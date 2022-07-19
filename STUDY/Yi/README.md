@@ -1,7 +1,7 @@
 1. 호스트만 회의내용을 녹화할 수 있는가? 녹음만 가능할 수는 없는가?, 녹화한다면 서버에 저장하지 않고 호스트가 바로 저장할 수는 없는가?
 
 ```html
-## 화면만 녹화
+## 화면만 녹화 - https://medium.com/watcha/%EC%9B%B9%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%97%90%EC%84%9C-%EB%8F%99%EC%9E%91%ED%95%98%EB%8A%94-%EB%85%B9%ED%99%94%EC%95%B1-%EB%A7%8C%EB%93%A4%EA%B8%B0-70142ce28994
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,7 +100,7 @@
 ```
 
 ```html
-## 소리만 녹음
+## 소리만 녹음 - https://curryyou.tistory.com/446
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -192,3 +192,9 @@
 컴포넌트 구조 구상
 
 피그마 강의 시청
+
+-----------------
+
+0718
+
+피그마를 통한 목업 만들기
