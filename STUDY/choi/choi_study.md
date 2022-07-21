@@ -60,3 +60,11 @@
 1. API 문서 작성 확인
 2. 프론트 URL 작성
 3. 쿠렌토 학습
+
+## 0721
+1. 라이브러리 조사
+   1. GoJS
+   2. ZEGOCLOUD
+2. vuex vs pinia 비교
+   1. 데이터 관리 어떤 걸로 할지.
+3. git 새로 clone
