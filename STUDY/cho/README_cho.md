@@ -116,3 +116,18 @@ https://element-plus.org/en-US/
 
 
 
+# 7.21
+
+gojs - ERD Tool
+
+https://gojs.net/latest/api/
+
+https://github.com/NorthwoodsSoftware/GoJS
+
+frontend 스켈레톤 코드 분석 및 방향성 회의
+
+
+
+drawing canvas
+
+https://www.webrtc-experiment.com/Canvas-Designer/
