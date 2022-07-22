@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from "pinia"
 import axios from 'axios'
-import api from "@/api/api";
-import router from "@/router";
+import api from "@/api/api"
+import router from "@/router"
 
 export const useCounterStore = defineStore("account", {
   state: () => ({
@@ -9,7 +9,7 @@ export const useCounterStore = defineStore("account", {
     currentUser: {},
     profile: {},
     authError: null,
-    projects: [],
+    //projects: [],
   }),
   getters: {
     isLoggedIn: state => !!state.token,
@@ -17,7 +17,7 @@ export const useCounterStore = defineStore("account", {
     profile: state => state.profile,
     authError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.token}`}),
-    projects: state => state.projects
+    //projects: state => state.projects
   },
   actions: {
     saveToken({ state }, token) {
@@ -49,6 +49,9 @@ export const useCounterStore = defineStore("account", {
         })
     },
 
+    // 비회원 로그인
+
+
     // 로그아웃
     logout({ dispatch }) {
       dispatch('removeToken')
@@ -71,7 +74,7 @@ export const useCounterStore = defineStore("account", {
         })
     },
 
-    // 회원가입 + // 유저 이메일 인증 메일 전송 + 자동로그인
+    // 회원가입 + 자동로그인
     signup({ dispatch, state }, signdata) {
       axios({
         url: api.accounts.checkemail(),
@@ -88,6 +91,7 @@ export const useCounterStore = defineStore("account", {
             .then(res => {
               const token = res.data.key
               dispatch('saveToken', token)
+              dispatch('login', { email : signdata.email, password: signdata.password })
               router.push({ name: 'MainView' })
             })
             .catch(err => {
@@ -140,17 +144,16 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: user_pk})
-        //router.push({name: 'ProfileView' , params: {user_pk: this.user_pk})
+        router.push({name: 'ProfileView' , params: {user_pk: namedata.user_pk}})
        })
        .catch(err => {
         console.error(err.response)
       })
     },
     // 유저 프로필 이미지 변경
-    changeimage({ state, getters }, user_pk, image ) {
+    changeImage({ state, getters }, image ) {
       axios({
-        url: api.accounts.profileimage_update(user_pk),
+        url: api.accounts.profileimage_update(),
         method: 'patch',
         data: image,
         // 백엔드 완성하면 테스트(postman)후 변경
@@ -158,23 +161,12 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: user_pk})
-        //router.push({name: 'ProfileView' , params: {user_pk: this.user_pk})
+        router.push({name: 'ProfileView' , params: {user_pk: image.user_pk}})
        })
        .catch(err => {
         console.error(err.response)
       })
     },
-    // 유저가 속한 프로젝트 조회
-    fetchProjects({ state ,getters }) {
-      axios({
-        url: api.movies.list(),
-        method: 'get',
-        headers: getters.authHeader,
-      })
-        .then(res => state.projects = res.data)
-        .catch(err => console.error(err.response))
-    },
-
+    
   }
 })
