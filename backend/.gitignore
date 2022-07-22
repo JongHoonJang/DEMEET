@@ -4,7 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-backend/src/main/resources/
 ssafy-web.log
 
 ### STS ###
@@ -20,6 +19,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+database.properties
 .idea
 *.iws
 *.iml
