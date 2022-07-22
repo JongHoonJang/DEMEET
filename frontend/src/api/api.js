@@ -10,11 +10,11 @@ export default {
     signup_userlist: () => HOST + ACCOUNTS, //get, post
     checkemail: () => HOST + ACCOUNTS + 'email/', //get
     profile_signout: user_pk => HOST + ACCOUNTS + `${user_pk}/`, //get, delete
-    nickname_update: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'nickname/', //patch
-    password_update: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'password/', //patch
-    profileimage_update: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'image/', //patch
+    nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
+    password_update: () => HOST + ACCOUNTS + 'password/', //patch
+    profileimage_update: () => HOST + ACCOUNTS + 'image/', //patch
     projectslist: user_pk => HOST + ACCOUNTS + `${user_pk}/` + PROJECTS, //get
-    email: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'email/', //post
+    //email: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'email/', //post
   },
   projects: {
     projects_list_create: () => HOST + PROJECTS, //get, post
