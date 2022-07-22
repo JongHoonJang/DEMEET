@@ -2,7 +2,10 @@
   <nav>
     <img src="@/assets/DEMEET_logo.png" alt="">
     <div>
-      <input type="text" placeholder="Search">
+      <form action="">
+        <input type="text" placeholder="Search">
+        
+      </form>
     </div>
     <div>
       <a href="">Logout</a>
