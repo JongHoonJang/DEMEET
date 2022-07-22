@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore } from "pinia"
 import axios from 'axios'
-import api from "@/api/api";
-import router from "@/router";
+import api from "@/api/api"
+import router from "@/router"
 
 export const useCounterStore = defineStore("account", {
   state: () => ({
@@ -9,7 +9,7 @@ export const useCounterStore = defineStore("account", {
     currentUser: {},
     profile: {},
     authError: null,
-    projects: [],
+    //projects: [],
   }),
   getters: {
     isLoggedIn: state => !!state.token,
@@ -17,7 +17,7 @@ export const useCounterStore = defineStore("account", {
     profile: state => state.profile,
     authError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.token}`}),
-    projects: state => state.projects
+    //projects: state => state.projects
   },
   actions: {
     saveToken({ state }, token) {
@@ -48,6 +48,9 @@ export const useCounterStore = defineStore("account", {
           state.authError = err.response.data
         })
     },
+
+    // 비회원 로그인
+
 
     // 로그아웃
     logout({ dispatch }) {
@@ -88,6 +91,7 @@ export const useCounterStore = defineStore("account", {
             .then(res => {
               const token = res.data.key
               dispatch('saveToken', token)
+              dispatch('login', { email : signdata.email, password: signdata.password })
               router.push({ name: 'MainView' })
             })
             .catch(err => {
@@ -163,16 +167,6 @@ export const useCounterStore = defineStore("account", {
         console.error(err.response)
       })
     },
-    // 유저가 속한 프로젝트 조회
-    fetchProjects({ state ,getters }) {
-      axios({
-        url: api.movies.list(),
-        method: 'get',
-        headers: getters.authHeader,
-      })
-        .then(res => state.projects = res.data)
-        .catch(err => console.error(err.response))
-    },
-
+    
   }
 })
