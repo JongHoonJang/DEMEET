@@ -1,5 +1,6 @@
 package com.ssafy.db.entity;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,18 +10,19 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-public class Users {
+public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int uid;
-    @Column(length = 30, nullable = false, unique = true)
-    String email;
-    @Column(length = 40, nullable = false)
-    String password;
-    @Column(length = 15, nullable = false)
-    String nickname;
+    int cid;
+
     @Column(nullable = false)
-    Timestamp regDate;
+    int uid;
 
+    @Column(nullable = false)
+    Timestamp confStartTime;
 
+    Timestamp confEndTime;
+
+    @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
+    boolean activation;
 }
