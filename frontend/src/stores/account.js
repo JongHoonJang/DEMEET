@@ -71,7 +71,7 @@ export const useCounterStore = defineStore("account", {
         })
     },
 
-    // 회원가입 + // 유저 이메일 인증 메일 전송 + 자동로그인
+    // 회원가입 + 자동로그인
     signup({ dispatch, state }, signdata) {
       axios({
         url: api.accounts.checkemail(),
@@ -140,17 +140,16 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: user_pk})
-        //router.push({name: 'ProfileView' , params: {user_pk: this.user_pk})
+        router.push({name: 'ProfileView' , params: {user_pk: namedata.user_pk}})
        })
        .catch(err => {
         console.error(err.response)
       })
     },
     // 유저 프로필 이미지 변경
-    changeimage({ state, getters }, user_pk, image ) {
+    changeImage({ state, getters }, image ) {
       axios({
-        url: api.accounts.profileimage_update(user_pk),
+        url: api.accounts.profileimage_update(),
         method: 'patch',
         data: image,
         // 백엔드 완성하면 테스트(postman)후 변경
@@ -158,8 +157,7 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: user_pk})
-        //router.push({name: 'ProfileView' , params: {user_pk: this.user_pk})
+        router.push({name: 'ProfileView' , params: {user_pk: image.user_pk}})
        })
        .catch(err => {
         console.error(err.response)
