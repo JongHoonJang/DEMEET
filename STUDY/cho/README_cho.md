@@ -131,3 +131,13 @@ frontend 스켈레톤 코드 분석 및 방향성 회의
 drawing canvas
 
 https://www.webrtc-experiment.com/Canvas-Designer/
+
+
+
+
+
+# 7.22
+
+chat 서버 구축 - socket.io, node.js와 index.html로 구성된 채팅창은 작동확인
+
+socket.io, node.js와 vue.js를 이용한 채팅창으로 옮기는 작업 중
