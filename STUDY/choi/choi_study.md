@@ -68,3 +68,9 @@
 2. vuex vs pinia 비교
    1. 데이터 관리 어떤 걸로 할지.
 3. git 새로 clone
+
+## 0722
+1. vue API & router 구성
+2. axios 작성
+3. 채팅을 위한 테스트 서버 구성
+
