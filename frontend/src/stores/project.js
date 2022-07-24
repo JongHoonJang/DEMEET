@@ -56,4 +56,4 @@ export const useCounterStore = defineStore("project", {
     // 프로젝트 이미지 저장
 
   },
-});
+})

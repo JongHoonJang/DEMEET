@@ -3,7 +3,7 @@
     <div class="container">
         <div class="create-box">
           <a href="">
-            <span class="material-symbols-outlined">add</span>
+            <span class="material-symbols-outlined" id="add">add</span>
           </a>
         </div>
         <ProjectList 
@@ -33,7 +33,7 @@ header {
   margin-top: 100px;
 }
 
-.material-symbols-outlined {
+#add {
   font-size: 64px;
   color: white;
 }
