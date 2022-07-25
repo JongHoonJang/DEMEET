@@ -131,3 +131,21 @@ frontend 스켈레톤 코드 분석 및 방향성 회의
 drawing canvas
 
 https://www.webrtc-experiment.com/Canvas-Designer/
+
+
+
+# 7.25
+
+chat.js 및 server.js 분리
+
+채팅창 정상작동 확인
+
+vue에 연동작업 및 백과 연결할 때 수정할 내용 주석에 작성
+
+---
+
+openvidu 이용을 위한 ubuntu 및 docker설치
+
+openvidu를 이용하여 웹캠 화면 확인
+
+openvidu에 있는 내용 vue에 연동하기 위한 방법 찾기
