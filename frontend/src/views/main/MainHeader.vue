@@ -1,11 +1,29 @@
 <template>
   <header>
     <div class="container">
+      <a href="/project/1" class="create">
         <div class="create-box">
-          <a href="">
             <span class="material-symbols-outlined" id="add">add</span>
-          </a>
         </div>
+      </a>
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
         <ProjectList 
 
         />
@@ -28,21 +46,22 @@ export default {
 }
 </script>
 
-<style>
-header {
-  margin-top: 100px;
-}
-
+<style scoped>
 #add {
   font-size: 64px;
   color: white;
 }
 
+.create {
+  text-decoration: none;
+}
+
 .create-box {
+  margin-bottom: 50px;
+  margin-left: 25px;
+  margin-right: 25px;
   width: 280px;
   height: 280px;
-  left: 196px;
-  top: 226px;
   background: #111315;
   border-radius: 10px;
   display: flex;
@@ -51,8 +70,10 @@ header {
 }
 
 .container {
+  margin-left: 100px;
   display: flex;
-  justify-content: space-around;
   flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 </style>
