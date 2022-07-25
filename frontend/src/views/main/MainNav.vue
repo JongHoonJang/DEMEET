@@ -28,6 +28,21 @@ export default {
 </script>
 
 <style scoped>
+#account {
+  font-size: 32px;
+  color: #4C4E50;
+}
+
+#logout {
+  font-size: 32px;
+  color: #4C4E50;
+}
+
+.list-box {
+  margin-top: 12px;
+  display: flex;
+}
+
 nav {
   height: 70px;
   display: flex;
@@ -73,20 +88,4 @@ nav div a {
 nav a.router-link-exact-active {
   color: #2978c2;
 }
-
-#account {
-  font-size: 32px;
-  color: #4C4E50;
-}
-
-#logout {
-  font-size: 32px;
-  color: #4C4E50;
-}
-
-.list-box {
-  margin-top: 12px;
-  display: flex;
-}
-
 </style>

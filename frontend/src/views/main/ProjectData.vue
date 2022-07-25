@@ -85,6 +85,21 @@ export default {
 </script>
 
 <style scoped>
+#add {
+  margin-top: 16px;
+  color: #9E9E9E;
+}
+
+#content {
+  margin-top: 16px;
+  color: #9E9E9E;
+}
+
+#edit {
+  margin-top: 16px;
+  color: #9E9E9E;
+}
+
 .blue-btn {
   width: 92px;
   height: 36px;
@@ -109,16 +124,6 @@ export default {
   margin-top: 30px;
   margin-right: 20px;
   text-align: end;
-}
-
-#add {
-  margin-top: 16px;
-  color: #9E9E9E;
-}
-
-#content {
-  margin-top: 16px;
-  color: #9E9E9E;
 }
 
 .time {
@@ -157,11 +162,6 @@ export default {
   height: 44px;
   background: #333333;
   margin-left: 160px;
-  color: #9E9E9E;
-}
-
-#edit {
-  margin-top: 16px;
   color: #9E9E9E;
 }
 

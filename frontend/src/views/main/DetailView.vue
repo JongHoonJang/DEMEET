@@ -30,19 +30,16 @@ export default {
 </script>
 
 <style scoped>
+#person {
+  font-size: 60px;
+  margin-left: 16px;
+  margin-top: 16px;
+  margin-right: 200px;
+}
+
 #edit {
   color:#9E9E9E;
   margin: 16px;
-}
-
-
-h1 {
-  color: white;
-}
-
-img {
-  width: 500px;
-  height: 300px;
 }
 
 .container {
@@ -59,12 +56,6 @@ img {
   flex-direction: column;
 }
 
-#person {
-  font-size: 60px;
-  margin-left: 16px;
-  margin-top: 16px;
-  margin-right: 200px;
-}
 
 .host-box {
   background: #9E9E9E;
@@ -74,5 +65,14 @@ img {
   display: flex;
   align-items: flex-start;
   text-align: start;
+}
+
+h1 {
+  color: white;
+}
+
+img {
+  width: 500px;
+  height: 300px;
 }
 </style>

@@ -21,6 +21,10 @@ export default {
 </script>
 
 <style scoped>
+#mail {
+  margin: 4px;
+}
+
 .user-box {
   margin: 14px;
   width: 300px;
@@ -45,10 +49,6 @@ img {
 
 .plus {
   font-size: 16px;
-  margin: 4px;
-}
-
-#mail {
   margin: 4px;
 }
 

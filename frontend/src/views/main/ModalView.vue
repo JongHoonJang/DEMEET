@@ -15,6 +15,12 @@ export default {
 </script>
 
 <style>
+#close {
+  text-align: end;
+  float: right;
+  border-radius: 5px;
+}
+
 .modal,
 .overlay {
   width: 100%;
@@ -36,10 +42,5 @@ export default {
   min-height: 500px;
   z-index: 10;
   opacity: 1;
-}
-#close {
-  text-align: end;
-  float: right;
-  border-radius: 5px;
 }
 </style>

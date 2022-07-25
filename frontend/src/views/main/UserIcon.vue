@@ -12,6 +12,11 @@ export default {
 </script>
 
 <style scoped>
+#close {
+  font-size: 16px;
+  color: black;
+}
+
 .user-icon {
   margin-left: 8px;
   margin-top: 2px;
@@ -29,11 +34,6 @@ export default {
   width: 34px;
   height: 14px;
   font-size: 8px;
-  color: black;
-}
-
-#close {
-  font-size: 16px;
   color: black;
 }
 </style>

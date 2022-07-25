@@ -33,6 +33,37 @@ export default {
 </script>
 
 <style scoped>
+#terminal {
+  font-size: 24px;
+  color: white;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+#group {
+  font-size: 24px;
+  color: white;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+#person {
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 20px;
+  font-size: 52px;
+}
+
+#cancel{
+  font-size: 24px;
+  margin-right: 20px;
+}
+
+#video {
+  font-size: 24px;
+  margin-right: 20px;
+}
+
 .project-box {
   margin-bottom: 50px;
   margin-left: 25px;
@@ -84,37 +115,6 @@ export default {
   line-height: 120%;
   color: #FFFFFF;
   margin-left: 28px;
-}
-
-#terminal {
-  font-size: 24px;
-  color: white;
-  margin-right: 20px;
-  margin-bottom: 10px;
-}
-
-#group {
-  font-size: 24px;
-  color: white;
-  margin-right: 20px;
-  margin-bottom: 10px;
-}
-
-#person {
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
-  font-size: 52px;
-}
-
-#cancel{
-  font-size: 24px;
-  margin-right: 20px;
-}
-
-#video {
-  font-size: 24px;
-  margin-right: 20px;
 }
 
 .box {
