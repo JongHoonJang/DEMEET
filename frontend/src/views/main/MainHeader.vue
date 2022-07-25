@@ -58,6 +58,8 @@ export default {
 
 .create-box {
   margin-bottom: 50px;
+  margin-left: 25px;
+  margin-right: 25px;
   width: 280px;
   height: 280px;
   background: #111315;
@@ -69,9 +71,9 @@ export default {
 
 .container {
   margin-left: 100px;
-  margin-right: 100px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 </style>

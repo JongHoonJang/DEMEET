@@ -35,6 +35,8 @@ export default {
 <style scoped>
 .project-box {
   margin-bottom: 50px;
+  margin-left: 25px;
+  margin-right: 25px;
   text-decoration: none;
   width: 280px;
   height: 280px;
