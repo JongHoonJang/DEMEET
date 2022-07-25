@@ -134,10 +134,18 @@ https://www.webrtc-experiment.com/Canvas-Designer/
 
 
 
+# 7.25
 
+chat.js 및 server.js 분리
 
-# 7.22
+채팅창 정상작동 확인
 
-chat 서버 구축 - socket.io, node.js와 index.html로 구성된 채팅창은 작동확인
+vue에 연동작업 및 백과 연결할 때 수정할 내용 주석에 작성
 
-socket.io, node.js와 vue.js를 이용한 채팅창으로 옮기는 작업 중
+---
+
+openvidu 이용을 위한 ubuntu 및 docker설치
+
+openvidu를 이용하여 웹캠 화면 확인
+
+openvidu에 있는 내용 vue에 연동하기 위한 방법 찾기
