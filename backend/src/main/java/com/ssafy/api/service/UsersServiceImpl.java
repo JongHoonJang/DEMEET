@@ -10,11 +10,11 @@ import com.ssafy.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.ssafy.db.repository.UsersRepositorySupport;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static com.ssafy.db.entity.QUser.user;
 
 @Service("usersService")
 public class UsersServiceImpl implements UsersService {
@@ -23,13 +23,14 @@ public class UsersServiceImpl implements UsersService {
     UsersRepository usersRepository;
 
     @Autowired
+    UsersRepositorySupport usersRepositorySupport;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Override
     public Users createUsers(UsersRegisterPostReq usersRegisterInfo) {
         Users newUser = new Users();
-//        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-//        System.out.println(timestamp);
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         System.out.println(localDateTime);
         newUser.setEmail(usersRegisterInfo.getEmail());
@@ -40,5 +41,12 @@ public class UsersServiceImpl implements UsersService {
         // jwt를 이용해 패스워드를 암호화하여 디비에 저장
         newUser.setPassword(passwordEncoder.encode(usersRegisterInfo.getPassword()));
         return usersRepository.save(newUser);
+    }
+
+    @Override
+    public Users getUsersByUserEmail(String userEmail) {
+        // 디비에 유저 정보 조회
+        Users newUser = usersRepositorySupport.findUserByEmail(userEmail).get();
+        return newUser;
     }
 }
