@@ -1,8 +1,6 @@
 <template>
-  <div>
     <MainNav />
     <MainHeader />
-  </div>
 </template>
 
 <script>

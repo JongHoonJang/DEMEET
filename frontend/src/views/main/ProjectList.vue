@@ -32,13 +32,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .project-box {
+  margin-bottom: 50px;
   text-decoration: none;
   width: 280px;
   height: 280px;
-  left: 196px;
-  top: 226px;
   background: #111315;
   border-radius: 10px;
   display: flex;
@@ -46,6 +45,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
+  float: right;
 }
 
 .on {

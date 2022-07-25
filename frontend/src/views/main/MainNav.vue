@@ -1,6 +1,8 @@
 <template>
   <nav>
-    <img src="@/assets/DEMEET_logo.png" alt="">
+    <a href="/">
+      <img src="@/assets/DEMEET_logo.png" alt="">
+    </a>
     <div>
       <form action="">
         <input type="text" placeholder="Search">
@@ -9,7 +11,7 @@
     <div class="list-box">
       <div class="list-box">
         <span class="material-symbols-outlined" id="account">account_box</span>
-        <a href="">Profile</a>
+        <a href="/profile/1">Profile</a>
       </div>
       <div class="list-box">
         <span class="material-symbols-outlined" id="logout">logout</span>
@@ -25,12 +27,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 nav {
   height: 70px;
   display: flex;
   justify-content: space-between;
   background: #1A1D1F;
+  margin-bottom: 100px;
 }
 
 nav img {

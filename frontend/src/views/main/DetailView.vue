@@ -6,56 +6,35 @@
         <img src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
       </div>
       <div class="detail-box">
-        <div class="detail-host-box">
+        <div class="host-box">
           <span class="material-symbols-outlined" id="person">person</span>
           <div class="host-data">
-            <p>Host</p>
+            <h3>Host</h3>
             <p>SSAFY@SSAFY.com</p>
           </div>
         </div>
-        <div>
-          <div class="pjt-name">
-            <p>PJT-Name</p>
-            <span class="material-symbols-outlined" id="edit">edit</span>
-          </div>
-          <div class="edit-box">Project1</div>
-          <!-- <input id="edit-box" type="text" placeholder="Project1"> -->
-          <div class="pjt-name">
-            <p>PJT-Detail</p>
-            <span class="material-symbols-outlined" id="edit">edit</span>
-          </div>
-          <div class="edit-box">Project Detail</div>
-          <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
-        </div>
+        <ProjectData />
       </div>
     </div>
 </template>
 
 <script>
 import MainNav from '@/views/main/MainNav'
+import ProjectData from '@/views/main/ProjectData'
 export default {
   components: {
     MainNav,
+    ProjectData
   }
 }
 </script>
 
-<style>
+<style scoped>
 #edit {
   color:#9E9E9E;
   margin: 16px;
 }
 
-.edit-box {
-  width: 600;
-  height: 56;
-  background: #333333;
-}
-
-.data-box {
-  width: 600;
-  height: 600;
-}
 
 h1 {
   color: white;
@@ -67,8 +46,8 @@ img {
 }
 
 .container {
-  margin-top: 100px;
   display: flex;
+  justify-content: space-around;
 }
 
 .detail-box{
@@ -80,17 +59,20 @@ img {
   flex-direction: column;
 }
 
-.detail-host-box {
+#person {
+  font-size: 60px;
+  margin-left: 16px;
+  margin-top: 16px;
+  margin-right: 200px;
+}
+
+.host-box {
   background: #9E9E9E;
   border-radius: 10px;
   width: 816px;
   height: 92px;
   display: flex;
   align-items: flex-start;
-}
-
-.pjt-name {
-  display: flex;
-  justify-content: space-around;
+  text-align: start;
 }
 </style>
