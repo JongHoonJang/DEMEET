@@ -1,28 +1,58 @@
 <template>
   <header>
-    <h1>header</h1>
     <div class="container">
-      <div class="create_box">
-        
+        <div class="create-box">
+          <a href="">
+            <span class="material-symbols-outlined" id="add">add</span>
+          </a>
+        </div>
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
+        <ProjectList 
+
+        />
       </div>
-    </div>
   </header>
 </template>
 
 <script>
+import ProjectList from '@/views/main/ProjectList'
 export default {
-
+  components: {
+    ProjectList
+  }
 }
 </script>
 
 <style>
-.create_box {
-  position: absolute;
-  width: 277px;
-  height: 277px;
+header {
+  margin-top: 100px;
+}
+
+#add {
+  font-size: 64px;
+  color: white;
+}
+
+.create-box {
+  width: 280px;
+  height: 280px;
   left: 196px;
   top: 226px;
   background: #111315;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
 }
 </style>
