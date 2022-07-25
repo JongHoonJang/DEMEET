@@ -2,11 +2,19 @@
   <nav>
     <img src="@/assets/DEMEET_logo.png" alt="">
     <div>
-      <input type="text" placeholder="Search">
+      <form action="">
+        <input type="text" placeholder="Search">
+      </form>
     </div>
-    <div>
-      <a href="">Logout</a>
-      <a href="">Profile</a>
+    <div class="list-box">
+      <div class="list-box">
+        <span class="material-symbols-outlined" id="account">account_box</span>
+        <a href="">Profile</a>
+      </div>
+      <div class="list-box">
+        <span class="material-symbols-outlined" id="logout">logout</span>
+        <a href="">Logout</a>
+      </div>
     </div>
   </nav>
 </template>
@@ -28,7 +36,7 @@ nav {
 nav img {
   margin-top: 20px;
   margin-left: 20px;
-  width: 110px;
+  width: 180px;
   height: 50px;
 }
 
@@ -51,19 +59,31 @@ nav div a {
   font-weight: bold;
   color: #4C4E50;
   text-decoration-line: none;
-  margin-top: 20px;
   margin-right: 20px;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
-  font-size: 32px;
-  line-height: 48px;
-  text-align: center;
+  font-size: 24px;
   color: #4C4E50;
 }
 
 nav a.router-link-exact-active {
   color: #2978c2;
+}
+
+#account {
+  font-size: 32px;
+  color: #4C4E50;
+}
+
+#logout {
+  font-size: 32px;
+  color: #4C4E50;
+}
+
+.list-box {
+  margin-top: 12px;
+  display: flex;
 }
 
 </style>
