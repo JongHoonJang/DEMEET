@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -15,12 +15,12 @@ public class Users {
     int uid;
     @Column(length = 30, nullable = false, unique = true)
     String email;
-    @Column(length = 40, nullable = false)
-    String password;
+    @Column(length = 100, nullable = false)
+    String password; // 토큰값이 생각보다 길어 length값을 늘림
     @Column(length = 15, nullable = false)
     String nickname;
     @Column(nullable = false)
-    Timestamp regDate;
+    LocalDateTime regDate;
 
 
 }
