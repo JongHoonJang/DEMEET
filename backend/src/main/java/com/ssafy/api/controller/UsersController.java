@@ -9,18 +9,19 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.api.response.UserLoginPostRes;
+import com.ssafy.api.response.UsersRes;
 import com.ssafy.api.service.UsersService;
+import com.ssafy.common.auth.SsafyUsersDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Users;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value = "유저 API", tags = {"Users"})
 @RestController
@@ -64,5 +65,23 @@ public class UsersController {
         }
 //        // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
         return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", null));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UsersRes> getUsersInfo(@ApiIgnore Authentication authentication) {
+        /**
+         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+         */
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails)authentication.getDetails();
+        String email = ssafyUsersDetails.getUsername();
+        Users newUser = usersService.getUsersByUserEmail(email);
+        System.out.println("%&%&%&%&%&%&%&%&%&%&%&%&%&%UsersController 79");
+        System.out.println(newUser);
+        System.out.println(newUser.getUid());
+        System.out.println(newUser.getEmail());
+        System.out.println(newUser.getNickname());
+        System.out.println(newUser.getRegDate());
+        return ResponseEntity.status(200).body(UsersRes.of(newUser));
     }
 }
