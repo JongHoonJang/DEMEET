@@ -9,6 +9,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.api.response.UserLoginPostRes;
+import com.ssafy.api.response.UsersEmailDuplicateRes;
 import com.ssafy.api.response.UsersRes;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
@@ -42,7 +43,7 @@ public class UsersController {
             @RequestBody @ApiParam(value = "회원가입 정보", required = true) UsersRegisterPostReq registerInfo){
 
         Users newUser = usersService.createUsers(registerInfo);
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "sign-in success"));
     }
 
     @PostMapping("/login")
@@ -83,5 +84,18 @@ public class UsersController {
         System.out.println(newUser.getNickname());
         System.out.println(newUser.getRegDate());
         return ResponseEntity.status(200).body(UsersRes.of(newUser));
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<BaseResponseBody> checkEmailDuplication(@PathVariable("email") String email){
+        boolean check  = usersService.checkEmailDuplicate(email);
+        // check가 false일경우는 이메일 중복이 없음
+        if(!check) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "email checked, no duplicated email"));
+        }
+        // check가 true일경우는 이메일 중복이 있음
+        else {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "email checked, duplicated email, please try another email"));
+        }
     }
 }

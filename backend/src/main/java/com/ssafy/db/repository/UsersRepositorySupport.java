@@ -26,4 +26,24 @@ public class UsersRepositorySupport {
         if(newUser == null) return Optional.empty();
         return Optional.ofNullable(newUser);
     }
+
+    /**
+     * email값을 통해 해당 email이 Users테이블에 저장되어있는지 확인하는 메서드
+     * @param email
+     * 만약 같은 이메일이 있다면 return true
+     * 같은 이메일이 없다면(null값포함) return false
+     * @return Boolean
+     */
+    public  Boolean checkEmailDuplicate(String email){
+        String checkEmail = jpaQueryFactory.select(qNewUsers.email).from(qNewUsers).where(qNewUsers.email.eq(email)).fetchOne();
+        boolean check = email.equals(checkEmail);
+        System.out.println("email = "+email);
+        System.out.println("check email = "+checkEmail);
+        System.out.println("같니? => "+check+"");
+        if(checkEmail == null){
+            return false;
+        }
+        return check;
+
+    }
 }
