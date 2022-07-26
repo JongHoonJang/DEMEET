@@ -11,4 +11,5 @@ public interface UsersService {
     Users createUsers(UsersRegisterPostReq usersRegisterInfo);
 
     Users getUsersByUserEmail(String userEmail);
+    Boolean checkEmailDuplicate(String email);
 }
