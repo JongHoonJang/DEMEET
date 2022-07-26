@@ -3,13 +3,12 @@ import axios from 'axios'
 import api from "@/api/api"
 import router from "@/router"
 
-export const useCounterStore = defineStore("account", {
+export const useAccountStore = defineStore("account", {
   state: () => ({
     token: localStorage.getItem('token') || '' ,
     currentUser: {},
     profile: {},
     authError: null,
-    //projects: [],
   }),
   getters: {
     isLoggedIn: state => !!state.token,
@@ -17,7 +16,6 @@ export const useCounterStore = defineStore("account", {
     profile: state => state.profile,
     authError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.token}`}),
-    //projects: state => state.projects
   },
   actions: {
     saveToken({ state }, token) {
@@ -29,7 +27,8 @@ export const useCounterStore = defineStore("account", {
       state.token = ''
       localStorage.setItem('token', '')
     },
-    // 로그인
+
+    // 로그인 (이메일,패스워드)
     login({ dispatch, state }, credentials) {
       axios({
         url: api.accounts.login(),
@@ -39,8 +38,7 @@ export const useCounterStore = defineStore("account", {
         .then(res => {
           const token = res.data.key
           dispatch('saveToken', token)
-          // 회원일때랑 비회원일 때 나눠서 진행
-          
+          dispatch('fetchCurrentUser')          
           router.push({ name: 'MainView' })
         })
         .catch(err => {
@@ -48,9 +46,6 @@ export const useCounterStore = defineStore("account", {
           state.authError = err.response.data
         })
     },
-
-    // 비회원 로그인
-
 
     // 로그아웃
     logout({ dispatch }) {
@@ -84,13 +79,14 @@ export const useCounterStore = defineStore("account", {
       })
         .then(() => {
           axios({
-            url: api.accounts.signup_userlist(),
+            url: api.accounts.signup_userlist_signout(),
             method: 'post',
             data: signdata
           })
             .then(res => {
               const token = res.data.key
               dispatch('saveToken', token)
+              dispatch('fetchCurrentUser')
               dispatch('login', { email : signdata.email, password: signdata.password })
               router.push({ name: 'MainView' })
             })
@@ -109,7 +105,7 @@ export const useCounterStore = defineStore("account", {
     // 회원 탈퇴
     signout({ dispatch, getters }) {
       axios({
-        url: api.accounts.profile_signout(),
+        url: api.accounts.signup_userlist_signout(),
         method: 'delete',
         headers: getters.authHeader
       })
@@ -122,10 +118,10 @@ export const useCounterStore = defineStore("account", {
         })
     },
     // 유저 프로필
-    fetchProfile({ state, getters }, { user_pk }) {
+    fetchProfile({ state, getters }) {
 
       axios({
-        url: api.accounts.profile(user_pk),
+        url: api.accounts.currentUserInfo(),
         method: 'get',
         headers: getters.authHeader,
       })
@@ -134,9 +130,9 @@ export const useCounterStore = defineStore("account", {
         })
     },
     // 유저 닉네임 변경
-    changeName({ state, getters }, user_pk, namedata ) {
+    changeName({ state, getters }, namedata ) {
       axios({
-        url: api.accounts.nickname_update(user_pk),
+        url: api.accounts.nickname_update(),
         method: 'patch',
         data: namedata,
         // 백엔드 완성하면 테스트(postman)후 변경
@@ -144,7 +140,7 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: {user_pk: namedata.user_pk}})
+        router.push({name: 'ProfileView'})
        })
        .catch(err => {
         console.error(err.response)
@@ -161,12 +157,38 @@ export const useCounterStore = defineStore("account", {
       })
        .then(res => {
         state.profile = res.data
-        router.push({name: 'ProfileView' , params: {user_pk: image.user_pk}})
+        router.push({name: 'ProfileView'})
        })
        .catch(err => {
         console.error(err.response)
       })
     },
-    
+
+    //유저 목록조회
+    fetchCurrentUser({ state, getters, dispatch }) {
+      /*
+      GET: 사용자가 로그인 했다면(토큰이 있다면)
+        currentUserInfo URL로 요청보내기
+          성공하면
+            state.cuurentUser에 저장
+          실패하면(토큰이 잘못되었다면)
+            기존 토큰 삭제
+            LoginView로 이동
+      */
+      if (getters.isLoggedIn) {
+        axios({
+          url: api.accounts.signup_userlist_signout(),
+          method: 'get',
+          headers: getters.authHeader,
+        })
+          .then(res => state.currentUser = res.data)
+          .catch(err => {
+            if (err.response.status === 401) {
+              dispatch('removeToken')
+              router.push({ name: 'LoginView' })
+            }
+          })
+      }
+    },
   }
 })
