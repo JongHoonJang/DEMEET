@@ -149,3 +149,11 @@ openvidu 이용을 위한 ubuntu 및 docker설치
 openvidu를 이용하여 웹캠 화면 확인
 
 openvidu에 있는 내용 vue에 연동하기 위한 방법 찾기
+
+
+
+# 7.26
+
+openvidu와 vue를 이용해 화상회의를 만든 프로젝트의 코드를 분석
+
+openvidu와 vue를 연결하는법 공부
