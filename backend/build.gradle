@@ -51,12 +51,12 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 // 프론트가 있으면 주석 해제
-//node {
-//    download = true
-//    version = '16.16.0'
-//    // Set the work directory where node_modules should be located
-//    nodeModulesDir = file("${project.projectDir}/../frontend")
-//}
+node {
+    download = true
+    version = '16.16.0'
+    // Set the work directory where node_modules should be located
+    nodeModulesDir = file("${project.projectDir}/../frontend")
+}
 
 configurations {
     providedRuntime
@@ -67,13 +67,13 @@ configurations {
 }*/
 
 // 프론트가 있으면 주석 해제
-//task webpack(type: NpmTask, dependsOn: 'npmInstall') {
-//    args = ['run','build']
-//}
+task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+    args = ['run','build']
+}
 
 // processResources is a Java task. Run the webpack bundling before this task using the 'build' task in the package.json
 // 프론트가 있으면 다시 살리기
-//processResources.dependsOn 'webpack'
+processResources.dependsOn 'webpack'
 
 //set build time and inject value to application.properties
 def buildTime() {
