@@ -49,4 +49,11 @@ public class UsersServiceImpl implements UsersService {
         Users newUser = usersRepositorySupport.findUserByEmail(userEmail).get();
         return newUser;
     }
+
+    @Override
+    public Boolean checkEmailDuplicate(String email) {
+
+        boolean check = usersRepositorySupport.checkEmailDuplicate(email);
+        return check;
+    }
 }
