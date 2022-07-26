@@ -6,15 +6,14 @@ const IMAGES = 'images/'
 
 export default {
   accounts: {
+    signup_userlist_signout: () => HOST + ACCOUNTS, //get, post delete
     login: () => HOST + ACCOUNTS + 'login/', //post
-    signup_userlist: () => HOST + ACCOUNTS, //get, post
+    currentUserInfo: () => HOST + ACCOUNTS + 'user/me/' , // get
     checkemail: () => HOST + ACCOUNTS + 'email/', //get
-    profile_signout: user_pk => HOST + ACCOUNTS + `${user_pk}/`, //get, delete
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch
     profileimage_update: () => HOST + ACCOUNTS + 'image/', //patch
-    projectslist: user_pk => HOST + ACCOUNTS + `${user_pk}/` + PROJECTS, //get
-    //email: user_pk => HOST + ACCOUNTS + `${user_pk}/` + 'email/', //post
+    // projectslist: () => HOST + ACCOUNTS + `${user_pk}/` + PROJECTS, //get
   },
   projects: {
     projects_list_create: () => HOST + PROJECTS, //get, post
