@@ -1,7 +1,10 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.db.entity.Users;
+
+import java.util.List;
 
 /**
  * Users 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의
@@ -12,4 +15,6 @@ public interface UsersService {
 
     Users getUsersByUserEmail(String userEmail);
     Boolean checkEmailDuplicate(String email);
+
+    List<userSimpleInfoDTO> getUserList();
 }

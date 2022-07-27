@@ -4,6 +4,7 @@ package com.ssafy.api.service;
  * Users 관련 비즈니스 로직 처리를 위한 서비스 구현 정의
  */
 
+import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.UsersRepository;
@@ -14,6 +15,7 @@ import com.ssafy.db.repository.UsersRepositorySupport;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 
 @Service("usersService")
@@ -55,5 +57,11 @@ public class UsersServiceImpl implements UsersService {
 
         boolean check = usersRepositorySupport.checkEmailDuplicate(email);
         return check;
+    }
+
+    @Override
+    public List<userSimpleInfoDTO> getUserList() {
+        List<userSimpleInfoDTO> userList = usersRepositorySupport.getUserList();
+        return userList;
     }
 }
