@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style='width:80%; margin:auto;' >
     <MainNav/>
     <div class='profile-box'>
       <div class='profile-bg'>
@@ -12,7 +12,7 @@
         <div class='profile-detail'>
           <div class='profile-rough'>
             <div class="name">
-              <h1>Name
+              <h1>{{ account.profile.nickname }}
                 <button>변경</button>
               </h1>
               <!-- <button>변경</button> -->
@@ -22,34 +22,57 @@
             </div>
           </div>
           <div class='change-password'>
-            <button>Change Password</button>
+            <button @click="isModalViewed=true">Change Password</button>
+            <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
+              <ChangePassword />
+            </ModalView>
           </div>
         </div>
       </div>
 
     </div>
     <div class='container'>
-      <div class='PJT'>PJT1</div>
-      <div class='PJT'>PJT2</div>
-      <div class='PJT'>PJT3</div>
-      <div class='PJT'>PJT4</div>
+      <div class='pjt'>PJT1</div>
+      <div class='pjt'>PJT2</div>
+      <div class='pjt'>PJT3</div>
+      <div class='pjt'>PJT4</div>
     </div>
   </div>
 </template>
 
 <script>
-import MainNav from '@/views/main/MainNav'
-export default {
-  components: {
-    MainNav
-  }
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
 
-}
+import MainNav from '@/views/main/MainNav'
+import ModalView from '@/views/main/ModalView'
+import ChangePassword from '@/views/account/ChangePassword'
+
+export default defineComponent({
+  components: {
+    MainNav,
+    ModalView,
+    ChangePassword,
+  },
+
+  data() {
+    return {
+      isModalViewed: false,
+    }
+  },
+
+  setup() {
+    const account = useAccountStore()
+    return {
+      account,
+    }
+  },
+})
 </script>
 
 <style scoped>
 #account {
-  font-size:300px;
+  font-size:10rem;
 }
 
 /* .name {
@@ -58,27 +81,34 @@ export default {
 
 .bg-image {
   width: 100%;
+  height: 40vh;
 }
 .profile-id {
   display: flex;
+  border: solid;
+  margin-bottom: 2rem;
 }
 .profile-detail {
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
-.PJT {
+.pjt {
   width: 20%;
-  height: 10vh;
+  height: 20rem;
+  background-color: white;
+  margin-left: 30px;
 }
 /* .profile-projects {
   display: grid; */
 /* } */
 .container {
-  margin-left: 100px;
+  padding-top: 10rem;
+  padding-bottom: 2rem;
+  border: solid;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 </style>
