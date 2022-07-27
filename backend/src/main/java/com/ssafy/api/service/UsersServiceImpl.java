@@ -4,6 +4,7 @@ package com.ssafy.api.service;
  * Users 관련 비즈니스 로직 처리를 위한 서비스 구현 정의
  */
 
+import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.UsersRepository;
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ssafy.db.repository.UsersRepositorySupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 
 @Service("usersService")
@@ -54,6 +57,19 @@ public class UsersServiceImpl implements UsersService {
     public Boolean checkEmailDuplicate(String email) {
 
         boolean check = usersRepositorySupport.checkEmailDuplicate(email);
+        return check;
+    }
+
+    @Override
+    public List<userSimpleInfoDTO> getUserList() {
+        List<userSimpleInfoDTO> userList = usersRepositorySupport.getUserList();
+        return userList;
+    }
+
+    @Override
+    @Transactional
+    public Boolean changeUserPassword(int uid, String newPassword) {
+        Boolean check = usersRepositorySupport.changeUserPassword(uid, passwordEncoder.encode(newPassword));
         return check;
     }
 }
