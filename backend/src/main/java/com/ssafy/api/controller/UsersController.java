@@ -7,6 +7,7 @@ package com.ssafy.api.controller;
  */
 
 import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.api.request.UserPwChangePostReq;
 import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.api.response.UserListRes;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -110,4 +112,25 @@ public class UsersController {
         List<userSimpleInfoDTO> userList = usersService.getUserList();
         return ResponseEntity.status(200).body(UserListRes.of(200,"user list lookup success",userList));
     }
+    @PatchMapping("/password")
+    public ResponseEntity<BaseResponseBody> changeUserPassword(@ApiIgnore Authentication authentication, @RequestBody UserPwChangePostReq userPwChangePostReq ){
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        // 토큰을 통해 email을 포함하고 있는 User를 받아온다.
+        Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
+        // 그 후 passwordEncoder.match를 통해 user의 비밀번호와 비교하여 맞는지 틀리는지 출력해준다
+        boolean check = passwordEncoder.matches(userPwChangePostReq.getCurrPassword(), user.getPassword());
+        System.out.println(check);
+        // 만약 틀리다면 406 에러를 띄운다.
+        if(!check){
+            return ResponseEntity.status(406).body(BaseResponseBody.of(406,"invalid currPassword"));
+        }
+        // 같다면 새로운 비밀번호를 새로이 갱신시켜준다.
+        Boolean changeCheck  = usersService.changeUserPassword(user.getUid(), userPwChangePostReq.getNewPassword());
+        if(changeCheck){
+            // 비밀번호 변경 성공
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200,"success to change user password"));
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200,"server error"));
+    }
+
 }

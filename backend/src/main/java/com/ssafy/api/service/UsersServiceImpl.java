@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ssafy.db.repository.UsersRepositorySupport;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -63,5 +64,12 @@ public class UsersServiceImpl implements UsersService {
     public List<userSimpleInfoDTO> getUserList() {
         List<userSimpleInfoDTO> userList = usersRepositorySupport.getUserList();
         return userList;
+    }
+
+    @Override
+    @Transactional
+    public Boolean changeUserPassword(int uid, String newPassword) {
+        Boolean check = usersRepositorySupport.changeUserPassword(uid, passwordEncoder.encode(newPassword));
+        return check;
     }
 }

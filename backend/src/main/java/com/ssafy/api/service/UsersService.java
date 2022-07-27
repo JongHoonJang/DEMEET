@@ -17,4 +17,6 @@ public interface UsersService {
     Boolean checkEmailDuplicate(String email);
 
     List<userSimpleInfoDTO> getUserList();
+
+    Boolean changeUserPassword(int uid, String newPassword);
 }

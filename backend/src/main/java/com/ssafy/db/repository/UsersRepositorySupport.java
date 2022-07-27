@@ -55,4 +55,10 @@ public class UsersRepositorySupport {
                 from(qNewUsers).fetch();
         return userlist;
     }
+
+    public Boolean changeUserPassword(int uid, String newPassword) {
+        Long res = jpaQueryFactory.update(qNewUsers).set(qNewUsers.password, newPassword).where(qNewUsers.uid.eq(uid)).execute();
+
+        return res > 0;
+    }
 }
