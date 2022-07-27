@@ -118,11 +118,12 @@ export const useAccountStore = defineStore("account", {
         })
     },
     // 유저 프로필
-    fetchProfile({ state, getters }) {
+    fetchProfile({ state, getters }, {user_pk}) {
 
       axios({
         url: api.accounts.currentUserInfo(),
         method: 'get',
+        data: user_pk,
         headers: getters.authHeader,
       })
         .then(res => {

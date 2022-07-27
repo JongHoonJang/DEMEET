@@ -12,14 +12,14 @@
         <div class='profile-detail'>
           <div class='profile-rough'>
             <div class="name">
-              <!-- <h1 v-if="isEdit">{{ account.profile.nickname }} 
-              <button v-if="isEdit" @click="editNickname">변경</button>
-              </h1> -->
-              <input v-model="payload.nickName" type="text">
-              <button @click="account.changeName(payload)">
+              <h1 v-if="!isEdit">{{ account.profile.nickname }} 
+              <button v-if="!isEdit" @click="editNickname">변경</button>
+              </h1>
+              <input v-if="isEdit" v-model="account.profile.nickname" type="text">
+              <button v-if="isEdit" @click="onUpdate">
                 <span class="material-symbols-outlined">done</span>
               </button>
-              <button @click="editNickname">
+              <button v-if="isEdit" @click="editNickname">
                 <span class="material-symbols-outlined">close</span>
               </button>
             </div>
@@ -73,7 +73,7 @@ export default defineComponent({
     }
   },
 
-  created() {
+  updated() {
     const payload = { nickname: this.$route.params.user_pk }
     this.account.fetchProfile(payload)
   },
@@ -81,6 +81,10 @@ export default defineComponent({
   methods : {
     editNickname() {
       this.isEdit = !this.isEdit
+    },
+    onUpdate() {
+      this.account.changeName(this.payload)
+      this.isEdit = false
     }
   }
 
