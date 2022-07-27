@@ -12,14 +12,18 @@
         <div class='profile-detail'>
           <div class='profile-rough'>
             <div class="name">
-              <h1>{{ account.profile.nickname }}
-                <button>변경</button>
-              </h1>
-              <!-- <button>변경</button> -->
+              <!-- <h1 v-if="isEdit">{{ account.profile.nickname }} 
+              <button v-if="isEdit" @click="editNickname">변경</button>
+              </h1> -->
+              <input v-model="payload.nickName" type="text">
+              <button @click="account.changeName(payload)">
+                <span class="material-symbols-outlined">done</span>
+              </button>
+              <button @click="editNickname">
+                <span class="material-symbols-outlined">close</span>
+              </button>
             </div>
-            <div>
-              <p>Job</p>
-            </div>
+
           </div>
           <div class='change-password'>
             <button @click="isModalViewed=true">Change Password</button>
@@ -58,6 +62,7 @@ export default defineComponent({
   data() {
     return {
       isModalViewed: false,
+      isEdit: false,
     }
   },
 
@@ -67,6 +72,18 @@ export default defineComponent({
       account,
     }
   },
+
+  created() {
+    const payload = { nickname: this.$route.params.user_pk }
+    this.account.fetchProfile(payload)
+  },
+
+  methods : {
+    editNickname() {
+      this.isEdit = !this.isEdit
+    }
+  }
+
 })
 </script>
 
@@ -75,9 +92,6 @@ export default defineComponent({
   font-size:10rem;
 }
 
-/* .name {
-  display: flex;
-} */
 
 .bg-image {
   width: 100%;
@@ -99,9 +113,7 @@ export default defineComponent({
   background-color: white;
   margin-left: 30px;
 }
-/* .profile-projects {
-  display: grid; */
-/* } */
+
 .container {
   padding-top: 10rem;
   padding-bottom: 2rem;
