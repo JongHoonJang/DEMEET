@@ -90,6 +90,7 @@ processResources {
         include "**/application*.yml"
         include "**/application*.yaml"
         include "**/application*.properties"
+        include "**/database.properties"
         project.properties.findAll().each {
             prop ->
                 if (prop.value != null) {
