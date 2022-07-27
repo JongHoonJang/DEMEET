@@ -13,8 +13,8 @@ export const useAccountStore = defineStore("account", {
   getters: {
     isLoggedIn: state => !!state.token,
     setUserList: state => state.userList,
-    profile: state => state.profile,
-    authError: state => state.authError,
+    setprofile: state => state.profile,
+    setauthError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.token}`}),
   },
   actions: {
