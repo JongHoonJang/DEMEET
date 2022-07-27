@@ -13,7 +13,7 @@
         <span class="material-symbols-outlined" id="account">account_box</span>
         <a href="/profile/1">Profile</a>
       </div>
-      <div class="list-box">
+      <div class="list-box" @click="account.logout">
         <span class="material-symbols-outlined" id="logout">logout</span>
         <a href="">Logout</a>
       </div>
@@ -22,9 +22,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
+export default defineComponent({
+  setup() {
+    const account = useAccountStore()
+    return {
+      account,
+    }
+  },
 
-}
+})
 </script>
 
 <style scoped>

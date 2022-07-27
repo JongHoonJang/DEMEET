@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { defineStore } from "pinia";
 import axios from 'axios'
 import api from "@/api/api"
 import router from "@/router"
@@ -6,23 +6,24 @@ import router from "@/router"
 export const useAccountStore = defineStore("account", {
   state: () => ({
     token: localStorage.getItem('token') || '' ,
-    currentUser: {},
+    userList: [],
     profile: {},
     authError: null,
   }),
   getters: {
     isLoggedIn: state => !!state.token,
-    currentUser: state => state.currentUser,
+    setUserList: state => state.userList,
     profile: state => state.profile,
     authError: state => state.authError,
     authHeader: state => ({ Authorization: `Token ${state.token}`}),
   },
   actions: {
+    //token값 저장
     saveToken({ state }, token) {
       state.token = token
       localStorage.setItem('token', token)
     },
-
+    //token값 삭제
     removeToken({ state }) {
       state.token = ''
       localStorage.setItem('token', '')
@@ -74,7 +75,6 @@ export const useAccountStore = defineStore("account", {
       axios({
         url: api.accounts.checkemail(),
         method: 'get',
-        //딕셔너리 key갑에 따라 변경
         data: signdata.email
       })
         .then(() => {
@@ -165,7 +165,7 @@ export const useAccountStore = defineStore("account", {
     },
 
     //유저 목록조회
-    fetchCurrentUser({ state, getters, dispatch }) {
+    userList({ state, getters }) {
       /*
       GET: 사용자가 로그인 했다면(토큰이 있다면)
         currentUserInfo URL로 요청보내기
@@ -181,12 +181,9 @@ export const useAccountStore = defineStore("account", {
           method: 'get',
           headers: getters.authHeader,
         })
-          .then(res => state.currentUser = res.data)
+          .then(res => state.userList = res.data)
           .catch(err => {
-            if (err.response.status === 401) {
-              dispatch('removeToken')
-              router.push({ name: 'LoginView' })
-            }
+            console.log(err.response)
           })
       }
     },
