@@ -1,70 +1,57 @@
 <template>
+  <div>
   <div class='backdrop'>
     <div class='account-box'>
       <div class='account-left'>
         <div style='display:flex; justify-content:center;'>
-      <h1 class='sign-head'>Sign In</h1>
+        <h1 class='sign-head'>Sign Up</h1>
     </div>
-    <div class='account-info'>
-      <p><input v-model="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
-      <p><input v-model="credentials.password" type="password" placeholder="password" class="input-prop"></p>
-    </div>
-    <div>
-      <button @click="account.login(credentials)">Sign In</button>
-    </div>
-    <!-- <div style='color: white;'>Signin as a Guest</div>
-    <div>
-      <div>
-        <img src="@/assets/btn_google_signin_dark_focus_web.png" alt="">
-      </div>
-      <div style="height:46px; width:190px; display:flex; background-color: black; margin:auto; border-radius: 0.5rem;">
-        <img src="@/assets/GitHub-Mark-Light-32px.png" style="height: 36px; margin: 2px;" alt="">
-        <p>Sign In with GitHub</p>                
-      </div>
-      <div style="margin:4px">
-        <img src="@/assets/kakao_login_medium_narrow.png" alt="">
-      </div>
-    </div> -->
+    <form @submit.prevent="account.signup(signdata)" class='account-info'>
+      <p><input v-model="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
+      <p><input v-model="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
+      <p><input v-model="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
+      <button>Sign Up</button>
+    </form>
       </div>
       <div class='account-right'>
         <h1 class="main-logo">DEMEET</h1>
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
+
 import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
 export default defineComponent({
 
   setup() {
-    const credentials = {
+    const signdata = {
+      nickname: '',
       email: '',
-      password: ''
+      password: '',
+    }
+    const password2 = ''
+    const sign = () => {
+      if (signdata.password === password2){
+        account.signup(signdata)
+      }
     }
     const account = useAccountStore()
     return {
       account,
-      credentials
+      signdata,
+      password2,
+      sign
     }
   },
 })
 </script>
 
 <style scoped>
-.main-logo {
-      /* width: 5rem;
-      height: 5rem; */
-  color: rgba(26, 15, 31, 0.3);
-  font-size: 4rem;
-  background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
-  -webkit-text-stroke: transparent;
-
-  -webkit-background-clip: text;
-  letter-spacing: -0.25rem;
-}
 
 .backdrop {
   display: flex;
@@ -87,21 +74,16 @@ export default defineComponent({
   flex-grow: 1;
   justify-content: space-evenly;
 }
-
 .account-left {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
 .account-right {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-input::placeholder {color:white;}
-
 .logo {
     color: rgba(26, 15, 31, 0.3);
     font-size: 4rem;
@@ -110,12 +92,17 @@ input::placeholder {color:white;}
     /* -webkit-background-clip: text; */
     letter-spacing: -0.25rem;
     }
+.main-logo {
+      /* width: 5rem;
+      height: 5rem; */
+  color: rgba(26, 15, 31, 0.3);
+  font-size: 4rem;
+  background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
+  -webkit-text-stroke: transparent;
 
-.account-info {
-  width: 20vw;
-  height: 20vh;
-  }
-  
+  -webkit-background-clip: text;
+  letter-spacing: -0.25rem;
+}
 .input-prop {
   color: white;
   background: transparent;
@@ -143,5 +130,4 @@ input::placeholder {color:white;}
   line-height: 5rem;
   display: flex;
 }
-
 </style>

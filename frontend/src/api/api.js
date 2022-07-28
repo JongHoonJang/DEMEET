@@ -1,4 +1,4 @@
-const HOST = 'http://127.0.0.1:8000/api/v1/'
+const HOST = 'http://127.0.0.1:8080/'
 
 const ACCOUNTS = 'users/'
 const PROJECTS = 'projects/'
@@ -8,7 +8,7 @@ export default {
   accounts: {
     signup_userlist_signout: () => HOST + ACCOUNTS, //get, post delete
     login: () => HOST + ACCOUNTS + 'login/', //post
-    currentUserInfo: () => HOST + ACCOUNTS + 'user/me/' , // get
+    currentUserInfo: () => HOST + ACCOUNTS + 'me/' , // get
     checkemail: () => HOST + ACCOUNTS + 'email/', //get
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch

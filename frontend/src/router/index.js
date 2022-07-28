@@ -4,7 +4,7 @@ import DetailView from '@/views/main/DetailView'
 import ConferenceView from '@/views/conference/ConferenceView'
 import ProfileView from '@/views/account/ProfileView'
 import LoginView from '@/views/account/LoginView'
-
+import SignupView from '@/views/account/SignupView'
 const routes = [
   {
     path: '/',
@@ -30,6 +30,11 @@ const routes = [
     path: '/login',
     name: 'LoginView',
     component: LoginView
+  },
+  {
+    path: '/signup',
+    name: 'SignupView',
+    component: SignupView
   },
 ]
 
