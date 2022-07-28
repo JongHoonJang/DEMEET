@@ -15,8 +15,7 @@
     </form>
       </div>
       <div class='account-right'>
-        <CheckCamera></CheckCamera>
-        <!-- <SocialSignup></SocialSignup> -->
+        <h1 class="main-logo">DEMEET</h1>
       </div>
     </div>
   </div>
@@ -27,8 +26,8 @@
 
 import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
 export default defineComponent({
+
   setup() {
     const signdata = {
       nickname: '',
@@ -70,7 +69,7 @@ export default defineComponent({
   background-color : rgba(26, 15, 31, 0.3);
   background-clip: content-box;
   display: flex;
-  width: 50vw;
+  width: 60vw;
   height: 60vh;
   flex-grow: 1;
   justify-content: space-evenly;
@@ -80,5 +79,55 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
 }
+.account-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo {
+    color: rgba(26, 15, 31, 0.3);
+    font-size: 4rem;
+    background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
+    -webkit-text-stroke: transparent;
+    /* -webkit-background-clip: text; */
+    letter-spacing: -0.25rem;
+    }
+.main-logo {
+      /* width: 5rem;
+      height: 5rem; */
+  color: rgba(26, 15, 31, 0.3);
+  font-size: 4rem;
+  background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
+  -webkit-text-stroke: transparent;
 
+  -webkit-background-clip: text;
+  letter-spacing: -0.25rem;
+}
+.input-prop {
+  color: white;
+  background: transparent;
+  border-top: none;
+  border-bottom: solid;
+  border-left: none;
+  border-right: none;
+  border-color: rgba(255, 1, 214, 1);
+  font-size : 1.2rem;
+  line-height: 2;
+}
+
+.sign-head {
+  color:rgba(255, 1, 214, 0);
+
+  -webkit-text-stroke: 0.125rem rgb(255, 255, 255);
+  letter-spacing: -0.25rem;
+  word-spacing: -0.75rem;
+  margin: 2rem;
+  
+  font-family: 'Poppins';
+  font-style: italic;
+  font-weight: 900;
+  font-size: 4rem;
+  line-height: 5rem;
+  display: flex;
+}
 </style>

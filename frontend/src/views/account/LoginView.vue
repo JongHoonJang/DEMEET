@@ -12,7 +12,7 @@
     <div>
       <button @click="account.login(credentials)">Sign In</button>
     </div>
-    <div style='color: white;'>Signin as a Guest</div>
+    <!-- <div style='color: white;'>Signin as a Guest</div>
     <div>
       <div>
         <img src="@/assets/btn_google_signin_dark_focus_web.png" alt="">
@@ -24,26 +24,21 @@
       <div style="margin:4px">
         <img src="@/assets/kakao_login_medium_narrow.png" alt="">
       </div>
-    </div>
+    </div> -->
       </div>
       <div class='account-right'>
-        <CheckCamera></CheckCamera>
-        <!-- <SocialSignup></SocialSignup> -->
+        <h1 class="main-logo">DEMEET</h1>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import GuestLogin from '@/views/account/GuestLogin'
-import CheckCamera from '@/views/account/CheckCamera'
 import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
 
 export default defineComponent({
-  components: {
-    CheckCamera
-  },
+
   setup() {
     const credentials = {
       email: '',
@@ -59,7 +54,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.main-logo {
+      /* width: 5rem;
+      height: 5rem; */
+  color: rgba(26, 15, 31, 0.3);
+  font-size: 4rem;
+  background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
+  -webkit-text-stroke: transparent;
 
+  -webkit-background-clip: text;
+  letter-spacing: -0.25rem;
+}
 
 .backdrop {
   display: flex;
@@ -77,7 +82,7 @@ export default defineComponent({
   background-color : rgba(26, 15, 31, 0.3);
   background-clip: content-box;
   display: flex;
-  width: 50vw;
+  width: 60vw;
   height: 60vh;
   flex-grow: 1;
   justify-content: space-evenly;
@@ -92,6 +97,7 @@ export default defineComponent({
 .account-right {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 input::placeholder {color:white;}
@@ -106,7 +112,6 @@ input::placeholder {color:white;}
     }
 
 .account-info {
-  margin-top : 3rem;
   width: 20vw;
   height: 20vh;
   }
@@ -119,7 +124,6 @@ input::placeholder {color:white;}
   border-left: none;
   border-right: none;
   border-color: rgba(255, 1, 214, 1);
-  margin-bottom: 1rem;
   font-size : 1.2rem;
   line-height: 2;
 }

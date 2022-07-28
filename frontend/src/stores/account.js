@@ -63,14 +63,14 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 비밀번호 수정
-    changePassword({ dispatch }, credentials) {
+    changePassword(credentials) {
       axios({
         url: api.accounts.password_update(),
         method: 'patch',
         data: credentials
       })
         .then(() => {
-          dispatch('removeToken')
+          this.logout()
           router.push({ name: 'LoginView'})
         })
         .catch(err => {
@@ -101,14 +101,14 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 회원 탈퇴
-    signout({ dispatch, getters }) {
+    signout() {
       axios({
         url: api.accounts.signup_userlist_signout(),
         method: 'delete',
-        headers: getters.authHeader
+        headers: this.authHeader
       })
         .then(() => {
-          dispatch('removeToken')
+          this.logout()
           router.push({ name: 'LoginView' })
         })
         .catch(err => {
@@ -116,16 +116,16 @@ export const useAccountStore = defineStore("account", {
         })
     },
     // 유저 닉네임 변경
-    changeName({ state, getters }, namedata ) {
+    changeName( namedata ) {
       axios({
         url: api.accounts.nickname_update(),
         method: 'patch',
         data: namedata,
         // 백엔드 완성하면 테스트(postman)후 변경
-        headers: getters.authHeader
+        headers: this.authHeader
       })
        .then(res => {
-        state.profile = res.data
+        this.profile = res.data
         router.push({name: 'ProfileView'})
        })
        .catch(err => {
@@ -133,16 +133,16 @@ export const useAccountStore = defineStore("account", {
       })
     },
     // 유저 프로필 이미지 변경
-    changeImage({ state, getters }, image ) {
+    changeImage( image ) {
       axios({
         url: api.accounts.profileimage_update(),
         method: 'patch',
         data: image,
         // 백엔드 완성하면 테스트(postman)후 변경
-        headers: getters.authHeader
+        headers: this.authHeader
       })
        .then(res => {
-        state.profile = res.data
+        this.profile = res.data
         router.push({name: 'ProfileView'})
        })
        .catch(err => {
@@ -151,7 +151,7 @@ export const useAccountStore = defineStore("account", {
     },
 
     //유저 목록조회
-    userList({ state, getters }) {
+    userList() {
       /*
       GET: 사용자가 로그인 했다면(토큰이 있다면)
         currentUserInfo URL로 요청보내기
@@ -161,13 +161,13 @@ export const useAccountStore = defineStore("account", {
             기존 토큰 삭제
             LoginView로 이동
       */
-      if (getters.isLoggedIn) {
+      if (this.isLoggedIn) {
         axios({
           url: api.accounts.signup_userlist_signout(),
           method: 'get',
-          headers: getters.authHeader,
+          headers: this.authHeader,
         })
-          .then(res => state.userList = res.data)
+          .then(res => this.userList = res.data)
           .catch(err => {
             console.log(err.response)
           })
