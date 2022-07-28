@@ -61,4 +61,9 @@ public class UsersRepositorySupport {
 
         return res > 0;
     }
+
+    public Boolean changeUserNickname(int uid, String newNickname) {
+        Long res = jpaQueryFactory.update(qNewUsers).set(qNewUsers.nickname, newNickname).where(qNewUsers.uid.eq(uid)).execute();
+        return res > 0;
+    }
 }

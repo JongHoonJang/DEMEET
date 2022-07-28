@@ -12,7 +12,6 @@ import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
-import com.ssafy.api.response.UsersEmailDuplicateRes;
 import com.ssafy.api.response.UsersRes;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
@@ -24,11 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "유저 API", tags = {"Users"})
 @RestController
@@ -110,10 +109,11 @@ public class UsersController {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         String email = ssafyUsersDetails.getUsername();
         List<userSimpleInfoDTO> userList = usersService.getUserList();
-        return ResponseEntity.status(200).body(UserListRes.of(200,"user list lookup success",userList));
+        return ResponseEntity.status(200).body(UserListRes.of(200, "user list lookup success", userList));
     }
+
     @PatchMapping("/password")
-    public ResponseEntity<BaseResponseBody> changeUserPassword(@ApiIgnore Authentication authentication, @RequestBody UserPwChangePostReq userPwChangePostReq ){
+    public ResponseEntity<BaseResponseBody> changeUserPassword(@ApiIgnore Authentication authentication, @RequestBody UserPwChangePostReq userPwChangePostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         // 토큰을 통해 email을 포함하고 있는 User를 받아온다.
         Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
@@ -121,16 +121,35 @@ public class UsersController {
         boolean check = passwordEncoder.matches(userPwChangePostReq.getCurrPassword(), user.getPassword());
         System.out.println(check);
         // 만약 틀리다면 406 에러를 띄운다.
-        if(!check){
-            return ResponseEntity.status(406).body(BaseResponseBody.of(406,"invalid currPassword"));
+        if (!check) {
+            return ResponseEntity.status(406).body(BaseResponseBody.of(406, "invalid currPassword"));
         }
         // 같다면 새로운 비밀번호를 새로이 갱신시켜준다.
-        Boolean changeCheck  = usersService.changeUserPassword(user.getUid(), userPwChangePostReq.getNewPassword());
-        if(changeCheck){
+        Boolean changeCheck = usersService.changeUserPassword(user.getUid(), userPwChangePostReq.getNewPassword());
+        if (changeCheck) {
             // 비밀번호 변경 성공
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200,"success to change user password"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to change user password"));
         }
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200,"server error"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(500, "server error"));
+    }
+
+    @PatchMapping("/nickname")
+    public ResponseEntity<BaseResponseBody> changeUserNickname(@ApiIgnore Authentication authentication, @RequestBody Map<String, String> nicknameMap) {
+        String newNickname = nicknameMap.get("nickname");
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
+        // 이제 현재 nickname과 newNickname이 같은지 비교한 후 같다면 바꿀필요가 없다고 데이터 전송
+        if(user.getNickname().equals(newNickname)){
+            return ResponseEntity.status(426).body(BaseResponseBody.of(426,"new nickname matches current nickname. Please change your new nickname."));
+        }
+        // 닉네임이 다르기 때문에 변경 작업 시작
+        Boolean changeCheck = usersService.changeUserNickname(user.getUid(), newNickname);
+        if (changeCheck) {
+            // 닉네임 변경 성공
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to change user's nickname"));
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(500, "server error"));
+
     }
 
 }
