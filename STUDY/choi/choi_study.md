@@ -85,3 +85,7 @@
 1. openvidu 개발 중
 2. 오류 발생으로 해당파일 push X, study만 commit
    1. openvidu 튜토리얼 작동 X
+
+## 0728
+1. openvidu 유저 목록 개발 중
+2. angular 분석 예정
