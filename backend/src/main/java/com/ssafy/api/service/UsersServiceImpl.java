@@ -8,10 +8,10 @@ import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.UsersRepository;
+import com.ssafy.db.repository.UsersRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.ssafy.db.repository.UsersRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -69,7 +69,14 @@ public class UsersServiceImpl implements UsersService {
     @Override
     @Transactional
     public Boolean changeUserPassword(int uid, String newPassword) {
-        Boolean check = usersRepositorySupport.changeUserPassword(uid, passwordEncoder.encode(newPassword));
-        return check;
+        Boolean changeCheck = usersRepositorySupport.changeUserPassword(uid, passwordEncoder.encode(newPassword));
+        return changeCheck;
+    }
+
+    @Override
+    @Transactional
+    public Boolean changeUserNickname(int uid, String newNickname) {
+        Boolean changeCheck = usersRepositorySupport.changeUserNickname(uid, newNickname);
+        return changeCheck;
     }
 }

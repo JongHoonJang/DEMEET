@@ -19,4 +19,6 @@ public interface UsersService {
     List<userSimpleInfoDTO> getUserList();
 
     Boolean changeUserPassword(int uid, String newPassword);
+
+    Boolean changeUserNickname(int uid, String newNickname);
 }
