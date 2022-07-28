@@ -15,7 +15,7 @@
               <h1 v-if="!isEdit">{{ account.profile.nickname }} 
               <button v-if="!isEdit" @click="editNickname">변경</button>
               </h1>
-              <input v-if="isEdit" v-model="account.profile.nickname" type="text">
+              <input v-if="isEdit" v-model="name" type="text">
               <button v-if="isEdit" @click="onUpdate">
                 <span class="material-symbols-outlined">done</span>
               </button>
@@ -58,11 +58,11 @@ export default defineComponent({
     ModalView,
     ChangePassword,
   },
-
   data() {
     return {
       isModalViewed: false,
       isEdit: false,
+      name: this.account.profile.nickname
     }
   },
 
@@ -71,11 +71,6 @@ export default defineComponent({
     return {
       account,
     }
-  },
-
-  updated() {
-    const payload = { nickname: this.$route.params.user_pk }
-    this.account.fetchProfile(payload)
   },
 
   methods : {
@@ -118,7 +113,7 @@ export default defineComponent({
   margin-left: 30px;
 }
 
-.container {
+/* .container {
   padding-top: 10rem;
   padding-bottom: 2rem;
   border: solid;
@@ -126,5 +121,5 @@ export default defineComponent({
   flex-direction: row;
   justify-content: space-evenly;
   flex-wrap: wrap;
-}
+} */
 </style>
