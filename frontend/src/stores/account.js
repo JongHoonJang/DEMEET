@@ -15,47 +15,55 @@ export const useAccountStore = defineStore("account", {
     setUserList: state => state.userList,
     setprofile: state => state.profile,
     setauthError: state => state.authError,
-    authHeader: state => ({ Authorization: `Token ${state.token}`}),
+    authHeader: state => ({ Authorization: `Bearer ${state.token}`}),
   },
   actions: {
     //token값 저장
-    saveToken({ state }, token) {
-      state.token = token
+    saveToken(token) {
+      this.token = token
       localStorage.setItem('token', token)
     },
     //token값 삭제
-    removeToken({ state }) {
-      state.token = ''
+    removeToken() {
+      this.token = ''
       localStorage.setItem('token', '')
+    },
+    // 유저 프로필
+    fetchProfile() {
+      axios({
+        url: api.accounts.currentUserInfo(),
+        method: 'get',
+        headers: this.authHeader,
+      })
+        .then(res => {
+          console.log(res)
+          this.profile = res.data
+        })
     },
 
     // 로그인 (이메일,패스워드)
-    login({ dispatch, state }, credentials) {
+    login(credentials) {
       axios({
         url: api.accounts.login(),
         method: 'post',
         data: credentials
       })
         .then(res => {
-          const token = res.data.key
-          dispatch('saveToken', token)
-          dispatch('fetchCurrentUser')          
-          router.push({ name: 'MainView' })
-        })
-        .catch(err => {
-          console.error(err.response.data)
-          state.authError = err.response.data
+          const token = res.data.accessToken
+          this.saveToken(token)        
+          this.fetchProfile()
+          // router.push({ name: 'MainView' })
         })
     },
 
     // 로그아웃
-    logout({ dispatch }) {
-      dispatch('removeToken')
+    logout() {
+      this.removeToken()
       router.push({ name: 'LoginView'})
     },
 
     // 비밀번호 수정
-    changePassword({ dispatch },credentials) {
+    changePassword({ dispatch }, credentials) {
       axios({
         url: api.accounts.password_update(),
         method: 'patch',
@@ -71,7 +79,8 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 회원가입 + 자동로그인
-    signup({ dispatch, state }, signdata) {
+    signup(signdata) {
+      console.log(signdata)
       axios({
         url: api.accounts.checkemail(),
         method: 'get',
@@ -83,23 +92,12 @@ export const useAccountStore = defineStore("account", {
             method: 'post',
             data: signdata
           })
-            .then(res => {
-              const token = res.data.key
-              dispatch('saveToken', token)
-              dispatch('fetchCurrentUser')
-              dispatch('login', { email : signdata.email, password: signdata.password })
-              router.push({ name: 'MainView' })
+            .then(() => {
+              router.push({ name: 'LoginView' })
             })
-            .catch(err => {
-              console.error(err.response.data)
-              state.authError = err.response.data
-            })
+
         })
-        .catch(err => {
-          //추후에 변경
-          console.error(err.response.data)
-          state.authError = err.response.data
-        })
+
     },
 
     // 회원 탈퇴
@@ -115,19 +113,6 @@ export const useAccountStore = defineStore("account", {
         })
         .catch(err => {
           console.error(err.response)
-        })
-    },
-    // 유저 프로필
-    fetchProfile({ state, getters }, {user_pk}) {
-
-      axios({
-        url: api.accounts.currentUserInfo(),
-        method: 'get',
-        data: user_pk,
-        headers: getters.authHeader,
-      })
-        .then(res => {
-          state.profile = res.data
         })
     },
     // 유저 닉네임 변경

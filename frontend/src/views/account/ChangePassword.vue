@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class='pass-cg-form'>
+  <div class="container">
+    <div>
       <div>
         <p>Password</p>
         <input v-model="credentials.currPassword" type="password" placeholder="*********">
@@ -56,5 +56,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.container {
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 </style>
