@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <div class="pjt-list">
+    <div class="pjt-list" v-if="!isEditName">
       <p>PJT-Name</p>
-      <span class="material-symbols-outlined" id="edit">edit</span>
+      <span @click="switchName" class="material-symbols-outlined" id="edit">edit</span>
     </div>
     <div class="box">
       <p class="text-style">Project1</p>
     </div>
     <!-- <input id="edit-box" type="text" placeholder="Project1"> -->
-    <div class="pjt-list">
+    <div class="pjt-list" v-if="!isEditDetail">
       <p>PJT-Detail</p>
-      <span class="material-symbols-outlined" id="edit">edit</span>
+      <span @click="switchDetail" class="material-symbols-outlined" id="edit">edit</span>
     </div>
     <div class="box">
       <p class="text-style">Project Detail</p>
@@ -79,6 +79,16 @@ export default {
   data() {
     return {
       isModalViewed: false,
+      isEditName: false,
+      isEditDetail: false,
+    }
+  },
+  methods: {
+    switchName() {
+      this.isEditName = !this.isEditName
+    },
+    switchDetail() {
+      this.isEditDetail = !this.isEditDetail
     }
   }
 }

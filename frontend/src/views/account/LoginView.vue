@@ -15,17 +15,17 @@
 </template>
 
 <script>
-// import MemberLogin from '@/views/account/MemberLogin';
-// import GuestLogin from '@/views/account/GuestLogin';
-import DefaultSignup from '@/views/account/DefaultSignup';
-import CheckCamera from '@/views/account/CheckCamera';
-// import SocialSignup from '@/views/account/SocialSignup';
+import MemberLogin from '@/views/account/MemberLogin'
+// import GuestLogin from '@/views/account/GuestLogin'
+// import DefaultSignup from '@/views/account/DefaultSignup'
+import CheckCamera from '@/views/account/CheckCamera'
+// import SocialSignup from '@/views/account/SocialSignup'
 
 export default {
   components: {
-    // MemberLogin,
+    MemberLogin,
     // GuestLogin,
-    DefaultSignup,
+    //DefaultSignup,
     CheckCamera,
     // SocialSignup,
   }
