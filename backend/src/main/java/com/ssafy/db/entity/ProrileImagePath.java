@@ -13,7 +13,7 @@ public class ProrileImagePath {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int pipid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="uid")
     Users user;
 

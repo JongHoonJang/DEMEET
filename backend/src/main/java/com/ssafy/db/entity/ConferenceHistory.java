@@ -14,11 +14,11 @@ public class ConferenceHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int chid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="uid")
     Users user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cid")
     Conferences conferences;
 
