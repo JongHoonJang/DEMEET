@@ -36,7 +36,6 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(res => {
-          console.log(res)
           this.profile = res.data
         })
     },
@@ -51,8 +50,7 @@ export const useAccountStore = defineStore("account", {
         .then(res => {
           const token = res.data.accessToken
           this.saveToken(token)        
-          this.fetchProfile()
-          // router.push({ name: 'MainView' })
+          router.push({ name: 'MainView' })
         })
     },
 
@@ -63,11 +61,13 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 비밀번호 수정
-    changePassword(credentials) {
+    changePassword(namedata) {
+      console.log(namedata)
       axios({
         url: api.accounts.password_update(),
         method: 'patch',
-        data: credentials
+        data: namedata,
+        headers: this.authHeader,
       })
         .then(() => {
           this.logout()
@@ -116,17 +116,18 @@ export const useAccountStore = defineStore("account", {
         })
     },
     // 유저 닉네임 변경
-    changeName( namedata ) {
+    changeName(namedata) {
+      console.log(namedata)
       axios({
         url: api.accounts.nickname_update(),
         method: 'patch',
-        data: namedata,
+        data: { nickname: namedata },
         // 백엔드 완성하면 테스트(postman)후 변경
         headers: this.authHeader
       })
        .then(res => {
         this.profile = res.data
-        router.push({name: 'ProfileView'})
+        router.go({name: 'ProfileView'})
        })
        .catch(err => {
         console.error(err.response)
