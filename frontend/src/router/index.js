@@ -22,7 +22,7 @@ const routes = [
     component: ConferenceView
   },
   {
-    path: '/profile/:user_pk',
+    path: '/profile/me',
     name: 'ProfileView',
     component: ProfileView
   },
