@@ -8,17 +8,17 @@
 
       <div>
         <p>New Password</p>
-        <input v-model="credentials.newPassword1" type="password" placeholder="*********">
+        <input v-model="credentials.newPassword" type="password" placeholder="*********">
       </div>
 
       <div>
         <p>Confirm Password</p>
-        <input v-model="credentials.newPassword2" type="password" placeholder="*********">
+        <input v-model="newPassword2" type="password" placeholder="*********">
       </div>
     </div>
 
     <div class='pass-cg-btn'>
-      <button @click="checkPassword">Change Password</button>
+      <button @click="pwupdata(credentials)">Change Password</button>
     </div>
   </div>
 </template>
@@ -28,30 +28,27 @@ import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
 
 export default defineComponent({
-  data() {
-    return{
-      newPassword1 : "",
-      newPassword2 : "",
-      
-      credentials: {
-        currPassword : "",
-        newPassword : "",
-      }
-    }
-  },
+
   setup() {
     const account = useAccountStore()
+    const newPassword2 = ""
+    const credentials = {
+        currPassword : "",
+        newPassword : "",
+    }
+    const pwupdata = (credentials) => {
+      // if (credentials.newPassword === newPassword2){
+      //   account.changePassword(credentials)
+      // }
+      account.changePassword(credentials)
+    }  
     return {
       account,
+      newPassword2,
+      credentials,
+      pwupdata
     }
   },
-  methods : {
-    checkPassword() {
-      if (this.newPassword1===this.newPassword2) {
-        this.account.changePassword(this.credentials)
-      }
-    }
-  }
 })
 </script>
 

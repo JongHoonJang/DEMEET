@@ -11,7 +11,7 @@
     <div class="list-box">
       <div class="list-box">
         <span class="material-symbols-outlined" id="account">account_box</span>
-        <a href="/profile/">Profile</a>
+        <a href="/profile/me">Profile</a>
       </div>
       <div class="list-box" @click="account.logout">
         <span class="material-symbols-outlined" id="logout">logout</span>

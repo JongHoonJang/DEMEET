@@ -13,13 +13,13 @@
           <div class='profile-rough'>
             <div class="name">
               <h1 v-if="!isEdit">{{ account.profile.nickname }} 
-              <button v-if="!isEdit" @click="editNickname">변경</button>
+              <button v-if="!isEdit" @click="isEdit=true">변경</button>
               </h1>
               <input v-if="isEdit" v-model="name" type="text">
-              <button v-if="isEdit" @click="onUpdate">
+              <button v-if="isEdit" @click="onUpdate(name)">
                 <span class="material-symbols-outlined">done</span>
               </button>
-              <button v-if="isEdit" @click="editNickname">
+              <button v-if="isEdit" @click="isEdit=false">
                 <span class="material-symbols-outlined">close</span>
               </button>
             </div>
@@ -51,7 +51,6 @@ import { useAccountStore } from "@/stores/account"
 import MainNav from '@/views/main/MainNav'
 import ModalView from '@/views/main/ModalView'
 import ChangePassword from '@/views/account/ChangePassword'
-
 export default defineComponent({
   components: {
     MainNav,
@@ -59,30 +58,27 @@ export default defineComponent({
     ChangePassword,
   },
   data() {
-    return {
+    return{
       isModalViewed: false,
-      isEdit: false,
-      name: this.account.profile.nickname
+      isEdit: false
     }
   },
-
+  computed: {
+    
+  },
   setup() {
     const account = useAccountStore()
+    const name = ''
+    const onUpdate = (data) => {
+      account.changeName(data)
+    }
+    account.fetchProfile()
     return {
       account,
+      name,
+      onUpdate
     }
   },
-
-  methods : {
-    editNickname() {
-      this.isEdit = !this.isEdit
-    },
-    onUpdate() {
-      this.account.changeName(this.payload)
-      this.isEdit = false
-    }
-  }
-
 })
 </script>
 
