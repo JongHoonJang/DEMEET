@@ -18,13 +18,13 @@
   <button id="finish-btn">녹화 종료</button>
   <button id="download-btn">다운로드</button>
   <script>
-    
+
     const videoOutput = document.getElementById('video-output');
     const startBtn = document.getElementById('start-btn');
     const downloadBtn = document.getElementById('download-btn');
     const finishBtn = document.getElementById('finish-btn');
     const recordedVideo = document.getElementById('recorded-video');
-    
+
     let mediaStream = null;
     let mediaRecorder = null;
     let recordedMediaURL = null;
@@ -34,14 +34,14 @@
     .getUserMedia({ video: true })
     .then(function (newMediaStream) {
       mediaStream = newMediaStream;
-      
+
       // 카메라의 입력을 실시간으로 비디오 태그에서 확인
       videoOutput.srcObject = mediaStream;
       videoOutput.onloadedmetadata = function (e) {
         videoOutput.play();
       };
     });
-    
+
     // 녹화 시작 버튼 클릭 시 빌생하는 이벤트 핸들러 등록
     startBtn.addEventListener('click', function () {
       let recordedChunks = [];
@@ -57,7 +57,7 @@
               recordedChunks.push(event.data);
             }
           };
-          
+
           // 3. 녹화 중지 이벤트 핸들러 등록
           mediaRecorder.onstop = function () {
             // createObjectURL로 생성한 url을 사용하지 않으면 revokeObjectURL 함수로 지워줘야합니다.
@@ -65,15 +65,15 @@
             if (recordedMediaURL) {
               URL.revokeObjectURL(recordedMediaURL);
             }
-            
+
             const blob = new Blob(recordedChunks, { type: 'video/webm;' });
             recordedMediaURL = URL.createObjectURL(blob);
             recordedVideo.src = recordedMediaURL;
           };
-          
+
           mediaRecorder.start();
         });
-        
+
         // 녹화 종료 버튼 클릭 시 빌생하는 이벤트 핸들러 등록
         finishBtn.addEventListener('click', function () {
           if (mediaRecorder) {
@@ -81,7 +81,7 @@
             mediaRecorder.stop();
           }
         });
-        
+
         // 다운로드 버튼 클릭 시 발생하는 이벤트 핸들러 등록
         downloadBtn.addEventListener('click', function () {
           console.log('recordedMediaURL : ', recordedMediaURL);
@@ -145,11 +145,11 @@
 
             // 이벤트핸들러: 녹음 종료 처리 & 재생하기
             mediaRecorder.onstop = (event)=>{
-                
+
                 // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
                 const blob = new Blob(audioArray, {"type": "audio/ogg codecs=opus"});
                 audioArray.splice(0); // 기존 오디오 데이터들은 모두 비워 초기화한다.
-                
+
                 // Blob 데이터에 접근할 수 있는 주소를 생성한다.
                 const blobURL = window.URL.createObjectURL(blob);
 
@@ -198,3 +198,67 @@
 0718
 
 피그마를 통한 목업 만들기
+
+--------------------
+
+0719
+
+목업 마무리 작업
+
+스토리보드 작성
+
+역할 분담(이정건 - 배포 및 FE의 Acoounts 부문)
+
+---------------------------------------
+
+0720
+
+api 문서 설계 보완
+
+명세서 익히기
+
+------------------------------------------
+
+0721
+
+git 새로 clone
+
+docker 설치 및 설정
+
+-------------------------
+
+0722
+
+프론트엔드 개발환경 설정
+
+공용함수 개발
+
+-------------------------------------
+
+0725
+
+LoginView 및 ProfileView 구현
+
+-----------------------------
+
+0726
+
+Profile 비밀번호변경 모달 추가
+
+-------------------------
+
+0727
+
+GoJS free drawing 작동 확인
+
+-----------------
+
+0728
+
+예비군훈련으로 공가
+
+--------------------
+
+0729
+
+GOJS Vue에 적용 시도
