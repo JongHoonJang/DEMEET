@@ -18,7 +18,7 @@ buildscript{
         classpath "io.spring.gradle:dependency-management-plugin:${springDependencyMgmtVer}.RELEASE"
         classpath "org.springframework:springloaded:${springLoadedVer}.RELEASE"
         //이클립스인 경우를 위한 QueryDSL 플러그인. IntelliJ는 불필요. [시작]
-        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
+        // classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
         //[끝] 
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
     }
@@ -50,27 +50,30 @@ group 'com.ssafy'
 version '1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-node {
-    download = true
-    version = '16.16.0'
-    // Set the work directory where node_modules should be located
-    nodeModulesDir = file("${project.projectDir}/../frontend")
-}
-
-configurations {
-    providedRuntime
-}
+// 프론트가 있으면 주석 해제
+//node {
+//    download = true
+//    version = '16.16.0'
+//    // Set the work directory where node_modules should be located
+//    nodeModulesDir = file("${project.projectDir}/../frontend")
+//}
+//
+//configurations {
+//    providedRuntime
+//}
 
 /*task npmInstall(type: NpmTask, overwrite: true) {
     args = ['install']
 }*/
 
-task webpack(type: NpmTask, dependsOn: 'npmInstall') {
-    args = ['run','build']
-}
+// 프론트가 있으면 주석 해제
+//task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+//    args = ['run','build']
+//}
 
 // processResources is a Java task. Run the webpack bundling before this task using the 'build' task in the package.json
-processResources.dependsOn 'webpack'
+// 프론트가 있으면 주석 해제
+// processResources.dependsOn 'webpack'
 
 //set build time and inject value to application.properties
 def buildTime() {
@@ -87,6 +90,7 @@ processResources {
         include "**/application*.yml"
         include "**/application*.yaml"
         include "**/application*.properties"
+        include "**/database.properties"
         project.properties.findAll().each {
             prop ->
                 if (prop.value != null) {
@@ -155,6 +159,12 @@ dependencies {
     //Kurento (미디어서버) 관련 의존성 추가
     implementation('org.kurento:kurento-client:6.16.0')
     implementation('org.kurento:kurento-utils-js:6.15.0')
+
+    //Openvidu 관련 의존성 추가
+    implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.22.0'
+
+    //json 처리를 위한 의존성 추가
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
 
     //IntelliJ용

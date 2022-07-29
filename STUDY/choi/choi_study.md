@@ -54,3 +54,42 @@
 2. ERD 회의
 3. 이번 주 수행 목표 회의
    - 지라 연동 준비
+
+## 0720
+
+1. API 문서 작성 확인
+2. 프론트 URL 작성
+3. 쿠렌토 학습
+
+## 0721
+1. 라이브러리 조사
+   1. GoJS
+   2. ZEGOCLOUD
+2. vuex vs pinia 비교
+   1. 데이터 관리 어떤 걸로 할지.
+3. git 새로 clone
+
+## 0722
+1. vue API & router 구성
+2. axios 작성
+3. 채팅을 위한 테스트 서버 구성
+
+## 0726
+1. openvidu 튜토리얼 구동확인
+2. openvidu 공부
+   1. 공식문서 확인
+   2. 코드 분석
+   3. 선배 기수 git 분석
+   
+## 0727
+1. openvidu 개발 중
+2. 오류 발생으로 해당파일 push X, study만 commit
+   1. openvidu 튜토리얼 작동 X
+
+## 0728
+1. openvidu 유저 목록 개발 중
+2. angular 분석 예정
+
+## 0729
+1. openvidu angular 적용 실패
+2. vue3 component API 적용하기
