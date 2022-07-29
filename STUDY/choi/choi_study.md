@@ -89,3 +89,7 @@
 ## 0728
 1. openvidu 유저 목록 개발 중
 2. angular 분석 예정
+
+## 0729
+1. openvidu angular 적용 실패
+2. vue3 component API 적용하기
