@@ -71,14 +71,13 @@ export const useAccountStore = defineStore("account", {
       })
         .then(() => {
           this.logout()
-          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           console.error(err.response)
         })
     },
 
-    // 회원가입 + 자동로그인
+    // 회원가입
     signup(signdata) {
       console.log(signdata)
       axios({
@@ -144,7 +143,7 @@ export const useAccountStore = defineStore("account", {
       })
        .then(res => {
         this.profile = res.data
-        router.push({name: 'ProfileView'})
+        router.go({name: 'ProfileView'})
        })
        .catch(err => {
         console.error(err.response)

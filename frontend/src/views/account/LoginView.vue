@@ -5,13 +5,12 @@
         <div style='display:flex; justify-content:center;'>
       <h1 class='sign-head'>Sign In</h1>
     </div>
-    <div class='account-info'>
+    <form @submit.prevent="account.login(credentials)" class='account-info'>
       <p><input v-model="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
       <p><input v-model="credentials.password" type="password" placeholder="password" class="input-prop"></p>
-    </div>
-    <div>
-      <button @click="account.login(credentials)">Sign In</button>
-    </div>
+      <button>Sign In</button>
+    </form>
+
     <!-- <div style='color: white;'>Signin as a Guest</div>
     <div>
       <div>
