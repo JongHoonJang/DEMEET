@@ -13,17 +13,15 @@
           <div class='profile-rough'>
             <div class="name">
               <h1 v-if="!isEdit">{{ account.profile.nickname }} 
-                <button class="pw-btn" v-if="!isEdit" @click="isEdit=true">
-                  <span class="material-symbols-outlined" id="edit">edit</span>
-                </button>
+              <span class="material-symbols-outlined" id="edit" v-if="!isEdit" @click="isEdit=true">edit</span>
               </h1>
-              <input v-if="isEdit" v-model="name" type="text">
-              <button class="pw-btn" v-if="isEdit" @click="onUpdate(name)">
-                <span class="material-symbols-outlined">done</span>
-              </button>
-              <button class="pw-btn" v-if="isEdit" @click="isEdit=false">
-                <span class="material-symbols-outlined">close</span>
-              </button>
+              <div class="name-edit">
+                <input v-if="isEdit" v-model="name" type="text">
+                <div class="name-btn">
+                  <span class="material-symbols-outlined" id="done" v-if="isEdit" @click="onUpdate(name)">done</span>
+                  <span class="material-symbols-outlined" id="close" v-if="isEdit" @click="isEdit=false">close</span>
+                </div>
+              </div>
             </div>
             <div>
               <h3>{{ account.profile.email }}</h3>
@@ -90,7 +88,13 @@ export default defineComponent({
 .name {
   display: flex;
 }
-
+.name-edit {
+  display: flex;
+}
+.name-btn {
+  margin-top: 30px;
+  margin-left: 8px;
+}
 .bg-image {
   width: 100%;
   height: 40vh;
@@ -109,7 +113,6 @@ export default defineComponent({
   width: 20%;
   height: 20rem;
   background-color: white;
-  margin-left: 30px;
 }
 
 .endproject {
@@ -140,13 +143,35 @@ input {
   border-radius: 5px;
 }
 
-.pw-btn {
-  margin-top: 30px;
-  margin-left: 10px;
-  width: 30px;
-  height: 30px;
+#edit {
   color: white;
-  background: #2D68FE;
-  border-radius: 5px;
+}
+
+#edit:hover {
+  color: #2D68FE;
+  transform: scale(1.4);
+}
+
+#done {
+  color: white;
+}
+
+#done:hover {
+  color: green;
+  transform: scale(1.4);
+}
+
+#close {
+  color: white;
+}
+
+#close:hover {
+  color: red;
+  transform: scale(1.4);
+}
+.change-password {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
 }
 </style>
