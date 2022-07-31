@@ -3,7 +3,7 @@ import axios from 'axios'
 import api from "@/api/api"
 import router from "@/router"
 
-
+// 추후에 account.js랑 합쳐질 예정
 export const useProjectStore = defineStore("project", {
   state: () => ({
     project: {},
@@ -17,7 +17,7 @@ export const useProjectStore = defineStore("project", {
   },
   actions: {
     // 프로젝트 상세 조회
-    fetchProject({ state ,getters }, project_pk) {
+    fetchProject(project_pk, { state, getters }) {
       axios({
         url: api.projects.project_detail_update(project_pk),
         method: 'get',
@@ -30,7 +30,7 @@ export const useProjectStore = defineStore("project", {
     }, 
 
     // 유저가 속한 프로젝트 조회
-    fetchProjects({ state, getters }, user_pk) {
+    fetchProjects(user_pk, { state, getters }) {
       axios({
         url: api.projects.projectslist(user_pk),
         method: 'get',
@@ -45,7 +45,7 @@ export const useProjectStore = defineStore("project", {
       
 
     // 유저 초대
-    addUser( {state, getters}, {project_pk, user_pk}) {
+    addUser({project_pk, user_pk}, {state, getters}) {
       axios({
         url: api.projects.add_user(project_pk, user_pk),
         method: 'post',
@@ -62,7 +62,7 @@ export const useProjectStore = defineStore("project", {
 
 
     // 프로젝트 이미지 삭제
-    deleteImage({ state, getters },project_pk) {
+    deleteImage(project_pk, { state, getters }) {
       if (confirm('정말 삭제하시겠습니까?')) {
         axios({
           url: api.projects.image_list_delete(project_pk),
