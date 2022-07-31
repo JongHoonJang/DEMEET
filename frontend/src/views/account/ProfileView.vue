@@ -13,20 +13,22 @@
           <div class='profile-rough'>
             <div class="name">
               <h1 v-if="!isEdit">{{ account.profile.nickname }} 
-              <button v-if="!isEdit" @click="isEdit=true">변경</button>
+              <span class="material-symbols-outlined" id="edit" v-if="!isEdit" @click="isEdit=true">edit</span>
               </h1>
-              <input v-if="isEdit" v-model="name" type="text">
-              <button v-if="isEdit" @click="onUpdate(name)">
-                <span class="material-symbols-outlined">done</span>
-              </button>
-              <button v-if="isEdit" @click="isEdit=false">
-                <span class="material-symbols-outlined">close</span>
-              </button>
+              <div class="name-edit">
+                <input v-if="isEdit" v-model="name" type="text">
+                <div class="name-btn">
+                  <span class="material-symbols-outlined" id="done" v-if="isEdit" @click="onUpdate(name)">done</span>
+                  <span class="material-symbols-outlined" id="close" v-if="isEdit" @click="isEdit=false">close</span>
+                </div>
+              </div>
             </div>
-
+            <div>
+              <h3>{{ account.profile.email }}</h3>
+            </div>
           </div>
           <div class='change-password'>
-            <button @click="isModalViewed=true">Change Password</button>
+            <button class="pwedit-btn" @click="isModalViewed=true">Change Password</button>
             <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
               <ChangePassword />
             </ModalView>
@@ -35,7 +37,7 @@
       </div>
 
     </div>
-    <div class='container'>
+    <div class='endproject'>
       <div class='pjt'>PJT1</div>
       <div class='pjt'>PJT2</div>
       <div class='pjt'>PJT3</div>
@@ -63,9 +65,6 @@ export default defineComponent({
       isEdit: false
     }
   },
-  computed: {
-    
-  },
   setup() {
     const account = useAccountStore()
     const name = ''
@@ -85,9 +84,26 @@ export default defineComponent({
 <style scoped>
 #account {
   font-size:10rem;
+  color: white;
 }
 
+h1 {
+  color: white;
+}
 
+h3 {
+  color: white;
+}
+.name {
+  display: flex;
+}
+.name-edit {
+  display: flex;
+}
+.name-btn {
+  margin-top: 30px;
+  margin-left: 8px;
+}
 .bg-image {
   width: 100%;
   height: 40vh;
@@ -106,10 +122,9 @@ export default defineComponent({
   width: 20%;
   height: 20rem;
   background-color: white;
-  margin-left: 30px;
 }
 
-/* .container {
+.endproject {
   padding-top: 10rem;
   padding-bottom: 2rem;
   border: solid;
@@ -117,5 +132,55 @@ export default defineComponent({
   flex-direction: row;
   justify-content: space-evenly;
   flex-wrap: wrap;
-} */
+}
+
+input {
+  margin-top: 30px;
+  box-sizing: border-box;
+  width: 200px;
+  height: 30px;
+
+  border: 1px solid #A9A9A9;
+  border-radius: 8px;
+}
+
+.pwedit-btn {
+  width: 148px;
+  height: 40px;
+  color: white;
+  background: #2D68FE;
+  border-radius: 5px;
+}
+
+#edit {
+  color: white;
+}
+
+#edit:hover {
+  color: #2D68FE;
+  transform: scale(1.4);
+}
+
+#done {
+  color: white;
+}
+
+#done:hover {
+  color: green;
+  transform: scale(1.4);
+}
+
+#close {
+  color: white;
+}
+
+#close:hover {
+  color: red;
+  transform: scale(1.4);
+}
+.change-password {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+}
 </style>
