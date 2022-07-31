@@ -11,8 +11,8 @@ export const useProjectStore = defineStore("project", {
   }),
 
   getters: {
-    project: state => state.project,
-    projects: state => state.projects,
+    // project: state => state.project,
+    // projects: state => state.projects,
 
   },
   actions: {
