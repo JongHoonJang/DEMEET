@@ -84,6 +84,15 @@ export default defineComponent({
 <style scoped>
 #account {
   font-size:10rem;
+  color: white;
+}
+
+h1 {
+  color: white;
+}
+
+h3 {
+  color: white;
 }
 .name {
   display: flex;
