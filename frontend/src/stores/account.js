@@ -12,9 +12,9 @@ export const useAccountStore = defineStore("account", {
   }),
   getters: {
     isLoggedIn: state => !!state.token,
-    setUserList: state => state.userList,
-    setprofile: state => state.profile,
-    setauthError: state => state.authError,
+    // setUserList: state => state.userList,
+    // setprofile: state => state.profile,
+    // setauthError: state => state.authError,
     authHeader: state => ({ Authorization: `Bearer ${state.token}`}),
   },
   actions: {
@@ -52,10 +52,15 @@ export const useAccountStore = defineStore("account", {
           this.saveToken(token)        
           router.push({ name: 'MainView' })
         })
+        .catch(err => (
+          console.error(err.response),
+          alert('이메일 혹은 비밀번호가 잘못되었습니다.')
+        ))
     },
 
     // 로그아웃
     logout() {
+      confirm('로그아웃 하기겠습니까?')
       this.removeToken()
       router.push({ name: 'LoginView'})
     },
@@ -70,9 +75,13 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          this.logout()
+          confirm('비밀번호를 변경하시겠습니까?')
+          alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
+          this.removeToken()
+          router.push({ name: 'LoginView'})
         })
         .catch(err => {
+          alert('현재 비밀번호가 다릅니다.')
           console.error(err.response)
         })
     },
@@ -94,8 +103,12 @@ export const useAccountStore = defineStore("account", {
             .then(() => {
               router.push({ name: 'LoginView' })
             })
-
+            
         })
+        .catch(err => (
+          console.error(err.response),
+          alert('중복된 메일입니다.')
+        ))
 
     },
 

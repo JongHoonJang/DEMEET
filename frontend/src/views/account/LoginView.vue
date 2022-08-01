@@ -8,7 +8,8 @@
     <form @submit.prevent="account.login(credentials)" class='account-info'>
       <p><input v-model="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
       <p><input v-model="credentials.password" type="password" placeholder="password" class="input-prop"></p>
-      <button>Sign In</button>
+      <button class="login-btn">Sign In</button>
+      <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
     </form>
 
     <!-- <div style='color: white;'>Signin as a Guest</div>
@@ -143,4 +144,20 @@ input::placeholder {color:white;}
   display: flex;
 }
 
+.createuser {
+  color: white;
+  text-decoration: none;
+  margin-left: 100px;
+}
+
+.createuser:hover {
+  color: rgba(255, 1, 214, 1);
+}
+
+.login-btn {
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
+  border-radius: 5px;
+}
 </style>
