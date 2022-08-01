@@ -14,10 +14,14 @@
     </section>
     <aside>
       <!-- 참자가 목록, 채팅 -->
-      <ConferenceUsers/>
+      <ConferenceUsers
+      :publisher="publisher"
+      :subscribers="subscribers"
+      />
       <ConferenceChat/>
     </aside>
   </main>
+  
 </template>
 
 <script>
@@ -26,12 +30,9 @@ import ConferenceUsers from './ConferenceUsers'
 import ConferenceChat from './ConferenceChat'
 
 export default {
-  components: {
-    ConferenceVideo,
-    ConferenceUsers,
-    ConferenceChat,
-},
+components: { ConferenceVideo, ConferenceUsers, ConferenceChat }
 }
+
 </script>
 
 <style scoped>
