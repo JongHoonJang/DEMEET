@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.ProjectsCreatePostReq;
+import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -21,6 +22,9 @@ public class ProjectsController {
     @Autowired
     UsersService usersService;
 
+    @Autowired
+    ProjectsService projectsService;
+
     @PostMapping()
     public ResponseEntity<BaseResponseBody> createProject(@ApiIgnore Authentication authentication, @RequestBody ProjectsCreatePostReq projectsCreatePostReq){
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
@@ -32,8 +36,9 @@ public class ProjectsController {
         //pjt_name(필수)
         //pjt_start_date(직접 생성해준다.)
         //total_meet_time(일단 0로 둔다.)
+        Integer pid = projectsService.createProject(projectsCreatePostReq);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, projectsCreatePostReq.toString()));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, pid+""));
 //        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "email checked, no duplicated email"));
 
     }
