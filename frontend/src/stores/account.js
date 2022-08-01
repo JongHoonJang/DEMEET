@@ -6,16 +6,16 @@ import router from "@/router"
 export const useAccountStore = defineStore("account", {
   state: () => ({
     token: localStorage.getItem('token') || '' ,
-    userList: [],
     profile: {},
+    userList: [],
+    project: {},
+    projects: [],
     authError: null,
   }),
   getters: {
     isLoggedIn: state => !!state.token,
-    // setUserList: state => state.userList,
-    // setprofile: state => state.profile,
-    // setauthError: state => state.authError,
     authHeader: state => ({ Authorization: `Bearer ${state.token}`}),
+
   },
   actions: {
     //token값 저장
@@ -120,8 +120,8 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader
       })
         .then(() => {
-          this.logout()
-          router.push({ name: 'LoginView' })
+          this.removeToken()
+          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           console.error(err.response)
@@ -151,7 +151,6 @@ export const useAccountStore = defineStore("account", {
         url: api.accounts.profileimage_update(),
         method: 'patch',
         data: image,
-        // 백엔드 완성하면 테스트(postman)후 변경
         headers: this.authHeader
       })
        .then(res => {
@@ -165,26 +164,92 @@ export const useAccountStore = defineStore("account", {
 
     //유저 목록조회
     userList() {
-      /*
-      GET: 사용자가 로그인 했다면(토큰이 있다면)
-        currentUserInfo URL로 요청보내기
-          성공하면
-            state.cuurentUser에 저장
-          실패하면(토큰이 잘못되었다면)
-            기존 토큰 삭제
-            LoginView로 이동
-      */
-      if (this.isLoggedIn) {
+      axios({
+        url: api.accounts.signup_userlist_signout(),
+        method: 'get',
+        headers: this.authHeader,
+      })
+        .then(res => this.userList = res.data)
+        .catch(err => {
+          console.log(err.response)
+        })
+      
+    },
+//////////////////////////////////////////////////////////////project
+    // 프로젝트 상세 조회
+    fetchProject(project_pk) {
+      axios({
+        url: api.projects.project_detail_update(project_pk),
+        method: 'get',
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.project = res.data
+        })
+        .catch(err => console.error(err.response))
+    }, 
+
+    // 유저가 속한 프로젝트 조회
+    fetchProjects(user_pk) {
+      axios({
+        url: api.projects.projectslist(user_pk),
+        method: 'get',
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.projects = res.data
+        })
+        .catch(err => console.error(err.response))
+    },
+
+      
+
+    // 유저 초대
+    addUser({project_pk, user_pk}) {
+      axios({
+        url: api.projects.add_user(project_pk, user_pk),
+        method: 'post',
+        data: {},
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.project = res.data
+        })
+        .catch(err => console.error(err.response))
+    },
+
+    // 프로젝트 이미지 리스트
+
+
+    // 프로젝트 이미지 삭제
+    deleteImage(project_pk) {
+      if (confirm('정말 삭제하시겠습니까?')) {
         axios({
-          url: api.accounts.signup_userlist_signout(),
-          method: 'get',
+          url: api.projects.image_list_delete(project_pk),
+          method: 'delete',
+          data: {},
           headers: this.authHeader,
         })
-          .then(res => this.userList = res.data)
-          .catch(err => {
-            console.log(err.response)
+          .then(res => {
+            this.project = res.data
+            //router.go({ name: 'DetailView' })
           })
+          .catch(err => console.error(err.response))
       }
     },
+
+    // 프로젝트 이미지 저장
+    saveImage(project_pk) {
+      axios({
+        url: api.projects.image_save(project_pk),
+        method: 'post',
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.project = res.data
+          //router.go({ name: 'DetailView' })
+        })
+        .catch(err => console.error(err.response))
+    }
   }
 })

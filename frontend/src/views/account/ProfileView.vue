@@ -69,7 +69,12 @@ export default defineComponent({
     const account = useAccountStore()
     const name = ''
     const onUpdate = (data) => {
-      account.changeName(data)
+      if (data !== '') {
+        account.changeName(data)
+      }
+      else {
+        alert('변경할 닉네임을 입력하세요')
+      }
     }
     account.fetchProfile()
     return {
