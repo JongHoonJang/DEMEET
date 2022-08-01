@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="changepw-box">
-      <form @submit.prevent="pwupdata(credentials)">
+      <form @submit.prevent="pwupdata(credentials, newPassword2)">
         <div>
           <p>Password</p>
           <input v-model="credentials.currPassword" type="password" placeholder="*********">
@@ -36,11 +36,15 @@ export default defineComponent({
         currPassword : "",
         newPassword : "",
     }
-    const pwupdata = (credentials) => {
-      // if (credentials.newPassword === newPassword2){
-      //   account.changePassword(credentials)
-      // }
-      account.changePassword(credentials)
+    const pwupdata = (credentials, newPassword2) => {
+      if (credentials.newPassword === newPassword2){
+        account.changePassword(credentials)
+      }
+      else {
+        console.log(credentials.newPassword)
+        console.log(newPassword2)
+        alert('비밀번호 확인에 실패하였습니다')
+      }
     }  
     return {
       account,
