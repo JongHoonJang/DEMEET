@@ -1,15 +1,19 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.common.auth.SsafyUsersDetails;
 import io.openvidu.java.client.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -30,13 +34,16 @@ public class ConferenceController {
     // OpenVidu 서버와 통신하는 비밀들
     private String SECRET;
 
-    public ResponseEntity<JSONObject> getToken(@RequestBody String sessionsNameParam, HttpSession httpSession) throws ParseException {
+    public ConferenceController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
+        this.SECRET = secret;
+        this.OPENVIDU_URL = openviduUrl;
+        this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
+    }
+
+
+    @RequestMapping(value = "/get-token", method = RequestMethod.POST)
+    public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam, HttpSession httpSession) throws ParseException {
         // 로그인 유저 검증 -> 우리에 맞게 변경 필요할듯
-//        try {
-//            checkUserLogged(httpSession);
-//        } catch (Exception e) {
-//            return getErrorResponse(e);
-//        }
 
         System.out.println("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
 
@@ -47,11 +54,12 @@ public class ConferenceController {
 
         // 이 유저의 역할
         //OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
-        OpenViduRole role = null;
+        OpenViduRole role = OpenViduRole.PUBLISHER;
 
         // 유저가 컨퍼런스에 참여할 때, 다른 유저에게 넘겨줄 정보
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         // 여기선 로그인할 때 있는 httpSession에 JSON에 넣는다.
-        String serverData = "{\"serverData\": \"" + httpSession.getAttribute("loggedUser") + "\"}";
+        String serverData = "{\"serverData\": \"" + ssafyUsersDetails.getUsername() + "\"}";
 
         // 서버 데이터와 역할을 담은 connectionProperties 객체 빌드
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).data(serverData).role(role).build();
@@ -114,13 +122,8 @@ public class ConferenceController {
     }
 
     @RequestMapping(value = "/remove-user", method = RequestMethod.POST)
-    public ResponseEntity<JSONObject> removeUser(@RequestBody String sessionNameToken, HttpSession httpSession) throws Exception {
+    public ResponseEntity<JSONObject> removeUser(@ApiIgnore Authentication authentication, @RequestBody String sessionNameToken) throws Exception {
         // 로그인 유저 검증 -> 우리에 맞게 변경 필요할듯
-//        try {
-//            checkUserLogged(httpSession);
-//        } catch (Exception e) {
-//            return getErrorResponse(e);
-//        }
         System.out.println("Removing user | {sessionName, token}= " + sessionNameToken);
 
         // BODY에서 파라미터 가져옴
@@ -156,11 +159,5 @@ public class ConferenceController {
         json.put("error", e.getMessage());
         json.put("exception", e.getClass());
         return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    private void checkUserLogged(HttpSession httpSession) throws Exception {
-        if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
-            throw new Exception("User not logged");
-        }
     }
 }
