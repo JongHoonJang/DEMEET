@@ -7,7 +7,6 @@ import com.ssafy.db.entity.QUserProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,21 +17,22 @@ public class ProjectsRepositorySupport {
     QUserProject qUserProject = QUserProject.userProject;
     QProjects qProjects = QProjects.projects;
 
-    public Boolean addMemberInProject(Integer member, Integer pid){
-        Long check = jpaQueryFactory.insert(qUserProject)
-                .set(qUserProject.users.uid, member)
-                .set(qUserProject.projects.pid, pid)
-                .execute();
-    return check > 0;
+    public Boolean addMemberInProject(Integer member, Integer pid) {
+//        long check = jpaQueryFactory.insert(qUserProject)
+//                .set(qUserProject.users.uid, member)
+//                .set(qUserProject.projects.pid, pid)
+//                .execute();
+
+        return null;
     }
 
     public Optional<Integer> createProject(Projects newProject) {
-        Long check = jpaQueryFactory.insert(qProjects)
-                .set(qProjects.activation,newProject.isActivation())
-                .set(qProjects.ownerId,newProject.getOwnerId())
+        jpaQueryFactory.insert(qProjects)
+                .set(qProjects.activation, newProject.isActivation())
+                .set(qProjects.ownerId, newProject.getOwnerId())
                 .set(qProjects.pjtDesc, newProject.getPjtDesc())
                 .set(qProjects.pjtName, newProject.getPjtName())
-                .set(qProjects.pjtStartDate,newProject.getPjtStartDate())
+                .set(qProjects.pjtStartDate, newProject.getPjtStartDate())
                 .set(qProjects.totalMeetTime, newProject.getTotalMeetTime())
                 .execute();
 

@@ -1,17 +1,17 @@
 package com.ssafy.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@ToString(of = {"uid", "email", "nickname", "regDate"})
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uid")
     int uid;
     @Column(length = 30, nullable = false, unique = true)
     String email;

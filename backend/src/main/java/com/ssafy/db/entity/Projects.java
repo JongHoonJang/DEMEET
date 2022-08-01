@@ -1,19 +1,19 @@
 package com.ssafy.db.entity;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Getter @Setter
+@ToString(of = {"pid", "ownerId", "pjtStartDate", "pjtEndDate","pjtName","pjtDesc","totalMeetTime","activation"})
 public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pid")
     int pid;
     @Column(nullable = false)
     int ownerId;
