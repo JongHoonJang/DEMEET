@@ -5,6 +5,7 @@
     </div>
     <div>
       <h1>Camera</h1>
+      <!-- <video src=""></video> -->
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <MainNav />
+    <MainNav class="nav"/>
     <MainHeader />
 </template>
 
@@ -15,5 +15,8 @@ export default {
 </script>
 
 <style>
-
+.nav {
+  width:80%; 
+  margin:auto;
+}
 </style>

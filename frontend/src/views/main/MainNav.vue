@@ -11,7 +11,7 @@
     <div class="list-box">
       <div class="list-box">
         <span class="material-symbols-outlined" id="account">account_box</span>
-        <a href="/profile/me">MyPage</a>
+        <a href="/profile/me">{{ account.profile.nickname }}님</a>
       </div>
       <div class="list-box" @click="account.logout">
         <span class="material-symbols-outlined" id="logout">logout</span>
@@ -27,6 +27,7 @@ import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   setup() {
     const account = useAccountStore()
+    account.fetchProfile()
     return {
       account,
     }
@@ -72,14 +73,18 @@ nav input {
   margin-top: 16px;
   background: #111315;
   border-radius: 10px;
-  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 32px;
   line-height: 48px;
   text-align: start;
-  color: white;
+  color: white; 
 }
+
+nav input[type=text]::placeholder {
+  font-family: 'Material Icons Outlined';
+}
+
 
 nav div a {
   font-weight: bold;
