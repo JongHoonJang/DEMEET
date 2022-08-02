@@ -34,7 +34,7 @@ public class UsersServiceImpl implements UsersService {
     PasswordEncoder passwordEncoder;
 
     // User객체를 userSimpleInfoDTO로 만들어주는 함수
-    public userSimpleInfoDTO makeUserSiuserSimpleInfoDTO(Users newUser){
+    public userSimpleInfoDTO makeUserSimpleInfoDTO(Users newUser){
         userSimpleInfoDTO dto = new userSimpleInfoDTO();
         dto.setUid(newUser.getUid());
         dto.setEmail(newUser.getEmail());
