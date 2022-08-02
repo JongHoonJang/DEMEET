@@ -47,12 +47,16 @@
 import axios from 'axios';
 import UserVideo from './UserVideo'
 import { OpenVidu } from 'openvidu-browser';
+//추가
+import api from "@/api/api"
 
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-const OPENVIDU_SERVER_URL = "https://" + location.hostname + ":4443";
-const OPENVIDU_SERVER_SECRET = "MY_SECRET";
+const OPENVIDU_SERVER_URL = "https://" + 'i7b309.p.ssafy.io' + ":4443";
+const OPENVIDU_SERVER_SECRET = "wlwhseodnjs123";
+
+
 
 export default {
   
@@ -105,34 +109,60 @@ export default {
 
 			// 'getToken' method is simulating what your server-side should do.
 			// 'token' parameter should be retrieved and returned by your own backend
-			this.getToken(this.mySessionId).then(token => {
-				this.session.connect(token, { clientData: this.myUserName })
-					.then(() => {
 
-						// --- Get your own camera stream with the desired properties ---
+			// this.getToken(this.mySessionId).then(token => {
+			// 	this.session.connect(token, { clientData: this.myUserName })
+			// 		.then(() => {
 
-						let publisher = this.OV.initPublisher(undefined, {
-							audioSource: undefined, // The source of audio. If undefined default microphone
-							videoSource: undefined, // The source of video. If undefined default webcam
-							publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-							publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-							resolution: '640x480',  // The resolution of your video
-							frameRate: 30,			// The frame rate of your video
-							insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-							mirror: false       	// Whether to mirror your local video or not
-						});
+			// 			// --- Get your own camera stream with the desired properties ---
 
-						this.mainStreamManager = publisher;
-						this.publisher = publisher;
+			// 			let publisher = this.OV.initPublisher(undefined, {
+			// 				audioSource: undefined, // The source of audio. If undefined default microphone
+			// 				videoSource: undefined, // The source of video. If undefined default webcam
+			// 				publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+			// 				publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+			// 				resolution: '640x480',  // The resolution of your video
+			// 				frameRate: 30,			// The frame rate of your video
+			// 				insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
+			// 				mirror: false       	// Whether to mirror your local video or not
+			// 			});
 
-						// --- Publish your stream ---
+			// 			this.mainStreamManager = publisher;
+			// 			this.publisher = publisher;
 
-						this.session.publish(this.publisher);
-					})
-					.catch(error => {
-						console.log('There was an error connecting to the session:', error.code, error.message);
+			// 			// --- Publish your stream ---
+
+			// 			this.session.publish(this.publisher);
+			// 		})
+			// 		.catch(error => {
+			// 			console.log('There was an error connecting to the session:', error.code, error.message);
+			// 		});
+			// });
+			this.getToken((token) => {
+				this.session.connect(token, {'clientData':this.myUserName})
+				.then(() => {
+					console.log("Connection Success");
+					let publisher = this.OV.initPublisher(undefined, {
+						audioSource: undefined, // The source of audio. If undefined default microphone
+						videoSource: undefined, // The source of video. If undefined default webcam
+						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
+						publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+						resolution: '640x480',  // The resolution of your video
+						frameRate: 30,			// The frame rate of your video
+						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
+						mirror: false       	// Whether to mirror your local video or not
 					});
-			});
+					console.log("Publish Success");
+					this.mainStreamManager = publisher;
+					this.publisher = publisher;
+
+					// publish your stream
+					this.session.publish(this.publisher);
+				})
+				.catch( error => {
+					console.log('There was an error connecting to the session:', error.code, error.message)
+				})
+			})
 
 			window.addEventListener('beforeunload', this.leaveSession)
 		},
@@ -167,8 +197,61 @@ export default {
 		 *   3) The Connection.token must be consumed in Session.connect() method
 		 */
 
-		getToken (mySessionId) {
-			return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
+		// getToken (mySessionId) {
+		// 	return this.createSession(mySessionId).then(sessionId => this.createToken(sessionId));
+		// },
+		getToken (callback){
+			this.httpPostRequest(
+				'get-token',
+				{sessionName : this.mySessionId},
+				(response) => {
+					let token = response; // Get token from response
+					console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
+					callback(token); // Continue the join operation
+				}
+			);
+		},
+
+		// httpPostRequest(url, body, errorMsg, callback) {
+		// 	var http = new XMLHttpRequest();
+		// 	http.open('POST', url, true);
+		// 	http.setRequestHeader('Content-type', 'application/json');
+		// 	http.addEventListener('readystatechange', processRequest, false);
+		// 	http.send(JSON.stringify(body));
+
+		// 	function processRequest() {
+		// 		if (http.readyState == 4) {
+		// 			if (http.status == 200) {
+		// 				try {
+		// 					callback(JSON.parse(http.responseText));
+		// 				} catch (e) {
+		// 					callback();Ò
+		// 				}
+		// 			} else {
+		// 				console.warn(errorMsg);
+		// 				console.warn(http.responseText);
+		// 			}
+		// 		}
+		// 	}
+		// },
+		httpPostRequest(url, body, callback){
+			axios({
+                'url': api.conferences.conference() + url,
+                'method': 'post',
+                'data': JSON.stringify(body),
+				// 추후 연결 필요
+				headers: { Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJub2luMTk5NkBuYXZlci5jb20iLCJpc3MiOiJzc2FmeS5jb20iLCJleHAiOjE2NjA3MTI1OTIsImlhdCI6MTY1OTQxNjU5Mn0.jiDFxawgjS9ZkJ5UuGIBZJNbb_zZsQFqNDB2r-sDg-LkHdL_JYOg_NumnVmjx6qEeIEURMidBYUB3gtSwZUlZA`}
+            })
+            .then(res => {
+				console.log(res.data[0]);
+                const token = res.data[0];
+                console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
+                callback(token);
+            })
+            .catch(err => (
+                console.error(err.response),
+                alert('컨퍼런스 토큰 저장에 실패하였습니다.')
+            ))
 		},
 
 		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
