@@ -120,6 +120,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader
       })
         .then(() => {
+          alert('회원탈퇴 되었습니다.')
           this.removeToken()
           router.push({ name: 'LoginView'})
         })
