@@ -149,7 +149,20 @@ public class UsersController {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to change user's nickname"));
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(500, "server error"));
-
     }
 
+    @DeleteMapping()
+    public ResponseEntity<BaseResponseBody> deleteUser(Authentication authentication){
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        System.out.println(ssafyUsersDetails.getUsername());
+        boolean deleteCheck = usersService.deleteUser(ssafyUsersDetails.getUsername());
+        if(deleteCheck) {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to delete user"));
+        }
+        else{
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "fail to find user"));
+
+        }
+
+    }
 }

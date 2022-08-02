@@ -13,10 +13,10 @@ import java.sql.Timestamp;
 public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int cid;
+    Long cid;
 
     @Column(nullable = false)
-    int uid;
+    Long uid;
 
     @Column(nullable = false)
     Timestamp confStartTime;

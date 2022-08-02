@@ -14,9 +14,9 @@ public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pid")
-    int pid;
+    Long pid;
     @Column(nullable = false)
-    int ownerId;
+    Long ownerId;
     @Column(nullable = false)
     LocalDateTime pjtStartDate;
 

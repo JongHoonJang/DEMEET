@@ -43,7 +43,7 @@ public class ProjectsController {
         //owner_id(토큰을 통해 얻어낸다.)
         Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
         projectsCreatePostReq.setOwner_id(user.getUid());
-        Integer pid = null;
+        Long pid = null;
         try {
             pid = projectsService.createProject(projectsCreatePostReq);
         } catch (UidNullException e) {
@@ -53,7 +53,7 @@ public class ProjectsController {
     }
 
     @GetMapping("/{pid}")
-    public ResponseEntity<BaseResponseBody> getProject(@PathVariable int pid) {
+    public ResponseEntity<BaseResponseBody> getProject(@PathVariable Long pid) {
 //        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         System.out.println("ProjectsController.getProject");
         System.out.println("pid = " + pid);

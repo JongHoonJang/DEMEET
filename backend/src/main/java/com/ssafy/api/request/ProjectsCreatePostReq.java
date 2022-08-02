@@ -16,7 +16,7 @@ public class ProjectsCreatePostReq {
     /**
      * The Owner id.
      */
-    int owner_id;
+    Long owner_id;
     /**
      * The Pjt name.
      */
@@ -24,7 +24,7 @@ public class ProjectsCreatePostReq {
     /**
      * The Member list.
      */
-    List<Integer> memberList;
+    List<Long> memberList;
     /**
      * The Pjt desc.
      */

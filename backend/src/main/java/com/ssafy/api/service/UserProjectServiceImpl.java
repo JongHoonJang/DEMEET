@@ -15,7 +15,7 @@ public class UserProjectServiceImpl implements UserProjectService{
     @Autowired
     UserProjectRepositorySupport userProjectRepositorySupport;
     @Override
-    public List<userSimpleInfoDTO> getUserListByPid(int pid) throws UidNullException {
+    public List<userSimpleInfoDTO> getUserListByPid(Long pid) throws UidNullException {
         Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserListByPid(pid);
         List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
         for(userSimpleInfoDTO user : userList) {
