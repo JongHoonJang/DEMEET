@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.ProjectsCreatePostReq;
+import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
@@ -92,6 +93,14 @@ public class ProjectsServiceImpl implements ProjectsService {
             userProjectCnt++;
         }
         return savedProject.getPid();
+    }
+
+    @Override
+    public Projects getProject(int pid) throws ProjectNullException {
+        Optional<Projects> optProject = projectRepositorySupport.getProject(pid);
+        // 위 결과가 null이면 오류발생, null이 아니면 정상값 반환
+        Projects project = optProject.orElseThrow(() -> new ProjectNullException("Project " + pid + " does not exist"));
+        return project;
     }
 }
 
