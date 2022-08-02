@@ -13,8 +13,20 @@ import java.util.List;
 @Setter
 @ToString
 public class ProjectsCreatePostReq {
+    /**
+     * The Owner id.
+     */
     int owner_id;
+    /**
+     * The Pjt name.
+     */
     String pjt_name;
+    /**
+     * The Member list.
+     */
     List<Integer> memberList;
+    /**
+     * The Pjt desc.
+     */
     String pjt_desc;
 }

@@ -4,6 +4,7 @@ import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
+import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ProjectsController {
     ProjectsService projectsService;
 
     @PostMapping()
-    public ResponseEntity<BaseResponseBody> createProject(@ApiIgnore Authentication authentication, @RequestBody ProjectsCreatePostReq projectsCreatePostReq){
+    public ResponseEntity<BaseResponseBody> createProject(@ApiIgnore Authentication authentication, @RequestBody ProjectsCreatePostReq projectsCreatePostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         //프로젝트 생성에 필요한 정보들은 다음과같다.
         //owner_id(토큰을 통해 얻어낸다.)
@@ -36,10 +37,13 @@ public class ProjectsController {
         //pjt_name(필수)
         //pjt_start_date(직접 생성해준다.)
         //total_meet_time(일단 0로 둔다.)
-        Integer pid = projectsService.createProject(projectsCreatePostReq);
-
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, pid+""));
-//        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "email checked, no duplicated email"));
+        Integer pid = null;
+        try {
+            pid = projectsService.createProject(projectsCreatePostReq);
+        } catch (UidNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to make project"));
 
     }
 }
