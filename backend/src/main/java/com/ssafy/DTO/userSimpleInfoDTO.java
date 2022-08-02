@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class userSimpleInfoDTO {
-    int uid;
+    Long uid;
     String email;
     String nickname;
 
@@ -13,7 +13,7 @@ public class userSimpleInfoDTO {
     }
 
     @QueryProjection
-    public userSimpleInfoDTO(int uid, String email, String nickname) {
+    public userSimpleInfoDTO(Long uid, String email, String nickname) {
         this.uid = uid;
         this.email = email;
         this.nickname = nickname;
