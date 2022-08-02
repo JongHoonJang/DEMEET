@@ -3,6 +3,7 @@ const HOST = 'http://127.0.0.1:8080/'
 const ACCOUNTS = 'users/'
 const PROJECTS = 'projects/'
 const IMAGES = 'images/'
+const CONFERENCE = 'api-sessions/'
 
 export default {
   accounts: {
@@ -21,5 +22,8 @@ export default {
     image_list_delete: project_pk => HOST + PROJECTS + `${project_pk}/`+ IMAGES, // get, delete
     image_save: (project_pk,user_pk) => HOST + PROJECTS + `${project_pk}/` + `${user_pk}/` + IMAGES, //post
     add_user: (project_pk, user_pk) => HOST + PROJECTS + `${project_pk}/` + `${user_pk}/`, //post
+  },
+  conferences: {
+    conference: () => HOST + CONFERENCE,
   }
 }
