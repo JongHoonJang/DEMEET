@@ -10,6 +10,7 @@
       </article>
       <footer>
         <!-- 동작 버튼 등,  -->
+        <ConferenceFooter/>
       </footer>
     </section>
     <aside>
@@ -28,9 +29,10 @@
 import ConferenceVideo from './ConferenceVideo'
 import ConferenceUsers from './ConferenceUsers'
 import ConferenceChat from './ConferenceChat'
+import ConferenceFooter from './ConferenceFooter'
 
 export default {
-components: { ConferenceVideo, ConferenceUsers, ConferenceChat }
+components: { ConferenceVideo, ConferenceUsers, ConferenceChat, ConferenceFooter }
 }
 
 </script>
