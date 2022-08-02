@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class UserConference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int ucid;
+    Long ucid;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "uid")

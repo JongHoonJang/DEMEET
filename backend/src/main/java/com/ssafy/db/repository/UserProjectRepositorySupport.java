@@ -20,7 +20,7 @@ public class UserProjectRepositorySupport {
     QUserProject qUserProject = QUserProject.userProject;
     QUsers qUsers = QUsers.users;
 
-    public Optional<List<userSimpleInfoDTO>> getUserListByPid(int pid) {
+    public Optional<List<userSimpleInfoDTO>> getUserListByPid(Long pid) {
         List<userSimpleInfoDTO> userList = jpaQueryFactory.select(new QuserSimpleInfoDTO(qUserProject.users.uid, qUserProject.users.email, qUserProject.users.nickname))
                 .from(qUserProject)
                 .where(qUserProject.projects.pid.eq(pid)).fetch();

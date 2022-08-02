@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class ProrileImagePath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int pipid;
+    Long pipid;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="uid")

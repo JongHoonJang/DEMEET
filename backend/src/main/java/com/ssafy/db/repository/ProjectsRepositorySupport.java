@@ -18,7 +18,7 @@ public class ProjectsRepositorySupport {
     QProjects qProjects = QProjects.projects;
 
 
-    public Optional<Projects> getProject(int pid) {
+    public Optional<Projects> getProject(Long pid) {
        Projects project = jpaQueryFactory.select(qProjects)
                .from(qProjects).where(qProjects.pid.eq(pid))
                .fetchOne();

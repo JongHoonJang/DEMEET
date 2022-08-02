@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class DrawingImgPath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int dipid;
+    Long dipid;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="uid")

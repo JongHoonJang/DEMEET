@@ -43,6 +43,21 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public boolean deleteUser(String username) {
+        try {
+            Long uid = usersRepositorySupport.findUserByEmail(username).get().getUid();
+            System.out.println("uid: " + uid);;
+            Long userId = Long.valueOf(uid);
+            System.out.println("userId: " + userId);
+            usersRepository.deleteById(userId);
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public Users createUsers(UsersRegisterPostReq usersRegisterInfo) {
         Users newUser = new Users();
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
@@ -79,20 +94,20 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     @Transactional
-    public Boolean changeUserPassword(int uid, String newPassword) {
+    public Boolean changeUserPassword(Long uid, String newPassword) {
         Boolean changeCheck = usersRepositorySupport.changeUserPassword(uid, passwordEncoder.encode(newPassword));
         return changeCheck;
     }
 
     @Override
     @Transactional
-    public Boolean changeUserNickname(int uid, String newNickname) {
+    public Boolean changeUserNickname(Long uid, String newNickname) {
         Boolean changeCheck = usersRepositorySupport.changeUserNickname(uid, newNickname);
         return changeCheck;
     }
 
     @Override
-    public userSimpleInfoDTO getUsersByUid(int ownerId) throws UidNullException {
+    public userSimpleInfoDTO getUsersByUid(Long ownerId) throws UidNullException {
         Optional<Users> optOwner = usersRepositorySupport.findUserById(ownerId);
         Users owner = optOwner.orElseThrow(() -> new UidNullException("User not found: " + ownerId));
 

@@ -11,7 +11,7 @@ import com.ssafy.db.entity.Projects;
  */
 public interface ProjectsService {
 
-    Integer createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException;
+    Long createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException;
 
-    Projects getProject(int pid) throws ProjectNullException;
+    Projects getProject(Long pid) throws ProjectNullException;
 }

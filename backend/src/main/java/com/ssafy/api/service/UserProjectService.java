@@ -12,5 +12,5 @@ import java.util.List;
 public interface UserProjectService {
 
 
-    List<userSimpleInfoDTO> getUserListByPid(int pid) throws UidNullException;
+    List<userSimpleInfoDTO> getUserListByPid(Long pid) throws UidNullException;
 }
