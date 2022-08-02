@@ -57,10 +57,10 @@ sourceCompatibility = '1.8'
 //    // Set the work directory where node_modules should be located
 //    nodeModulesDir = file("${project.projectDir}/../frontend")
 //}
-
-configurations {
-    providedRuntime
-}
+//
+//configurations {
+//    providedRuntime
+//}
 
 /*task npmInstall(type: NpmTask, overwrite: true) {
     args = ['install']
@@ -72,8 +72,8 @@ configurations {
 //}
 
 // processResources is a Java task. Run the webpack bundling before this task using the 'build' task in the package.json
-// 프론트가 있으면 다시 살리기
-//processResources.dependsOn 'webpack'
+// 프론트가 있으면 주석 해제
+// processResources.dependsOn 'webpack'
 
 //set build time and inject value to application.properties
 def buildTime() {
@@ -160,6 +160,12 @@ dependencies {
     implementation('org.kurento:kurento-client:6.16.0')
     implementation('org.kurento:kurento-utils-js:6.15.0')
 
+    //Openvidu 관련 의존성 추가
+    implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.22.0'
+
+    //json 처리를 위한 의존성 추가
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 
     //IntelliJ용
     //IntelliJ에서는 하기 annotationProcessor를 쓰면 별도의 querydsl 플러그인 및 플러그인 설정이 불필요.
@@ -175,7 +181,7 @@ dependencies {
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
 
     implementation("com.auth0:java-jwt:3.10.3")
-    
+
     implementation("io.springfox:springfox-swagger2:3.0.0")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
     implementation("io.springfox:springfox-data-rest:3.0.0")
