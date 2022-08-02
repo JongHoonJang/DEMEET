@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
+import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Users;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface UsersService {
     Boolean changeUserPassword(int uid, String newPassword);
 
     Boolean changeUserNickname(int uid, String newNickname);
+
+    userSimpleInfoDTO getUsersByUid(int ownerId) throws UidNullException;
 }

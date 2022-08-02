@@ -17,28 +17,12 @@ public class ProjectsRepositorySupport {
     QUserProject qUserProject = QUserProject.userProject;
     QProjects qProjects = QProjects.projects;
 
-    public Boolean addMemberInProject(Integer member, Integer pid) {
-//        long check = jpaQueryFactory.insert(qUserProject)
-//                .set(qUserProject.users.uid, member)
-//                .set(qUserProject.projects.pid, pid)
-//                .execute();
 
-        return null;
-    }
-
-    public Optional<Integer> createProject(Projects newProject) {
-        jpaQueryFactory.insert(qProjects)
-                .set(qProjects.activation, newProject.isActivation())
-                .set(qProjects.ownerId, newProject.getOwnerId())
-                .set(qProjects.pjtDesc, newProject.getPjtDesc())
-                .set(qProjects.pjtName, newProject.getPjtName())
-                .set(qProjects.pjtStartDate, newProject.getPjtStartDate())
-                .set(qProjects.totalMeetTime, newProject.getTotalMeetTime())
-                .execute();
-
-        Integer pid = jpaQueryFactory.select(qProjects.pid).from(qProjects).where(qProjects.pjtName.eq(newProject.getPjtName()), qProjects.pjtStartDate.eq(newProject.getPjtStartDate())).fetchOne();
-        return Optional.ofNullable(pid);
-
-
+    public Optional<Projects> getProject(int pid) {
+       Projects project = jpaQueryFactory.select(qProjects)
+               .from(qProjects).where(qProjects.pid.eq(pid))
+               .fetchOne();
+        if (project == null) return Optional.empty();
+        return Optional.ofNullable(project);
     }
 }
