@@ -23,6 +23,14 @@ public class UsersRepositorySupport {
     QUsers qNewUsers = QUsers.users;
 
 
+    public Optional<Users> findUserById(Integer id) {
+        Users User = jpaQueryFactory.select(qNewUsers)
+                .from(qNewUsers)
+                .where(qNewUsers.uid.eq(id)).fetchOne();
+        if (User == null) return Optional.empty();
+        return Optional.ofNullable(User);
+    }
+
     public Optional<Users> findUserByEmail(String email) {
         Users newUser = jpaQueryFactory.select(qNewUsers).from(qNewUsers)
                 .where(qNewUsers.email.eq(email)).fetchOne();

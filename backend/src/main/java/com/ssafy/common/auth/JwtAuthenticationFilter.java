@@ -25,25 +25,28 @@ import com.ssafy.common.util.ResponseBodyWriteUtil;
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-	private UsersService usersService;
-	
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UsersService usersService) {
-		super(authenticationManager);
-		this.usersService = usersService;
-	}
+    private UsersService usersService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		// Read the Authorization header, where the JWT Token should be
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UsersService usersService) {
+        super(authenticationManager);
+        System.out.println("JwtAuthenticationFilter.JwtAuthenticationFilter");
+        this.usersService = usersService;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        // Read the Authorization header, where the JWT Token should be
         String header = request.getHeader(JwtTokenUtil.HEADER_STRING);
+        System.out.println("request " + request.getRequestURI() + ": " + request.getHeader(JwtTokenUtil.HEADER_STRING) + "\nullable " + header);
+        System.out.println("doFilterInternal => header = " + header);
 
         // If header does not contain BEARER or is null delegate to Spring impl and exit
         if (header == null || !header.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         try {
             // If header is present, try grab user principal from database and perform authorization
             Authentication authentication = getAuthentication(request);
@@ -53,13 +56,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             ResponseBodyWriteUtil.sendError(request, response, ex);
             return;
         }
-        
+
         filterChain.doFilter(request, response);
-	}
-	
-	@Transactional(readOnly = true)
+    }
+
+    @Transactional(readOnly = true)
     public Authentication getAuthentication(HttpServletRequest request) throws Exception {
         String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
+        System.out.println("getAuthentication => token = " + token);
+
         // 요청 헤더에 Authorization 키값에 jwt 토큰이 포함된 경우에만, 토큰 검증 및 인증 처리 로직 실행.
         System.out.println("$%$%$%$%$%$%$%$%$%$filter 74");
         System.out.println(token);
@@ -69,19 +74,19 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             JwtTokenUtil.handleError(token);
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
-            
+
             // Search in the DB if we find the user by token subject (username)
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (email != null) {
-                    // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-            		Users newUser = usersService.getUsersByUserEmail(email);
-                if(newUser != null) {
-                        // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                		SsafyUsersDetails usersDetails = new SsafyUsersDetails(newUser);
-                		UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(email,
-                				null, usersDetails.getAuthorities());
-                		jwtAuthentication.setDetails(usersDetails);
-                		return jwtAuthentication;
+                // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
+                Users newUser = usersService.getUsersByUserEmail(email);
+                if (newUser != null) {
+                    // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
+                    SsafyUsersDetails usersDetails = new SsafyUsersDetails(newUser);
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(email,
+                            null, usersDetails.getAuthorities());
+                    jwtAuthentication.setDetails(usersDetails);
+                    return jwtAuthentication;
                 }
             }
             return null;
