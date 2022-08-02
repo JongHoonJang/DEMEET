@@ -6,6 +6,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
+import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.UsersRepository;
 import com.ssafy.db.repository.UsersRepositorySupport;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service("usersService")
@@ -30,6 +32,15 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    // User객체를 userSimpleInfoDTO로 만들어주는 함수
+    public userSimpleInfoDTO makeUserSiuserSimpleInfoDTO(Users newUser){
+        userSimpleInfoDTO dto = new userSimpleInfoDTO();
+        dto.setUid(newUser.getUid());
+        dto.setEmail(newUser.getEmail());
+        dto.setNickname(newUser.getNickname());
+        return dto;
+    }
 
     @Override
     public Users createUsers(UsersRegisterPostReq usersRegisterInfo) {
@@ -78,5 +89,13 @@ public class UsersServiceImpl implements UsersService {
     public Boolean changeUserNickname(int uid, String newNickname) {
         Boolean changeCheck = usersRepositorySupport.changeUserNickname(uid, newNickname);
         return changeCheck;
+    }
+
+    @Override
+    public userSimpleInfoDTO getUsersByUid(int ownerId) throws UidNullException {
+        Optional<Users> optOwner = usersRepositorySupport.findUserById(ownerId);
+        Users owner = optOwner.orElseThrow(() -> new UidNullException("User not found: " + ownerId));
+
+        return makeUserSiuserSimpleInfoDTO(owner);
     }
 }
