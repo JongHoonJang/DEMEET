@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import '@/stores/chat'
 
 export default {
   name: 'ConferenceChat',
