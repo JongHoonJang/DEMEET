@@ -96,6 +96,6 @@ public class UsersServiceImpl implements UsersService {
         Optional<Users> optOwner = usersRepositorySupport.findUserById(ownerId);
         Users owner = optOwner.orElseThrow(() -> new UidNullException("User not found: " + ownerId));
 
-        return makeUserSiuserSimpleInfoDTO(owner);
+        return makeUserSimpleInfoDTO(owner);
     }
 }
