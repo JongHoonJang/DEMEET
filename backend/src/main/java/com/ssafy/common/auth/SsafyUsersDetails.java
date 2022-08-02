@@ -1,6 +1,5 @@
 package com.ssafy.common.auth;
 
-import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

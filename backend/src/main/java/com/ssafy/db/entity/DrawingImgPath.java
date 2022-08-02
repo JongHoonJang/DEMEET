@@ -13,15 +13,15 @@ public class DrawingImgPath {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int dipid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="uid")
     Users user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="pid")
     Projects project;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="cid")
     Conferences conference;
 
