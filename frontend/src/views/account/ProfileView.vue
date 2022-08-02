@@ -43,6 +43,9 @@
       <div class='pjt'>PJT3</div>
       <div class='pjt'>PJT4</div>
     </div>
+    <div class="hidden">
+      <p class="signout" @click="signout()">회원탈퇴</p>
+    </div>
   </div>
 </template>
 
@@ -76,11 +79,16 @@ export default defineComponent({
         alert('변경할 닉네임을 입력하세요')
       }
     }
+    const signout = () => {
+      confirm("회원탈퇴 하시겠습니까?")
+      account.signout()
+    }
     account.fetchProfile()
     return {
       account,
       name,
-      onUpdate
+      onUpdate,
+      signout
     }
   },
 })
@@ -187,5 +195,17 @@ input {
   display: flex;
   align-items: center;
   margin-right: 30px;
+}
+
+.hidden {
+  display: flex;
+  justify-content: end;
+}
+.signout {
+  color: black;
+}
+
+.signout:hover {
+  color: red;
 }
 </style>
