@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -30,4 +32,7 @@ public class Projects {
     LocalDateTime totalMeetTime;
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
+
+    @OneToMany(mappedBy = "projects")
+    List<UserProject> userProjectList = new ArrayList<UserProject>();
 }
