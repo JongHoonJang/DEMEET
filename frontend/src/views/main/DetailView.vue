@@ -1,5 +1,5 @@
 <template>
-    <MainNav />
+    <MainNav class="nav"/>
     <div class="container">
       <div>
         <h1>저장된 이미지</h1>
@@ -30,6 +30,9 @@ export default {
 </script>
 
 <style scoped>
+.nav {
+  width:80%; 
+}
 #person {
   font-size: 60px;
   margin-left: 16px;

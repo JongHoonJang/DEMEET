@@ -4,9 +4,6 @@
       <input type="text" class="search" placeholder="Search User">
       <div class="user-list">
         <UserList />
-        <UserList />
-        <UserList />
-        <UserList />
       </div>
     </div>
   </div>
