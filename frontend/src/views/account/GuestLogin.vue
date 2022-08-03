@@ -5,18 +5,15 @@
         <div style='display:flex; justify-content:center;'>
           <h1 class='sign-head'>Guest</h1>
         </div>
-        <div class='account-info'>
-          <p><input type="text" placeholder="Email" class="input-prop"></p>
-          <p><input type="text" placeholder="Full Name" class="input-prop"></p>
-        </div>
-        <div>
-          <button>Join</button>
-        </div>
+        <form @submit="guest(guestData)" class='account-info'>
+          <p><input type="email" v-model="guestData.eamil" placeholder="Email" class="input-prop"></p>
+          <p><input type="text" v-model="guestData.name" placeholder="Full Name" class="input-prop"></p>
+          <button class="guest-btn">Join</button>
+        </form>
       </div>
       <div class='account-right'>
         <div class='image-box'>
           <h1 class="logo">DEMEET</h1>
-          <!-- <img src="@/assets/DEMEET_logo.png" alt=""> -->
         </div>
         <div>
           <h1>Camera</h1>
@@ -28,8 +25,18 @@
 
 <script>
 export default {
-  components: {
-
+  setup() {
+    const guestData = {
+      name: '',
+      email: ''
+    }
+    const guest = () => {
+      console.log(guestData)
+    }
+    return {
+      guestData,
+      guest
+    }
   }
 }
 </script>
@@ -48,6 +55,13 @@ input::placeholder {color:white;}
   width: 20vw;
   height: 20vh;
 
+}
+
+.guest-btn {
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
+  border-radius: 5px;
 }
 
 .input-prop {
@@ -70,10 +84,8 @@ input::placeholder {color:white;}
   background-color : rgba(26, 15, 31, 0.3);
   background-clip: content-box;
   display: flex;
-  padding: 10vw 15vw;
-  width: 50vw;
+  width: 60vw;
   height: 60vh;
-  border: solid;
   flex-grow: 1;
   justify-content: space-evenly;
 }
