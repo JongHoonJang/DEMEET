@@ -7,7 +7,9 @@ package com.ssafy.api.service;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.common.customException.UidNullException;
+import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
+import com.ssafy.db.repository.ProjectsRepository;
 import com.ssafy.db.repository.UsersRepository;
 import com.ssafy.db.repository.UsersRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class UsersServiceImpl implements UsersService {
     UsersRepositorySupport usersRepositorySupport;
 
     @Autowired
+    ProjectsRepository projectsRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     // User객체를 userSimpleInfoDTO로 만들어주는 함수
@@ -40,21 +45,6 @@ public class UsersServiceImpl implements UsersService {
         dto.setEmail(newUser.getEmail());
         dto.setNickname(newUser.getNickname());
         return dto;
-    }
-
-    @Override
-    public boolean deleteUser(String username) {
-        try {
-            Long uid = usersRepositorySupport.findUserByEmail(username).get().getUid();
-            System.out.println("uid: " + uid);;
-            Long userId = Long.valueOf(uid);
-            System.out.println("userId: " + userId);
-            usersRepository.deleteById(userId);
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -112,5 +102,25 @@ public class UsersServiceImpl implements UsersService {
         Users owner = optOwner.orElseThrow(() -> new UidNullException("User not found: " + ownerId));
 
         return makeUserSimpleInfoDTO(owner);
+    }
+
+    @Override
+    public boolean deleteUser(String username) {
+        try {
+            Long uid = usersRepositorySupport.findUserByEmail(username).get().getUid();
+            Long userId = uid;
+            System.out.println("userId: " + userId);
+            // 여기서 사용자가 만든 프로젝트가 있는지 조회한다.
+            List<Projects> projectsList = projectsRepository.findProjectsByOwnerId(uid);
+            System.out.println(projectsList.size());
+            if (projectsList.size() != 0){
+
+            }
+            usersRepository.deleteById(userId);
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
     }
 }

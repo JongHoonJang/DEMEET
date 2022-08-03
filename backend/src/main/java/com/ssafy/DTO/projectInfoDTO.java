@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class projectInfoDTO {
     Long pid;
-    userSimpleInfoDTO projectOwner;
+    Long projectOwner;
     List<userSimpleInfoDTO> member;
     LocalDateTime pjtStartDate;
     LocalDateTime pjtEndDate;

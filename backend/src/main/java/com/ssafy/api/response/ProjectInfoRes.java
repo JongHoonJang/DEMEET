@@ -19,7 +19,7 @@ public class ProjectInfoRes extends BaseResponseBody {
     public ProjectInfoRes(){
         super();
     }
-    public static ProjectInfoRes of(Integer statusCode, String message, Projects project, userSimpleInfoDTO projectOwner,  List<userSimpleInfoDTO> userList){
+    public static ProjectInfoRes of(Integer statusCode, String message, Projects project, Long projectOwner,  List<userSimpleInfoDTO> userList){
         ProjectInfoRes res = new ProjectInfoRes();
 //         project = new projectInfoDTO();
         res.setStatusCode(statusCode);
