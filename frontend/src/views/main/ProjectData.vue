@@ -38,10 +38,6 @@
     </div>
     <div class="user-box">
       <UserIcon />
-      <UserIcon />
-      <UserIcon />
-      <UserIcon />
-      <UserIcon />
     </div>
     <div class="time">
       <p>프로젝트 시작일</p>

@@ -32,7 +32,6 @@ export default {
 <style scoped>
 .nav {
   width:80%; 
-  margin:auto;
 }
 #person {
   font-size: 60px;
