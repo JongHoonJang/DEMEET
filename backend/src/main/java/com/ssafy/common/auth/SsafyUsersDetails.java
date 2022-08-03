@@ -109,4 +109,6 @@ public class SsafyUsersDetails implements UserDetails {
     public void setAuthorities(List<GrantedAuthority> roles) {
         this.roles = roles;
     }
+
+    public Long getUserUid() {return newUser.getUid();}
 }

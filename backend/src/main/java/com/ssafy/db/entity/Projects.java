@@ -33,6 +33,7 @@ public class Projects {
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
 
-    @OneToMany(mappedBy = "projects")
+    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
     List<UserProject> userProjectList = new ArrayList<UserProject>();
+
 }

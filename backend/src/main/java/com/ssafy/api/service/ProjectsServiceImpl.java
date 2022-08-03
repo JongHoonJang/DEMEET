@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
@@ -33,6 +34,18 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Autowired
     ProjectsRepositorySupport projectRepositorySupport;
+
+
+    public ProjectSimpleInfoDTO makeProjectSimpleInfoDTO(Projects project) {
+        ProjectSimpleInfoDTO simpleInfoDTO = new ProjectSimpleInfoDTO();
+        simpleInfoDTO.setPid(project.getPid());
+        simpleInfoDTO.setProjectOwner(project.getOwnerId());
+        simpleInfoDTO.setPjtName(project.getPjtName());
+        simpleInfoDTO.setPjtDesc(project.getPjtDesc());
+        simpleInfoDTO.setActivation(project.isActivation());
+        return simpleInfoDTO;
+    }
+
 
     @Override
     @Transactional
@@ -102,6 +115,22 @@ public class ProjectsServiceImpl implements ProjectsService {
         // 위 결과가 null이면 오류발생, null이 아니면 정상값 반환
         Projects project = optProject.orElseThrow(() -> new ProjectNullException("Project " + pid + " does not exist"));
         return project;
+    }
+
+    @Override
+    public List<ProjectSimpleInfoDTO> getActivateProjectsList(Long uid) throws ProjectNullException {
+        List<Projects> activateProjectsList = projectRepository.findProjectsByOwnerIdAndActivation(uid, true).orElseThrow(() -> new ProjectNullException("not found"));
+        System.out.println("ProjectsServiceImpl.getActivateProjectsList");
+        System.out.println("리스트 사이즈 = " + activateProjectsList.size());
+        List<ProjectSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectSimpleInfoDTO>();
+        for (Projects project : activateProjectsList) {
+            System.out.println(project.toString());
+            // 리스트속 객체(Projects)들을들을 우리가 원하는 객체(ProjectSimpleInfoDTO)로 바꿔준다.
+            projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
+        }
+        System.out.println("새로운 프로젝트 사이즈 = "+projectSimpleInfoList.size());
+
+        return projectSimpleInfoList;
     }
 }
 

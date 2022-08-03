@@ -1,14 +1,12 @@
 package com.ssafy.DTO;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class projectInfoDTO {
+public class ProjectInfoDTO {
     Long pid;
     Long projectOwner;
     List<userSimpleInfoDTO> member;

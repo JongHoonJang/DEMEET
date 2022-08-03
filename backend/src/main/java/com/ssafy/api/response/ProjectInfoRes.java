@@ -1,12 +1,11 @@
 package com.ssafy.api.response;
 
 
-import com.ssafy.DTO.projectInfoDTO;
+import com.ssafy.DTO.ProjectInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -14,14 +13,14 @@ import java.util.List;
 public class ProjectInfoRes extends BaseResponseBody {
 
 
-    projectInfoDTO project = new projectInfoDTO();
+    ProjectInfoDTO project = new ProjectInfoDTO();
 
     public ProjectInfoRes(){
         super();
     }
     public static ProjectInfoRes of(Integer statusCode, String message, Projects project, Long projectOwner,  List<userSimpleInfoDTO> userList){
         ProjectInfoRes res = new ProjectInfoRes();
-//         project = new projectInfoDTO();
+//         project = new ProjectInfoDTO();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         System.out.println(project.toString());
