@@ -2,12 +2,12 @@
   <a href="/project/1" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
-      <span style="font-size: 20px">PJT-name</span>
+      <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
     </div>
     <div class="box">
       <span class="material-symbols-outlined" id="group">group</span>
       <span style="font-size: 20px">Members</span>
-      <span class="member">3</span>
+      <span class="member">{{ demeet.project.member.length }}</span>
     </div>
     <!-- <div class="box">
       <span class="material-symbols-outlined" id="cancel">cancel_presentation</span>
@@ -20,16 +20,31 @@
     <div class="host-box">
       <span class="material-symbols-outlined" id="person">person</span>
       <div class="host-data">
-        <p>Host</p>
-        <p>SSAFY@SSAFY.com</p>
+        <p>{{ host.nickname }}</p>
+        <p>{{ host.email }}</p>
       </div>
     </div>
   </a>
 </template>
 
 <script>
-export default {
-}
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
+export default defineComponent({
+  props: ['project'],
+  setup(props) {
+    console.log(props.project)
+    const demeet = props
+    const account = useAccountStore()
+    account.userList()
+    const host = account.userList.find(user => user.uid === demeet.project.projectOwner)
+    return {
+      demeet,
+      host
+    }
+  }
+
+})
 </script>
 
 <style scoped>
