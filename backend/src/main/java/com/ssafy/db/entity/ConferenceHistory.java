@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class ConferenceHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int chid;
+    Long chid;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name ="uid")

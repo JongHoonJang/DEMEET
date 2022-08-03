@@ -9,30 +9,6 @@
         <ProjectList 
 
         />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
       </div>
   </header>
 </template>

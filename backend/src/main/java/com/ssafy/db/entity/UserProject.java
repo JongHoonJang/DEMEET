@@ -14,7 +14,7 @@ public class UserProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int upid;
+    Long upid;
 
     @ManyToOne
     @JoinColumn(name = "uid")

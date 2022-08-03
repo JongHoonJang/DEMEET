@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -37,14 +36,16 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
-    public Integer createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException {
+    public Long createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException {
 //        1. 프로젝트를 먼저 생성해준다.
         Projects project = new Projects();
 //        (컨트롤러에서 ownerId확인과정을 거치므로 다시 확인해줄 필요는 없음.
 //        2. 회원들의 명단을 넣기전에 다 있는지 확인함.
-        List<Integer> memberList = projectsCreatePostReq.getMemberList();
+        List<Long> memberList = new ArrayList<Long>();
+        memberList.add(projectsCreatePostReq.getOwner_id());
+        memberList.addAll(projectsCreatePostReq.getMemberList());
         List<Users> userList = new ArrayList<Users>();
-        for (Integer member : memberList) {
+        for (Long member : memberList) {
             /*
             Oprional.empty로 반환된 타입의 경우 isPresent로 null인지 아닌지 확인가능함.
             !isPresent를 해줌으로써 null인지 체크 후 Exception반환해줌.
@@ -96,7 +97,7 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
-    public Projects getProject(int pid) throws ProjectNullException {
+    public Projects getProject(Long pid) throws ProjectNullException {
         Optional<Projects> optProject = projectRepositorySupport.getProject(pid);
         // 위 결과가 null이면 오류발생, null이 아니면 정상값 반환
         Projects project = optProject.orElseThrow(() -> new ProjectNullException("Project " + pid + " does not exist"));

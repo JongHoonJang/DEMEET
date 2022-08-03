@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -12,7 +14,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uid")
-    int uid;
+    Long uid;
     @Column(length = 30, nullable = false, unique = true)
     String email;
     @Column(length = 100, nullable = false)
@@ -22,5 +24,7 @@ public class Users {
     @Column(nullable = false)
     LocalDateTime regDate;
 
+    @OneToMany(mappedBy ="users", cascade = CascadeType.ALL)
+    List<UserProject> userProjectList = new ArrayList<UserProject>();
 
 }

@@ -18,7 +18,7 @@ public class UsersRes {
 
 
     @ApiModelProperty(name="user's uid")
-    int uid;
+    Long uid;
     @ApiModelProperty(name="user's email")
     String email;
     @ApiModelProperty(name="user's nickname")

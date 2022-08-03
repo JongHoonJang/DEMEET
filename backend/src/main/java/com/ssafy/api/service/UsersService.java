@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface UsersService {
 
+    boolean deleteUser(String username);
+
     Users createUsers(UsersRegisterPostReq usersRegisterInfo);
 
     Users getUsersByUserEmail(String userEmail);
@@ -19,9 +21,9 @@ public interface UsersService {
 
     List<userSimpleInfoDTO> getUserList();
 
-    Boolean changeUserPassword(int uid, String newPassword);
+    Boolean changeUserPassword(Long uid, String newPassword);
 
-    Boolean changeUserNickname(int uid, String newNickname);
+    Boolean changeUserNickname(Long uid, String newNickname);
 
-    userSimpleInfoDTO getUsersByUid(int ownerId) throws UidNullException;
+    userSimpleInfoDTO getUsersByUid(Long ownerId) throws UidNullException;
 }

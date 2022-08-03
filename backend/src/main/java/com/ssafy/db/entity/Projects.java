@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -14,9 +16,9 @@ public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pid")
-    int pid;
+    Long pid;
     @Column(nullable = false)
-    int ownerId;
+    Long ownerId;
     @Column(nullable = false)
     LocalDateTime pjtStartDate;
 
@@ -30,4 +32,7 @@ public class Projects {
     LocalDateTime totalMeetTime;
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
+
+    @OneToMany(mappedBy = "projects")
+    List<UserProject> userProjectList = new ArrayList<UserProject>();
 }
