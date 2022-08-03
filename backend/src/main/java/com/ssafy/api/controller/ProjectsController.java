@@ -65,12 +65,13 @@ public class ProjectsController {
             // 이후 pid로 userprojects테이블에서 해당 pid를 가진 유저들을 모조리 가지고온다.
             List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(pid);
 
-            // owner_id에 넣어줄 userSimpleInfoDTO 또한 만들어준다.
-            userSimpleInfoDTO projectOwner = usersService.getUsersByUid(project.getOwnerId());
+//            // owner_id에 넣어줄 userSimpleInfoDTO 또한 만들어준다.
+//            userSimpleInfoDTO projectOwner = usersService.getUsersByUid(project.getOwnerId());
+            // owner_id는 uid값만 넣어준다.
 
             // 이제 이 모든걸 하나로 합쳐준다.
             System.out.println("하나로 합쳐준다~");
-            return ResponseEntity.status(200).body(ProjectInfoRes.of(200, "success to find project details", project, projectOwner, userList));
+            return ResponseEntity.status(200).body(ProjectInfoRes.of(200, "success to find project details", project, project.getOwnerId(), userList));
 
         } catch (ProjectNullException e) {
             // pid로 프로젝트를 찾지 못한다면
