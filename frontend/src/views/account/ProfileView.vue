@@ -84,6 +84,7 @@ export default defineComponent({
       account.signout()
     }
     account.fetchProfile()
+    console.log(account.profile)
     return {
       account,
       name,

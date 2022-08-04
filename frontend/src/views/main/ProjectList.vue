@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name:'DetailView', params: { project_pk: demeet.project.pid }}" class="project-box">
+  <router-link :to="{ name: 'DetailView', params: { project_pk }}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
       <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
@@ -7,7 +7,7 @@
     <div class="box">
       <span class="material-symbols-outlined" id="group">group</span>
       <span style="font-size: 20px">Members</span>
-      <span class="member">{{ demeet.project.member.length }}</span>
+      <span class="member">{{ member.length}}</span>
     </div>
     <!-- <div class="box">
       <span class="material-symbols-outlined" id="cancel">cancel_presentation</span>
@@ -33,14 +33,17 @@ import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   props: ['project'],
   setup(props) {
-    console.log(props.project)
     const demeet = props
     const account = useAccountStore()
-    account.userList()
-    const host = account.userList.find(user => user.uid === demeet.project.projectOwner)
+    account.fetchUserList()
+    const project_pk = demeet.project.pid
+    const member = demeet.project.member
+    const host = member.find(user => user.uid === demeet.project.projectOwner)
     return {
       demeet,
-      host
+      host,
+      member,
+      project_pk
     }
   }
 

@@ -3,8 +3,8 @@
     <div class="user-data">
       <img src="@/assets/profile.jpg" alt="">
       <div>
-        <div class="text-type">장종훈</div>
-        <div class="text-type">jangjr98@</div>
+        <div class="text-type">{{ userData.user.nickname }}</div>
+        <div class="text-type">{{ userData.user.email }}</div>
       </div>
     </div>
     <button class="plus-btn">
@@ -15,9 +15,16 @@
 </template>
 
 <script>
-export default {
-
-}
+import { defineComponent } from "vue"
+export default defineComponent({
+  props: ['user'],
+  setup(props) {
+    const userData = props
+    return {
+      userData
+    }
+  }
+})
 </script>
 
 <style scoped>
