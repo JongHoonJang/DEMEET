@@ -1,5 +1,5 @@
 <template>
-  <a href="/project/1" class="project-box">
+  <router-link :to="{ name:'DetailView', params: { project_pk: demeet.project.pid }}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
       <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
@@ -24,7 +24,7 @@
         <p>{{ host.email }}</p>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
