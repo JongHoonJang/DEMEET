@@ -97,11 +97,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public userSimpleInfoDTO getUsersByUid(Long ownerId) throws UidNullException {
+    public Users getUsersByUid(Long ownerId) throws UidNullException {
         Optional<Users> optOwner = usersRepositorySupport.findUserById(ownerId);
         Users owner = optOwner.orElseThrow(() -> new UidNullException("User not found: " + ownerId));
 
-        return makeUserSimpleInfoDTO(owner);
+        return owner;
     }
 
     @Override

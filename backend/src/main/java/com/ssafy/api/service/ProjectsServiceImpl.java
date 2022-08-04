@@ -1,16 +1,20 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
+import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -132,5 +136,32 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         return projectSimpleInfoList;
     }
+
+    @Override
+    public Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException {
+//        0. 프로젝트를 가져와 저장한다.
+//        조건 : 해당하는 pid의 프로젝트가 있고, 내가 그 프로젝트의 오너이고, 프로젝트는 활성화되어있어야한다.
+        Projects currProject = projectRepository.findProjectsByPidAndOwnerIdAndActivationIsTrue(projectPatchPostReq.getPid(),uid)
+                .orElseThrow(() -> new ProjectNullException("Your request does not meet the criteria."));
+        System.out.println(currProject.toString());
+//         변경할 정보(name, desc, decativate)모두 null일경우 똑같이 오류를 띄워준다.
+        if(projectPatchPostReq.getName()==null & projectPatchPostReq.getDesc() == null & !projectPatchPostReq.getDeactivate().orElse(false)){
+            System.out.println(projectPatchPostReq.getDeactivate().orElse(true));
+           throw new NullPointerException();
+        }
+
+        // 위 모든 조건들을 통과하였을경우 이제 변환작업을 시작한다.
+        if(projectPatchPostReq.getName()!=null){
+            currProject.setPjtName(projectPatchPostReq.getName());
+        }
+        if (projectPatchPostReq.getDesc() != null) {
+            currProject.setPjtDesc(projectPatchPostReq.getDesc());
+        }
+        currProject.setActivation(!projectPatchPostReq.getDeactivate().orElse(false));
+        System.out.println("프로젝트에 회원 추가");
+        return projectRepository.save(currProject);
+    }
+
+
 }
 
