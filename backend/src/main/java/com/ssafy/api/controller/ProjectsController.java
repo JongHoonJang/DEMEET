@@ -2,7 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
-import com.ssafy.api.request.AddUserInProjectPostReq;
+import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.response.ProjectInfoRes;
@@ -16,7 +16,6 @@ import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
-import com.ssafy.db.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -128,24 +127,24 @@ public class ProjectsController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<BaseResponseBody> addUserInProject(Authentication authentication, @RequestBody AddUserInProjectPostReq addUserInProjectPostReq) {
+    public ResponseEntity<BaseResponseBody> addUserInProject(Authentication authentication, @RequestBody AddDelUserInProjectPostReq addDelUserInProjectPostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         try {
             // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저추가가 가능하기때문에 일단 그 여부부터 확인한다.
-            Projects project = projectsService.getProject(addUserInProjectPostReq.getPid());
+            Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
             // 같지않다면
             if (!project.getOwnerId().equals(uid))
                 return ResponseEntity.status(422).body(BaseResponseBody.of(422, "You do not have permission."));
             // 해당하는 uid를 가지는 유저가 Users에 있는지 체크
-            Users user = usersService.getUsersByUid(addUserInProjectPostReq.getUid());
+            Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
             // 해당하는 uid를 가지는 유저가 프로젝트에 이미 추가되어있는지 확인
             // true면 중복됨, false면 중복 없음
             if (usersProjectService.userDuplicateCheck(project, user)) {
                 return ResponseEntity.status(200).body(BaseResponseBody.of(422, "member duplicate"));
             }
             // 두 조건 모두 완료하면 실제 추가직업 진행
-            usersProjectService.addUserInProject(addUserInProjectPostReq, project, user);
+            usersProjectService.addUserInProject(addDelUserInProjectPostReq, project, user);
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 
         } catch (ProjectNullException e) {
@@ -153,6 +152,20 @@ public class ProjectsController {
         } catch (UidNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         }
-
+    }
+    @DeleteMapping("/user")
+    public ResponseEntity<BaseResponseBody> deleteUserInProject(Authentication authentication, @RequestBody AddDelUserInProjectPostReq addDelUserInProjectPostReq){
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        Long uid = ssafyUsersDetails.getUserUid();
+        try {
+            Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
+            Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
+            usersProjectService.deleteUserInProject(project, user);
+        } catch (ProjectNullException e) {
+            throw new RuntimeException(e);
+        } catch (UidNullException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 }
