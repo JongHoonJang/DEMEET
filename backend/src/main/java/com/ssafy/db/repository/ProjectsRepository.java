@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ProjectsRepository extends JpaRepository<Projects, Long> {
     List<Projects> findProjectsByOwnerId(Long ownerId);
     Optional<List<Projects>> findProjectsByOwnerIdAndActivation(Long ownerId, boolean activate);
+
+    Optional<Projects> findProjectsByPidAndOwnerIdAndActivationIsTrue(Long pid, Long ownerId);
 }

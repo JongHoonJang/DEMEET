@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
@@ -19,4 +20,6 @@ public interface ProjectsService {
     Projects getProject(Long pid) throws ProjectNullException;
 
     List<ProjectSimpleInfoDTO> getActivateProjectsList(Long uid) throws ProjectNullException;
+
+    Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException;
 }
