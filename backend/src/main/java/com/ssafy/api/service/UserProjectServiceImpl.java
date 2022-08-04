@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.userSimpleInfoDTO;
-import com.ssafy.api.request.AddUserInProjectPostReq;
+import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
@@ -21,6 +21,7 @@ public class UserProjectServiceImpl implements UserProjectService{
     UserProjectRepository userProjectRepository;
     @Autowired
     UserProjectRepositorySupport userProjectRepositorySupport;
+
     @Override
     public List<userSimpleInfoDTO> getUserListByPid(Long pid) throws UidNullException {
         Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserListByPid(pid);
@@ -32,7 +33,7 @@ public class UserProjectServiceImpl implements UserProjectService{
     }
 
     @Override
-    public UserProject addUserInProject(AddUserInProjectPostReq addUserInProjectPostReq, Projects project, Users user) {
+    public UserProject addUserInProject(AddDelUserInProjectPostReq addDelUserInProjectPostReq, Projects project, Users user) {
         UserProject userProject = new UserProject();
         userProject.setUsers(user);
         userProject.setProjects(project);
@@ -45,5 +46,12 @@ public class UserProjectServiceImpl implements UserProjectService{
 //        true면 중복됨, false면 중복 없음
         UserProject userProject =userProjectRepository.getUserProjectByProjectsAndUsers(project, user);
         return userProject != null ? true:false;
+    }
+
+    @Override
+    public void deleteUserInProject(Projects project, Users user) {
+        UserProject userProject = userProjectRepository.getUserProjectByProjectsAndUsers(project, user);
+        System.out.println(userProject.toString());
+        userProjectRepository.delete(userProject);
     }
 }
