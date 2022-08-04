@@ -29,4 +29,7 @@ public class Users {
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
     List<DrawingImgPath> drawingImgPathList = new ArrayList<DrawingImgPath>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<ProfileImagePath> profileImagePathsList = new ArrayList<>();
+
 }
