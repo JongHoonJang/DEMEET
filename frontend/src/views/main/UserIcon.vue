@@ -1,14 +1,21 @@
 <template>
   <div class="user-icon">
     <span class="material-symbols-outlined" id="close">close</span>
-    <p class="username">장종훈</p>
+    <p class="username">{{ user.member.nickname }}</p>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+import { defineComponent } from "vue"
+export default defineComponent({
+  props: ['member'],
+  setup(props) {
+    const user = props
+    return {
+      user
+    }
+  }
+})
 </script>
 
 <style scoped>

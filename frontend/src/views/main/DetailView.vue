@@ -1,30 +1,25 @@
 <template>
-    <MainNav class="nav"/>
+<div>
+  <MainNav class="nav"/>
     <div class="container">
       <div>
         <h1>저장된 이미지</h1>
         <img src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
       </div>
       <div class="detail-box">
-        <div class="host-box">
-          <span class="material-symbols-outlined" id="person">person</span>
-          <div class="host-data">
-            <h3>Host</h3>
-            <p>SSAFY@SSAFY.com</p>
-          </div>
-        </div>
         <ProjectData 
         :project="project.project"
         :key="project.pid"
         />
       </div>
     </div>
+</div>
 </template>
 
 <script>
 import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import { useRoute } from 'vue-router'
 import MainNav from '@/views/main/MainNav'
 import ProjectData from '@/views/main/ProjectData'
 export default defineComponent({
@@ -33,13 +28,14 @@ export default defineComponent({
     ProjectData
   },
   setup() {
+    const route = useRoute()  
+    const project_pk = route.params.project_pk
     const project = useAccountStore()
-    const project_pk = this.$route.params.project_pk
     project.fetchProject(project_pk)
     return {
-      project
+      project,
     }
-  }
+  },
 })
 </script>
 

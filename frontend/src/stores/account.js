@@ -13,6 +13,7 @@ export const useAccountStore = defineStore("account", {
     authError: null,
   }),
   getters: {
+    // getUserList: state => state.userList,
     isLoggedIn: state => !!state.token,
     authHeader: state => ({ Authorization: `Bearer ${state.token}`}),
 
@@ -164,48 +165,51 @@ export const useAccountStore = defineStore("account", {
     },
 
     //유저 목록조회
-    userList() {
+    fetchUserList() {
       axios({
         url: api.accounts.signup_userlist_signout(),
         method: 'get',
         headers: this.authHeader,
       })
-        .then(res => this.userList = res.data)
+        .then(res => {
+          this.userList = res.data.userList
+        })
         .catch(err => {
-          console.log(err.response)
+          console.log(err)
         })
       
     },
 //////////////////////////////////////////////////////////////project
     // 프로젝트 상세 조회
-    fetchProject(project_pk) {
-      axios({
+    async fetchProject(project_pk) {
+      await axios({
         url: api.projects.project_detail_update(project_pk),
         method: 'get',
         headers: this.authHeader,
       })
         .then(res => {
-          this.project = res.data
+          this.project = res.data.project
         })
         .catch(err => console.error(err.response))
     }, 
 
     // 유저가 속한 프로젝트 조회
-    fetchProjects(user_pk) {
+    fetchProjects() {
       axios({
-        url: api.projects.projects_list_create(user_pk),
+        url: api.projects.projects_list(),
         method: 'get',
         headers: this.authHeader,
       })
         .then(res => {
-          this.projects = res.data
+          this.projects = res.data.activateProjects
+          // console.log(this.projects)
         })
         .catch(err => console.error(err.response))
     },
     // 프로젝트 생성
     createProject(projectData) {
       axios({
-        url: api.projects.projects_list_create(),
+        url: api.projects.projects_create(),
         method: 'post',
         data: projectData,
         headers: this.authHeader,

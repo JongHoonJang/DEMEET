@@ -1,9 +1,19 @@
 <template>
   <div class="container">
     <div>
-      <input type="text" class="search" placeholder="Search User">
+      <input 
+      type="text" 
+      class="search" 
+      placeholder="Search User"
+      v-model="searchUser" 
+      @keyup.enter="findData"
+      >
       <div class="user-list">
-        <UserList />
+        <UserList 
+        v-for="user in searchList"
+        :key="user.uid"
+        :user="user"
+        />
       </div>
     </div>
   </div>
@@ -11,12 +21,35 @@
 </template>
 
 <script>
+import { defineComponent } from "vue"
+// import { useAccountStore } from "@/stores/account"
+
 import UserList from '@/views/main/UserList'
-export default {
+export default defineComponent({
   components: {
     UserList
+  },
+  props: ['userList'],
+  setup(props) {
+    const users = props
+    const searchUser = ''
+    let searchList = []
+    const findData = () => {
+      console.log(searchUser)
+      if (searchUser.length != 0){
+        searchList = users.userList.filter(user => user.nickname.includes(searchUser))
+      }
+    }
+    console.log(searchUser)
+    
+    return {
+      users,
+      searchUser,
+      searchList,
+      findData
+    }
   }
-}
+})
 </script>
 
 <style scoped>
