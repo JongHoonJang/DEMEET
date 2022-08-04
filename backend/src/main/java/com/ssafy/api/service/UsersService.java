@@ -25,5 +25,5 @@ public interface UsersService {
 
     Boolean changeUserNickname(Long uid, String newNickname);
 
-    userSimpleInfoDTO getUsersByUid(Long ownerId) throws UidNullException;
+    Users getUsersByUid(Long ownerId) throws UidNullException;
 }
