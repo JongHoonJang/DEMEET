@@ -13,20 +13,34 @@
             <p>SSAFY@SSAFY.com</p>
           </div>
         </div>
-        <ProjectData />
+        <ProjectData 
+        :project="project.project"
+        :key="project.pid"
+        />
       </div>
     </div>
 </template>
 
 <script>
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
+
 import MainNav from '@/views/main/MainNav'
 import ProjectData from '@/views/main/ProjectData'
-export default {
+export default defineComponent({
   components: {
     MainNav,
     ProjectData
+  },
+  setup() {
+    const project = useAccountStore()
+    const project_pk = this.$route.params.project_pk
+    project.fetchProject(project_pk)
+    return {
+      project
+    }
   }
-}
+})
 </script>
 
 <style scoped>

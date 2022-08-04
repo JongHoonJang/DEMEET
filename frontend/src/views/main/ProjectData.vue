@@ -1,13 +1,15 @@
 <template>
   <div class="container">
-    <div class="pjt-list" v-if="!isEditName">
+    <div class="pjt-list" v-if="!isEditName" @click="isEditName=true">
       <p>PJT-Name</p>
       <span @click="switchName" class="material-symbols-outlined" id="edit">edit</span>
     </div>
     <div class="box">
       <p class="text-style">Project1</p>
     </div>
-    <!-- <input id="edit-box" type="text" placeholder="Project1"> -->
+    <form v-if="isEditName" @submit.prevent="">
+      <input id="edit-box" type="text" placeholder="Project1">
+    </form>
     <div class="pjt-list" v-if="!isEditDetail">
       <p>PJT-Detail</p>
       <span @click="switchDetail" class="material-symbols-outlined" id="edit">edit</span>
@@ -63,10 +65,13 @@
 </template>
 
 <script>
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
+
 import UserIcon from '@/views/main/UserIcon'
 import ModalView from '@/views/main/ModalView'
 import AddUser from '@/views/main/AddUser'
-export default {
+export default defineComponent({
   components: {
     UserIcon,
     ModalView,
@@ -79,15 +84,13 @@ export default {
       isEditDetail: false,
     }
   },
-  methods: {
-    switchName() {
-      this.isEditName = !this.isEditName
-    },
-    switchDetail() {
-      this.isEditDetail = !this.isEditDetail
+  setup() {
+    const project = useAccountStore()
+    return {
+      project
     }
-  }
-}
+  },
+})
 </script>
 
 <style scoped>
