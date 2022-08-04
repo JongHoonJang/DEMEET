@@ -1,8 +1,10 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.response.ProjectInfoRes;
+import com.ssafy.api.response.ProjectSimpleInfoRes;
 import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UserProjectService;
 import com.ssafy.api.service.UsersService;
@@ -11,7 +13,6 @@ import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
-import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -41,8 +42,9 @@ public class ProjectsController {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         //프로젝트 생성에 필요한 정보들은 다음과같다.
         //owner_id(토큰을 통해 얻어낸다.)
-        Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
-        projectsCreatePostReq.setOwner_id(user.getUid());
+//        Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
+//        projectsCreatePostReq.setOwner_id(user.getUid());
+        projectsCreatePostReq.setOwner_id(ssafyUsersDetails.getUserUid());
         Long pid = null;
         try {
             pid = projectsService.createProject(projectsCreatePostReq);
@@ -85,5 +87,30 @@ public class ProjectsController {
 
 
     }
+
+    @GetMapping("/activate")
+    public ResponseEntity<BaseResponseBody> getActivateProjects(Authentication authentication) {
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        Long uid = ssafyUsersDetails.getUserUid();
+        System.out.println(uid);
+        try {
+            List<ProjectSimpleInfoDTO> projectList = projectsService.getActivateProjectsList(uid);
+            for (int i = 0; i < projectList.size(); i++) {
+                List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(projectList.get(i).getPid());
+                projectList.get(i).setMember(userList);
+            }
+            return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
+        } catch (ProjectNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        } catch (UidNullException e) {
+            // db가 꼬일경우만 발생할듯함
+            // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        }
+    }
+//    @PatchMapping("/{pid}")
+//    public ResponseEntity<BaseResponseBody> patchProjectInfo(Authentication authentication, @PathVariable Long pid){
+//
+//    }
 
 }
