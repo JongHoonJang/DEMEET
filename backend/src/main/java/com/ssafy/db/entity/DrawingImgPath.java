@@ -13,16 +13,11 @@ public class DrawingImgPath {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long dipid;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="uid")
     Users user;
 
-    // 추후 삭제예정
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="pid")
-    Projects project;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="cid")
     Conferences conference;
 

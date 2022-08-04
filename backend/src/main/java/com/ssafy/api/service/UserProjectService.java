@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.userSimpleInfoDTO;
-import com.ssafy.api.request.AddUserInProjectPostReq;
+import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
@@ -16,9 +16,12 @@ import java.util.List;
 public interface UserProjectService {
 
 
+
     List<userSimpleInfoDTO> getUserListByPid(Long pid) throws UidNullException;
 
-    UserProject addUserInProject(AddUserInProjectPostReq addUserInProjectPostReq, Projects project, Users user);
+    UserProject addUserInProject(AddDelUserInProjectPostReq addDelUserInProjectPostReq, Projects project, Users user);
 
     boolean userDuplicateCheck(Projects project, Users user);
+
+    void deleteUserInProject(Projects project, Users user);
 }
