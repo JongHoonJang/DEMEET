@@ -165,7 +165,8 @@ dependencies {
 
     //json 처리를 위한 의존성 추가
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-
+    // aws 서비스와 연동하기 위한 의존성 추가
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.272'
 
     //IntelliJ용
     //IntelliJ에서는 하기 annotationProcessor를 쓰면 별도의 querydsl 플러그인 및 플러그인 설정이 불필요.
