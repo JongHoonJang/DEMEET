@@ -1,5 +1,5 @@
 <template>
-  <div class="user-box">
+  <div class="user-box" v-if="userData.user.uid !== account.profile.uid">
     <div class="user-data">
       <img src="@/assets/profile.jpg" alt="">
       <div>
@@ -7,7 +7,7 @@
         <div class="text-type">{{ userData.user.email }}</div>
       </div>
     </div>
-    <button class="plus-btn">
+    <button @click="account.addUser(userData.project.pid,userData.user.uid)" class="plus-btn">
       <span class="material-symbols-outlined" id="mail">mail</span>
       <span class="plus">초대</span>
     </button>
@@ -16,12 +16,16 @@
 
 <script>
 import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
 export default defineComponent({
-  props: ['user'],
+  props: ['user','project'],
   setup(props) {
     const userData = props
+    const account = useAccountStore()
+    account.fetchProfile()
     return {
-      userData
+      userData,
+      account
     }
   }
 })

@@ -44,6 +44,7 @@
       <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
         <AddUser 
         :userList="account.userList"
+        :project="account.project"
         />
       </ModalView>
     </div>
@@ -109,7 +110,6 @@ export default defineComponent({
         host = user
       }
     }
-    console.log(host)
     return {
       demeet,
       account,
