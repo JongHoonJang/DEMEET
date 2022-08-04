@@ -27,4 +27,7 @@ public class Users {
     @OneToMany(mappedBy ="users", cascade = CascadeType.ALL)
     List<UserProject> userProjectList = new ArrayList<UserProject>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<ProfileImagePath> profileImagePathsList = new ArrayList<>();
+
 }
