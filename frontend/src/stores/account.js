@@ -193,7 +193,7 @@ export const useAccountStore = defineStore("account", {
     // 유저가 속한 프로젝트 조회
     fetchProjects(user_pk) {
       axios({
-        url: api.projects.projectslist(user_pk),
+        url: api.projects.projects_list_create(user_pk),
         method: 'get',
         headers: this.authHeader,
       })
@@ -202,8 +202,19 @@ export const useAccountStore = defineStore("account", {
         })
         .catch(err => console.error(err.response))
     },
-
-      
+    // 프로젝트 생성
+    createProject(projectData) {
+      axios({
+        url: api.projects.projects_list_create(),
+        method: 'post',
+        data: projectData,
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.project = res.data
+        })
+        .catch(err => console.error(err.response))
+    },
 
     // 유저 초대
     addUser({project_pk, user_pk}) {

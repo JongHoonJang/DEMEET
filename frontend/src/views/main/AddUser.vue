@@ -23,7 +23,7 @@ export default {
 .user-list {
   margin-top: 50px;
   width: 328px;
-  height: 320px;
+  height: 234px;
   background: #333333;
   display: flex;
   flex-direction: column;
