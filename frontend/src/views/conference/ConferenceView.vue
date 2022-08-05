@@ -64,7 +64,7 @@
           />
           <ChatForm
             style="width:100%"
-            v-bind:sendMsg="sendMsg"
+            @sendMsg="sendMsg"
             :user-name="myUserName"
           />
         </div>
@@ -123,6 +123,7 @@ setup() {
 	const msgs = ref([])
 	const chatting = true
 	const fromId = ref("")
+	const myId = ref("")
 	
 	const joinSession = () => {
 			// --- Get an OpenVidu object ---
@@ -163,7 +164,7 @@ setup() {
 			// 'token' parameter should be retrieved and returned by your own backend
 
 			getToken((token) => {
-				session.connect(token, {'clientData':myUserName})
+				session.connect(token, {'clientData':myUserName, idData: this.myUserId})
 				.then(() => {
 					console.log("Connection Success");
 					let publisher = OV.initPublisher(undefined, {
@@ -300,39 +301,40 @@ setup() {
 
 		const sendMsg =(msg) => {
       // Sender of the message (after 'session.connect')
-      this.session
-        .signal({
-          data: msg, // Any string (optional)
-          to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-          type: "my-chat" // The type of message (optional)
-        })
-        .then(() => {
-          console.log("Message successfully sent");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
+      		this.session
+			.signal({
+			data: msg, // Any string (optional)
+			to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+			type: "my-chat" // The type of message (optional)
+			})
+			.then(() => {
+			console.log("Message successfully sent");
+			})
+			.catch(error => {
+			console.error(error);
+        	});
+    	}
 
-	return {
-		OV,
-		session,
-		mainStreamManager,
-		publisher,
-		subscribers,
-		mySessionId,
-		myUserName,
-		msgs,
-		chatting,
-		joinSession,
-		leaveSession,
-		updateMainVideoStreamManager,
-		getToken,
-		httpPostRequest,
-		createSession,
-		createToken,
-		sendMsg,
-		fromId
+		return {
+			OV,
+			session,
+			mainStreamManager,
+			publisher,
+			subscribers,
+			mySessionId,
+			myUserName,
+			msgs,
+			chatting,
+			joinSession,
+			leaveSession,
+			updateMainVideoStreamManager,
+			getToken,
+			httpPostRequest,
+			createSession,
+			createToken,
+			sendMsg,
+			fromId,
+			myId
 	}
 },
 
