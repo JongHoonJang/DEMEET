@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @ToString(of = {"uid", "email", "nickname", "regDate"})
 public class Users {
     @Id
@@ -24,12 +25,13 @@ public class Users {
     @Column(nullable = false)
     LocalDateTime regDate;
 
-    @OneToMany(mappedBy ="users", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     List<UserProject> userProjectList = new ArrayList<UserProject>();
-    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
-    List<DrawingImgPath> drawingImgPathList = new ArrayList<DrawingImgPath>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<ProfileImagePath> profileImagePathsList = new ArrayList<>();
+    List<DrawingImgPath> drawingImgPathList = new ArrayList<DrawingImgPath>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    ProfileImagePath profileImagePath = new ProfileImagePath();
 
 }

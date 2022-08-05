@@ -37,7 +37,8 @@ public class AwsS3Controller {
     @PostMapping("/profile")
     public ResponseEntity<BaseResponseBody> uploadProfileImage(@ApiIgnore Authentication authentication, @ModelAttribute ImageUploadReq imageUploadReq){
         SsafyUsersDetails usersDetails = (SsafyUsersDetails) authentication.getDetails();
-        long uid = usersService.getUsersByUserEmail(usersDetails.getUsername()).getUid();
+//        long uid = usersService.getUsersByUserEmail(usersDetails.getUsername()).getUid();
+        long uid = usersDetails.getUserUid();
         // 이미지 업로드
         try {
             // 파일, id, 프로필/드로잉 구분
