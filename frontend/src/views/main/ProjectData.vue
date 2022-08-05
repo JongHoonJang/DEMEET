@@ -73,8 +73,7 @@
       <span class="material-symbols-outlined" id="add" @click="isModalViewed=true">add</span>
       <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
         <AddUser 
-        :userList="account.userList"
-        :project="account.project"
+        :project="pjt"
         />
       </ModalView>
     </div>
@@ -99,7 +98,6 @@
     </div>
   </div>
   <div class="btn-box">
-    <!-- v-if로 호스트 맴버 endproject구분 -->
     <button 
     v-if="demeet.project.projectOwner === account.profile.uid" 
     class="blue-btn"
@@ -122,6 +120,7 @@
     >
     팀나가기</button>
     <button 
+    @click="back"
     class="blue-btn"
     >
     뒤로가기</button>
@@ -131,7 +130,7 @@
 <script>
 import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import router from "@/router"
 import UserIcon from '@/views/main/UserIcon'
 import ModalView from '@/views/main/ModalView'
 import AddUser from '@/views/main/AddUser'
@@ -151,31 +150,44 @@ export default defineComponent({
   props: ['project'],
   setup(props) {
     const account = useAccountStore()
-    const demeet = props
+    const demeet = ref(props)
     account.fetchProfile()
     account.fetchUserList()
+    const pjt = ref(demeet.value.project)
     const projectData = ref({
-      pid: demeet.project.pid,
-      name: demeet.project.pjtName,
-      desc: demeet.project.pjtDesc || 'pjt-detail',
+      pid: demeet.value.project.pid,
+      name: demeet.value.project.pjtName,
+      desc: demeet.value.project.pjtDesc || 'pjt-detail',
       deactivate: null
     })
+
     const endProject = () => {
       projectData.value.deactivate = true
       account.updateProject(projectData)
     }
-    let host = {}
-    for (const user of demeet.project.member) {
-      if (user.uid === demeet.project.projectOwner) {
-        host = user
+
+    const host = ref({})
+    for (const user of demeet.value.project.member) {
+      if (user.uid === demeet.value.project.projectOwner) {
+        host.value = user
+      }
+    }
+
+    const back = () => {
+      if (pjt.value.activation) {
+        router.push({name:'MainView'})
+      }else {
+        router.push({name:'ProfileView'})
       }
     }
     return {
+      pjt,
+      host,
       demeet,
       account,
-      host,
       projectData,
-      endProject
+      back,
+      endProject,
 
     }
   },

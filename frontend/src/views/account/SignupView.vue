@@ -7,10 +7,10 @@
         <h1 class='sign-head'>Sign Up</h1>
     </div>
     <form @submit.prevent="account.signup(signdata)" class='account-info'>
-      <p><input v-model="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
-      <p><input v-model="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
-      <p><input v-model="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
-      <p><input v-model="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
+      <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
+      <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
+      <p><input v-model.trim="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model.trim="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
       <button class="signup-btn">Sign Up</button>
       <router-link class="back" :to="{ name: 'LoginView' }">back</router-link>
     </form>

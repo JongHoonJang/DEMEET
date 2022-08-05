@@ -1,18 +1,28 @@
 <template>
   <div class="user-icon">
-    <span class="material-symbols-outlined" id="close">close</span>
+    <span @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
     <p class="username">{{ user.member.nickname }}</p>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
+import router from "@/router"
+import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   props: ['member'],
   setup(props) {
     const user = props
+    const project = useAccountStore()
+    const pjt = ref(project.project)
+    const remove = (user) => {
+      project.removeUser({pid:pjt.value.pid,uid:user.member.uid})
+      router.go({name:'DetailView'})
+    }
     return {
-      user
+      user,
+      project,
+      remove
     }
   }
 })

@@ -4,9 +4,7 @@
       <img src="@/assets/DEMEET_logo.png" alt="">
     </a>
     <div>
-      <form action="">
-        <input type="text" placeholder="Search">
-      </form>
+      <input type="text" placeholder="Search">
     </div>
     <div class="list-box">
       <div class="list-box">
@@ -30,6 +28,7 @@ export default defineComponent({
     account.fetchProfile()
     return {
       account,
+
     }
   },
 
@@ -39,12 +38,12 @@ export default defineComponent({
 <style scoped>
 #account {
   font-size: 32px;
-  color: #4C4E50;
+  color: white;
 }
 
 #logout {
   font-size: 32px;
-  color: #4C4E50;
+  color: white;
 }
 
 .list-box {
@@ -88,14 +87,13 @@ nav input[type=text]::placeholder {
 
 nav div a {
   font-weight: bold;
-  color: #4C4E50;
+  color: white;
   text-decoration-line: none;
   margin-right: 20px;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
-  color: #4C4E50;
 }
 
 nav a.router-link-exact-active {
