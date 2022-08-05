@@ -15,10 +15,12 @@ public class ProfileImagePath {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long pipid;
 
-    @ManyToOne
-    @JoinColumn(name="uid")
+
+    @OneToOne(mappedBy = "profileImagePath")
+    @JoinColumn(name = "uid")
+
     Users user;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     String path;
 }

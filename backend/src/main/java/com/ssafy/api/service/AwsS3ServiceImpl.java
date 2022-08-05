@@ -47,6 +47,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
         try(InputStream inputStream = multipartFile.getInputStream()){
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            // 이미지의 링크주소 반환
             return amazonS3Client.getUrl(bucket, fileName).toString();
         }catch (IOException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");

@@ -4,6 +4,7 @@ package com.ssafy.api.service;
  * Users 관련 비즈니스 로직 처리를 위한 서비스 구현 정의
  */
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.common.customException.UidNullException;
@@ -103,6 +104,7 @@ public class UsersServiceImpl implements UsersService {
 
         return owner;
     }
+
 
     @Override
     public boolean deleteUser(String username) {
