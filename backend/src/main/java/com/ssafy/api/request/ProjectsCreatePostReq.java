@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
@@ -16,10 +18,12 @@ public class ProjectsCreatePostReq {
     /**
      * The Owner id.
      */
+    @Positive
     Long owner_id;
     /**
      * The Pjt name.
      */
+    @NotBlank
     String pjt_name;
     /**
      * The Member list.
