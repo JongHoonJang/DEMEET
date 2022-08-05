@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.common.customException.UidNullException;

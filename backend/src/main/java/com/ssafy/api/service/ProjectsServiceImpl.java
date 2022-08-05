@@ -34,6 +34,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Autowired
     UserProjectRepository userProjectRepository;
     @Autowired
+    UserProjectRepositorySupport userProjectRepositorySupport;
+    @Autowired
     UsersRepositorySupport usersRepositorySupport;
 
     @Autowired
@@ -134,6 +136,18 @@ public class ProjectsServiceImpl implements ProjectsService {
         }
         System.out.println("새로운 프로젝트 사이즈 = "+projectSimpleInfoList.size());
 
+        return projectSimpleInfoList;
+    }
+
+    @Override
+    public List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException {
+        List<Projects> activateProjectsList = userProjectRepositorySupport.getJoinedProjectList(uid).orElseThrow(() -> new ProjectNullException("Projets not found"));
+        List<ProjectSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectSimpleInfoDTO>();
+        for (Projects project : activateProjectsList) {
+            System.out.println(project.toString());
+            // 리스트속 객체(Projects)들을들을 우리가 원하는 객체(ProjectSimpleInfoDTO)로 바꿔준다.
+            projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
+        }
         return projectSimpleInfoList;
     }
 

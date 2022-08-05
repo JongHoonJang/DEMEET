@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
+import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
@@ -30,6 +31,14 @@ public class UserProjectServiceImpl implements UserProjectService{
             System.out.println(user.toString());
         }
         return userList;
+    }
+
+    @Override
+    public List<Projects> getJoinedProjectList(Long uid) throws ProjectNullException {
+        Optional<List<Projects>> joinedProjectList = userProjectRepositorySupport.getJoinedProjectList(uid);
+        List<Projects> projectList = joinedProjectList.orElseThrow(() -> new ProjectNullException("cannot get project list by uid " + uid));
+
+        return projectList;
     }
 
     @Override

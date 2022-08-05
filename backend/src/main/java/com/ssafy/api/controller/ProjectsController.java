@@ -87,8 +87,28 @@ public class ProjectsController {
             // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         }
+    }
 
 
+    @GetMapping("/activate/joind")
+    public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication){
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        Long uid = ssafyUsersDetails.getUserUid();
+        System.out.println(uid);
+        try {
+            List<ProjectSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
+            for (int i = 0; i < projectList.size(); i++) {
+                List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(projectList.get(i).getPid());
+                projectList.get(i).setMember(userList);
+            }
+            return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
+        } catch (ProjectNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        } catch (UidNullException e) {
+            // db가 꼬일경우만 발생할듯함
+            // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        }
     }
 
     @GetMapping("/activate")
