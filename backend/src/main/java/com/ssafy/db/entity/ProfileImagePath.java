@@ -18,7 +18,6 @@ public class ProfileImagePath {
 
     @OneToOne(mappedBy = "profileImagePath")
     @JoinColumn(name = "uid")
-
     Users user;
 
     @Column(unique = true)
