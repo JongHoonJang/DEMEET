@@ -1,5 +1,5 @@
 <template>
-  <div style='width:80%; margin:auto;' >
+  <div class="profile-view">
     <MainNav/>
     <div class='profile-box'>
       <div class='profile-bg'>
@@ -96,6 +96,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.profile-view {
+  width:80%; 
+  margin:auto;
+}
 #account {
   font-size:10rem;
   color: white;

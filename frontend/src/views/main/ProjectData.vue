@@ -7,24 +7,54 @@
     </div>
   </div>
   <div class="container">
-    <div class="pjt-list" v-if="!isEditName" @click="isEditName=true">
+    <div class="pjt-list">
       <p>PJT-Name</p>
-      <span @click="switchName" class="material-symbols-outlined" id="edit">edit</span>
+      <span v-if="!isEditName" @click="isEditName=true" class="material-symbols-outlined" id="edit">edit</span>
+      <div v-if="isEditName">  
+        <span 
+        class="material-symbols-outlined" 
+        id="done" 
+        @click="account.updateProject(projectData)"
+        >
+        done</span>
+        <span 
+        class="material-symbols-outlined" 
+        id="close" 
+        @click="isEditName=false"
+        >
+        close</span>
+      </div>
     </div>
-    <div class="box">
+    <div class="box" v-if="!isEditName">
       <p class="text-style">{{ demeet.project.pjtName }}</p>
     </div>
-    <form v-if="isEditName" @submit.prevent="">
-      <input id="edit-box" type="text" placeholder="Project1">
-    </form>
-    <div class="pjt-list" v-if="!isEditDetail">
-      <p>PJT-Detail</p>
-      <span @click="switchDetail" class="material-symbols-outlined" id="edit">edit</span>
+    <div v-if="isEditName">
+      <input class="name-input-box" v-model="projectData.name" id="edit-box" type="text" placeholder="Project1">
     </div>
-    <div class="box">
+    <div class="pjt-list">
+      <p>PJT-Detail</p>
+      <span v-if="!isEditDetail" @click="isEditDetail=true" class="material-symbols-outlined" id="edit">edit</span>
+      <div v-if="isEditDetail">  
+        <span 
+        class="material-symbols-outlined" 
+        id="done" 
+        @click="account.updateProject(projectData)"
+        >
+        done</span>
+        <span 
+        class="material-symbols-outlined" 
+        id="close" 
+        @click="isEditDetail=false"
+        >
+        close</span>
+      </div>
+    </div>
+    <div v-if="!isEditDetail" class="box">
       <p class="text-style">{{ demeet.project.pjtDesc || 'pjt-detail' }}</p>
     </div>
-    <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+    <div v-if="isEditDetail">
+      <textarea class="desc-input-box" v-model="projectData.desc" name="" id="" cols="30" rows="10"></textarea>
+    </div>
     <div class="pjt-list">
       <p>초대코드</p>
       <span class="material-symbols-outlined" id="content">content_copy</span>
@@ -36,7 +66,7 @@
       <p>누적 미팅시간</p>
     </div>
     <div class="box">
-      <p class="text-style">10:30</p>
+      <p class="text-style">{{ demeet.project.totalMeetTime }}</p>
     </div>
     <div class="pjt-list">
       <p>Member</p>
@@ -44,10 +74,11 @@
       <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
         <AddUser 
         :userList="account.userList"
+        :project="account.project"
         />
       </ModalView>
     </div>
-    <div class="user-box">
+    <div class="member-box">
       <UserIcon 
       v-for="member in demeet.project.member"
       :key="member.uid"
@@ -69,16 +100,36 @@
   </div>
   <div class="btn-box">
     <!-- v-if로 호스트 맴버 endproject구분 -->
-    <button v-if="demeet.project.projectOwner === account.profile.uid" class="blue-btn">시작하기</button>
-    <button v-if="demeet.project.projectOwner === account.profile.uid" class="red-btn">종료하기</button>
-    <button v-if="demeet.project.projectOwner !== account.profile.uid" class="blue-btn">입장하기</button>
-    <button v-if="demeet.project.projectOwner !== account.profile.uid" class="red-btn">팀나가기</button>
-    <button class="blue-btn">뒤로가기</button>
+    <button 
+    v-if="demeet.project.projectOwner === account.profile.uid" 
+    class="blue-btn"
+    >
+    시작하기</button>
+    <button 
+    v-if="demeet.project.projectOwner === account.profile.uid" 
+    class="red-btn"
+    @click="endProject"
+    >
+    종료하기</button>
+    <button 
+    v-if="demeet.project.projectOwner !== account.profile.uid" 
+    class="blue-btn"
+    >
+    입장하기</button>
+    <button 
+    v-if="demeet.project.projectOwner !== account.profile.uid" 
+    class="red-btn"
+    >
+    팀나가기</button>
+    <button 
+    class="blue-btn"
+    >
+    뒤로가기</button>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 
 import UserIcon from '@/views/main/UserIcon'
@@ -103,17 +154,29 @@ export default defineComponent({
     const demeet = props
     account.fetchProfile()
     account.fetchUserList()
+    const projectData = ref({
+      pid: demeet.project.pid,
+      name: demeet.project.pjtName,
+      desc: demeet.project.pjtDesc || 'pjt-detail',
+      deactivate: null
+    })
+    const endProject = () => {
+      projectData.value.deactivate = true
+      account.updateProject(projectData)
+    }
     let host = {}
     for (const user of demeet.project.member) {
       if (user.uid === demeet.project.projectOwner) {
         host = user
       }
     }
-    console.log(host)
     return {
       demeet,
       account,
-      host
+      host,
+      projectData,
+      endProject
+
     }
   },
 })
@@ -205,8 +268,18 @@ export default defineComponent({
   margin-left: 160px;
   color: #9E9E9E;
 }
-
-.user-box{
+.name-input-box {
+  width: 492px;
+  height: 40px;
+  background: #333333;
+  color: white;
+}
+.desc-input-box{
+  width: 492px;
+  background: #333333;
+  color: white;
+}
+.member-box{
   display: flex;
   width: 500px;
   height: 44px;
@@ -218,5 +291,25 @@ export default defineComponent({
 .data-box {
   width: 600px;
   height: 600px;
+}
+
+#done {
+  margin-top: 16px;
+  color: white;
+}
+
+#done:hover {
+  color: green;
+  transform: scale(1.4);
+}
+
+#close {
+  margin-top: 16px;
+  color: white;
+}
+
+#close:hover {
+  color: red;
+  transform: scale(1.4);
 }
 </style>
