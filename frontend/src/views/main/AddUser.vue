@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 // import { useAccountStore } from "@/stores/account"
 
 import UserList from '@/views/main/UserList'
@@ -33,10 +33,10 @@ export default defineComponent({
   setup(props) {
     const users = props
     const searchUser = ''
-    let searchList 
+    const searchList = ref([]) 
     const findData = (inputData) => {
       if (inputData.length != 0){
-        searchList = users.userList.filter(user => user.nickname.includes(inputData))
+        searchList.value = users.userList.filter(user => user.nickname.includes(inputData))
         console.log(searchList)
       }
     }

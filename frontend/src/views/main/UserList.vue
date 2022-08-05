@@ -56,6 +56,7 @@ img {
 .text-type {
   margin: 2px;
   text-align: start;
+  color: white;
 }
 
 .plus {
