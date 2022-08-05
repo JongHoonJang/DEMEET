@@ -1,14 +1,12 @@
 package com.ssafy.api.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.ssafy.common.customException.NotImageException;
 import com.ssafy.db.entity.ProfileImagePath;
+import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.ProfileImagePathRepository;
 import com.ssafy.db.repository.UsersRepository;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ListIterator;
 import java.util.UUID;
 
 @Service("AwsS3Service")
@@ -56,14 +55,35 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
     // dipid를 받으면 이미지 주소를 리턴한다.
     @Override
-    public String getImage(Long dipid){
+    public String getImage(Long imgid){
         return null;
     }
 
     // dipid를 받으면 이미지를 삭제한다.
     @Override
-    public void DeleteImage(Long dipid){
+    public void DeleteImage(Long imgid, String flag) throws NotImageException{
+        if(!flag.equals("profile") && !flag.equals("drawing")){
+            throw new NotImageException("method must be profile or drawing");
+        }
+        String folderName = getFolderName(imgid, flag);
+        ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderName);
+        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
+        ListIterator<S3ObjectSummary> listIterator = listObjectsV2Result.getObjectSummaries().listIterator();
 
+        while (listIterator.hasNext()){
+            S3ObjectSummary objectSummary = listIterator.next();
+            DeleteObjectRequest request = new DeleteObjectRequest(bucket, objectSummary.getKey());
+            amazonS3Client.deleteObject(request);
+            System.out.println("Image Deleted");
+        }
+    }
+
+    @Override
+    public String getFolderName(Long imgid, String flag) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(flag).append('/').append(imgid).append('/');
+
+        return sb.toString();
     }
 
     @Override
@@ -89,11 +109,12 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     }
 
     @Override
-    public ProfileImagePath saveImagePath(String path, long uid) {
-        ProfileImagePath profileImagePath = new ProfileImagePath();
-        profileImagePath.setPath(path);
-        profileImagePath.setUser(usersRepository.findByUid(uid).orElseThrow(() -> new NullPointerException()));
-        return profileImagePathRepository.save(profileImagePath);
+    public Users saveImagePath(String path, long uid, String flag) throws NotImageException {
+        if(!flag.equals("profile") && !flag.equals("drawing")){
+            throw new NotImageException("method must be profile or drawing");
+        }
+        Users users = usersRepository.getOne(uid);
+        users.getProfileImagePath().setPath(path);
+        return usersRepository.save(users);
     }
-
 }
