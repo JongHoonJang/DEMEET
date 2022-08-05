@@ -17,9 +17,9 @@ export default {
     // projectslist: () => HOST + ACCOUNTS + `${user_pk}/` + PROJECTS, //get
   },
   projects: {
-    projects_create: () => HOST + PROJECTS, //get, post
+    projects_create_update: () => HOST + PROJECTS, //get, patch
     projects_list: () => HOST + PROJECTS + 'activate/',
-    project_detail_update: project_pk => HOST + PROJECTS + `${project_pk}/`, //get, patch
+    project_detail: project_pk => HOST + PROJECTS + `${project_pk}/`, //get, patch
     image_list_delete: project_pk => HOST + PROJECTS + `${project_pk}/`+ IMAGES, // get, delete
     image_save: (project_pk,user_pk) => HOST + PROJECTS + `${project_pk}/` + `${user_pk}/` + IMAGES, //post
     add_user: (project_pk, user_pk) => HOST + PROJECTS + `${project_pk}/` + `${user_pk}/`, //post

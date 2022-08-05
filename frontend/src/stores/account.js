@@ -76,8 +76,6 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          confirm('비밀번호를 변경하시겠습니까?')
-          alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
           this.removeToken()
           router.push({ name: 'LoginView'})
         })
@@ -183,7 +181,7 @@ export const useAccountStore = defineStore("account", {
     // 프로젝트 상세 조회
     async fetchProject(project_pk) {
       await axios({
-        url: api.projects.project_detail_update(project_pk),
+        url: api.projects.project_detail(project_pk),
         method: 'get',
         headers: this.authHeader,
       })
@@ -209,13 +207,14 @@ export const useAccountStore = defineStore("account", {
     // 프로젝트 생성
     createProject(projectData) {
       axios({
-        url: api.projects.projects_create(),
+        url: api.projects.projects_create_update(),
         method: 'post',
         data: projectData,
         headers: this.authHeader,
       })
         .then(res => {
           this.project = res.data
+          router.go({name: 'MainView'})
         })
         .catch(err => console.error(err.response))
     },
@@ -233,6 +232,23 @@ export const useAccountStore = defineStore("account", {
         })
         .catch(err => console.error(err.response))
     },
+
+
+    // 프로젝트 데이터 수정 
+    updateProject(projectData) {
+      axios({
+        url: api.projects.projects_create_update(),
+        method: 'patch',
+        data: projectData,
+        headers: this.authHeader,
+      })
+        .then(() => {
+          router.go({name:'DetailView', parmas: {project_pk: projectData.pid}})
+        })
+        .catch(err => console.error(err.response))
+    },
+
+
 
     // 프로젝트 이미지 리스트
 

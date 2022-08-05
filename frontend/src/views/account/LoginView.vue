@@ -11,20 +11,6 @@
       <button class="login-btn">Sign In</button>
       <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
     </form>
-
-    <!-- <div style='color: white;'>Signin as a Guest</div>
-    <div>
-      <div>
-        <img src="@/assets/btn_google_signin_dark_focus_web.png" alt="">
-      </div>
-      <div style="height:46px; width:190px; display:flex; background-color: black; margin:auto; border-radius: 0.5rem;">
-        <img src="@/assets/GitHub-Mark-Light-32px.png" style="height: 36px; margin: 2px;" alt="">
-        <p>Sign In with GitHub</p>                
-      </div>
-      <div style="margin:4px">
-        <img src="@/assets/kakao_login_medium_narrow.png" alt="">
-      </div>
-    </div> -->
       </div>
       <div class='account-right'>
         <h1 class="main-logo">DEMEET</h1>

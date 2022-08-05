@@ -6,22 +6,22 @@
       class="search" 
       placeholder="Search User"
       v-model="searchUser" 
-      @keyup.enter="findData"
+      @keyup.enter="findData(searchUser)"
       >
       <div class="user-list">
         <UserList 
-        v-for="user in searchList"
+        v-for="user in userList"
         :key="user.uid"
         :user="user"
+        :project="users.project"
         />
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 // import { useAccountStore } from "@/stores/account"
 
 import UserList from '@/views/main/UserList'
@@ -29,18 +29,17 @@ export default defineComponent({
   components: {
     UserList
   },
-  props: ['userList'],
+  props: ['userList','project'],
   setup(props) {
     const users = props
     const searchUser = ''
-    let searchList = []
-    const findData = () => {
-      console.log(searchUser)
-      if (searchUser.length != 0){
-        searchList = users.userList.filter(user => user.nickname.includes(searchUser))
+    const searchList = ref([]) 
+    const findData = (inputData) => {
+      if (inputData.length != 0){
+        searchList.value = users.userList.filter(user => user.nickname.includes(inputData))
+        console.log(searchList)
       }
     }
-    console.log(searchUser)
     
     return {
       users,
