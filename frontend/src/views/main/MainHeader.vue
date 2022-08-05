@@ -41,7 +41,8 @@ export default defineComponent({
     const projects = useAccountStore()
     projects.fetchProjects()
     return {
-      projects
+      projects,
+
     }
   }
 })
