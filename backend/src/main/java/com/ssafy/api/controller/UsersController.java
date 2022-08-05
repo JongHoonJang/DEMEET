@@ -23,14 +23,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 
 @Api(value = "유저 API", tags = {"Users"})
 @RestController
+@Validated
 @RequestMapping("/users")
 public class UsersController {
 
@@ -45,8 +52,12 @@ public class UsersController {
             @ApiResponse(code = 200, message = "sign-in success")
     })
     public ResponseEntity<? extends BaseResponseBody> register(
-            @RequestBody @ApiParam(value = "회원가입 정보", required = true) UsersRegisterPostReq registerInfo) {
-
+            @RequestBody @ApiParam(value = "회원가입 정보", required = true) @Validated UsersRegisterPostReq registerInfo) {
+        Field[] fields = UsersRegisterPostReq.class.getFields();
+        System.out.println("registerInfo = " + registerInfo);
+        for (Field field : fields) {
+            System.out.println(Modifier.isPublic(field.getModifiers()));
+        }
         Users newUser = usersService.createUsers(registerInfo);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "sign-in success"));
     }
@@ -59,7 +70,7 @@ public class UsersController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value = "로그인 정보", required = true) UsersLoginPostReq loginInfo) {
+    public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value = "로그인 정보", required = true) @Validated UsersLoginPostReq loginInfo) {
         String userEmail = loginInfo.getEmail();
         String userPassword = loginInfo.getPassword();
         Users newUser = usersService.getUsersByUserEmail(userEmail);
@@ -74,7 +85,7 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UsersRes> getUsersInfo(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<UsersRes> getUsersInfo(@ApiIgnore @Validated Authentication authentication) {
         /**
          * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
          * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
@@ -92,7 +103,7 @@ public class UsersController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<BaseResponseBody> checkEmailDuplication(@PathVariable("email") String email) {
+    public ResponseEntity<BaseResponseBody> checkEmailDuplication(@PathVariable("email") @Email @NotBlank String email) {
         boolean check = usersService.checkEmailDuplicate(email);
         // check가 false일경우는 이메일 중복이 없음
         if (!check) {
@@ -113,7 +124,7 @@ public class UsersController {
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<BaseResponseBody> changeUserPassword(@ApiIgnore Authentication authentication, @RequestBody UserPwChangePostReq userPwChangePostReq) {
+    public ResponseEntity<BaseResponseBody> changeUserPassword(@ApiIgnore Authentication authentication, @RequestBody @Validated UserPwChangePostReq userPwChangePostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         // 토큰을 통해 email을 포함하고 있는 User를 받아온다.
         Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
@@ -139,8 +150,8 @@ public class UsersController {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
         // 이제 현재 nickname과 newNickname이 같은지 비교한 후 같다면 바꿀필요가 없다고 데이터 전송
-        if(user.getNickname().equals(newNickname)){
-            return ResponseEntity.status(426).body(BaseResponseBody.of(426,"new nickname matches current nickname. Please change your new nickname."));
+        if (user.getNickname().equals(newNickname)) {
+            return ResponseEntity.status(426).body(BaseResponseBody.of(426, "new nickname matches current nickname. Please change your new nickname."));
         }
         // 닉네임이 다르기 때문에 변경 작업 시작
         Boolean changeCheck = usersService.changeUserNickname(user.getUid(), newNickname);
@@ -152,14 +163,13 @@ public class UsersController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<BaseResponseBody> deleteUser(Authentication authentication){
+    public ResponseEntity<BaseResponseBody> deleteUser(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         System.out.println(ssafyUsersDetails.getUsername());
         boolean deleteCheck = usersService.deleteUser(ssafyUsersDetails.getUsername());
-        if(deleteCheck) {
+        if (deleteCheck) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to delete user"));
-        }
-        else{
+        } else {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, "fail to find user"));
 
         }

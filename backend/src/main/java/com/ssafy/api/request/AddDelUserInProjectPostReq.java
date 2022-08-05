@@ -2,8 +2,13 @@ package com.ssafy.api.request;
 
 import lombok.Data;
 
+import javax.validation.constraints.Positive;
+
 @Data
 public class AddDelUserInProjectPostReq {
-    Long pid;
+    @Positive
     Long uid;
+
+    @Positive
+    Long pid;
 }
