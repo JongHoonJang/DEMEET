@@ -220,15 +220,30 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 유저 초대
-    addUser({project_pk, user_pk}) {
+    addUser(idData) {
       axios({
-        url: api.projects.add_user(project_pk, user_pk),
+        url: api.projects.add_delete_user(),
         method: 'post',
-        data: {},
+        data: idData,
         headers: this.authHeader,
       })
-        .then(res => {
-          this.project = res.data
+        .then(() => {
+          alert('팀으로 초대했습니다..')
+
+        })
+        .catch(err => console.error(err.response))
+    },
+    //유저 추방
+    removeUser(idData) {
+      axios({
+        url: api.projects.add_delete_user(),
+        method: 'delete',
+        data: idData,
+        headers: this.authHeader,
+      })
+        .then(() => {
+          alert('팀에서 제외시켰습니다.')
+          router.push({name: 'DetailView', parmas: {project_pk:idData.pid}})
         })
         .catch(err => console.error(err.response))
     },

@@ -1,7 +1,5 @@
 <template>
-<div class="bar">
-
-</div>
+<div class="bar"></div>
 <div class="name-bar">
   <input class="name-input" v-model="projectData.pjt_name" type="text" placeholder="pjt-name">
 </div>
@@ -11,7 +9,7 @@
       type="text" 
       class="search" 
       placeholder="Search User"
-      v-model="searchUser" 
+      v-model.trim="searchUser" 
       @keyup.enter="findData(searchUser)"
       >
       <div class="user-list">
@@ -127,6 +125,8 @@ export default defineComponent({
   background: #333333;
   display: flex;
   flex-direction: column;
+  border-style: solid;
+  border-color: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
   border-radius: 10px;
 }
 .create-container {

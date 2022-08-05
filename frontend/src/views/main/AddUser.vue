@@ -9,12 +9,37 @@
       @keyup.enter="findData(searchUser)"
       >
       <div class="user-list">
-        <UserList 
-        v-for="user in userList"
+        <div 
+        v-for="user in searchList"
         :key="user.uid"
         :user="user"
-        :project="users.project"
-        />
+        >
+          <div class="user-box" v-if="user.uid !== account.profile.uid">
+            <div class="user-data">
+              <img class="user-img" src="@/assets/profile.jpg" alt="">
+              <div>
+                <div class="text-type">{{ user.nickname }}</div>
+                <div class="text-type">{{ user.email }}</div>
+              </div>
+            </div>
+            <button
+            v-if="member.some(res => res.uid === user.uid)"  
+            @click="remove(user)"  
+            class="cancle-btn"
+            >
+              <span class="material-symbols-outlined" id="mail">mail</span>
+              <span class="cancel">취소</span>
+            </button>
+            <button
+            v-else
+            @click="add(user)" 
+            class="plus-btn"
+            >
+              <span class="material-symbols-outlined" id="mail">mail</span>
+              <span class="plus">초대</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -22,30 +47,53 @@
 
 <script>
 import { defineComponent, ref } from "vue"
-// import { useAccountStore } from "@/stores/account"
+import { useAccountStore } from "@/stores/account"
+import router from "@/router"
 
-import UserList from '@/views/main/UserList'
 export default defineComponent({
-  components: {
-    UserList
-  },
-  props: ['userList','project'],
+  props: ['project'],
   setup(props) {
-    const users = props
+    const account = useAccountStore()
+    account.fetchProfile()
+    const demeet = ref(props)
     const searchUser = ''
     const searchList = ref([]) 
+    const userData = ref(account.userList)
+    const member = ref(demeet.value.project.member)
+    const payload = ref({
+      pid: demeet.value.project.pid,
+      uid: -1
+    })
+    const add = (addUser) => {
+      payload.value.uid = addUser.uid
+      if (payload.value.uid !== -1){
+        account.addUser(payload.value)
+        router.go({name: 'DetailView'})
+      }
+    }
+    const remove = (addUser) => {
+      payload.value.uid = addUser.uid
+      if (payload.value.uid !== -1){
+        account.removeUser(payload.value)
+        router.go({name: 'DetailView'})
+      }
+    }
     const findData = (inputData) => {
       if (inputData.length != 0){
-        searchList.value = users.userList.filter(user => user.nickname.includes(inputData))
-        console.log(searchList)
+        searchList.value = account.userList.filter(user => user.nickname.includes(inputData))
       }
     }
     
     return {
-      users,
+      demeet,
       searchUser,
       searchList,
-      findData
+      account,
+      member,
+      userData,
+      findData,
+      add,
+      remove,
     }
   }
 })

@@ -6,8 +6,8 @@
       <h1 class='sign-head'>Sign In</h1>
     </div>
     <form @submit.prevent="account.login(credentials)" class='account-info'>
-      <p><input v-model="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
-      <p><input v-model="credentials.password" type="password" placeholder="password" class="input-prop"></p>
+      <p><input v-model.trim="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
+      <p><input v-model.trim="credentials.password" type="password" placeholder="password" class="input-prop"></p>
       <button class="login-btn">Sign In</button>
       <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
     </form>
