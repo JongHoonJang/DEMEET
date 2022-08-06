@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'DetailView', params: { pid }}" class="project-box">
+  <router-link :to="{ name: 'DetailView', params: {pid: pk}}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
       <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
@@ -36,14 +36,15 @@ export default defineComponent({
     const demeet = ref(props)
     const account = useAccountStore()
     account.fetchUserList()
-    const pid = ref(demeet.value.project.pid)
+    const pk = ref(demeet.value.project.pid)
     const member = ref(demeet.value.project.member)
     const host = ref(member.value.find(user => user.uid === demeet.value.project.projectOwner))
+    console.log(host.value)
     return {
       demeet,
       host,
       member,
-      pid
+      pk
     }
   }
 

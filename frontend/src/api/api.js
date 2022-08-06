@@ -10,7 +10,7 @@ export default {
     signup_userlist_signout: () => HOST + ACCOUNTS, //get, post delete
     login: () => HOST + ACCOUNTS + 'login/', //post
     currentUserInfo: () => HOST + ACCOUNTS + 'me/' , // get
-    checkemail: () => HOST + ACCOUNTS + 'email/', //get
+    checkemail: email => HOST + ACCOUNTS + `${email}/`, //get
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch
     profileimage_update: () => HOST + ACCOUNTS + 'image/', //patch
