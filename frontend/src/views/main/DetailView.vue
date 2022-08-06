@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import { useRoute } from 'vue-router'
 import MainNav from '@/views/main/MainNav'
@@ -29,9 +29,9 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute()  
-    const project_pk = route.params.project_pk
+    const project_pk = ref(route.params.pid)
     const project = useAccountStore()
-    project.fetchProject(project_pk)
+    project.fetchProject(project_pk.value)
     return {
       project,
     }

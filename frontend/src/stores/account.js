@@ -180,8 +180,8 @@ export const useAccountStore = defineStore("account", {
     },
 //////////////////////////////////////////////////////////////project
     // 프로젝트 상세 조회
-    async fetchProject(project_pk) {
-      await axios({
+    fetchProject(project_pk) {
+      axios({
         url: api.projects.project_detail(project_pk),
         method: 'get',
         headers: this.authHeader,
