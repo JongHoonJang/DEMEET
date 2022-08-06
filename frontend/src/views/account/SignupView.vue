@@ -25,19 +25,19 @@
 
 <script>
 
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 export default defineComponent({
 
   setup() {
-    const signdata = {
+    const signdata = ref({
       nickname: '',
       email: '',
       password: '',
-    }
+    })
     const password2 = ''
     const sign = () => {
-      if (signdata.password === password2){
+      if (signdata.value.password === password2){
         account.signup(signdata)
       }
     }

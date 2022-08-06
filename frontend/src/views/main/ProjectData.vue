@@ -186,13 +186,8 @@ export default defineComponent({
       projectData.value.deactivate = true
       account.updateProject(projectData)
     }
-
     const host = ref({})
-    for (const user of demeet.value.project.member) {
-      if (user.uid === demeet.value.project.projectOwner) {
-        host.value = user
-      }
-    }
+    // const host = ref(pjt.value.member.filter(res => res.uid.includes(pjt.value.projectOwner)))
 
     const back = () => {
       if (pjt.value.activation) {

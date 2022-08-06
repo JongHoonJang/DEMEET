@@ -88,10 +88,11 @@ export const useAccountStore = defineStore("account", {
 
     // 회원가입
     signup(signdata) {
+      console.log(signdata)
       axios({
-        url: api.accounts.checkemail(),
+        url: api.accounts.checkemail(signdata.email),
         method: 'get',
-        data: signdata.email
+        // data: signdata.email
       })
         .then(() => {
           axios({
