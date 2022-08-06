@@ -19,9 +19,9 @@ export default {
   projects: {
     projects_create_update: () => HOST + PROJECTS, //get, patch
     projects_list: () => HOST + PROJECTS + 'activate/joind/',
-    project_detail: project_pk => HOST + PROJECTS + `${project_pk}/`, //get, patch
-    image_list_delete: project_pk => HOST + PROJECTS + `${project_pk}/`+ IMAGES, // get, delete
-    image_save: (project_pk,user_pk) => HOST + PROJECTS + `${project_pk}/` + `${user_pk}/` + IMAGES, //post
+    project_detail: pid => HOST + PROJECTS + `${pid}/`, //get, patch
+    image_list_delete: pid => HOST + PROJECTS + `${pid}/`+ IMAGES, // get, delete
+    image_save: (pid,user_pk) => HOST + PROJECTS + `${pid}/` + `${user_pk}/` + IMAGES, //post
     add_delete_user: () => HOST + PROJECTS + 'user/', //post, delete
   },
   conferences: {
