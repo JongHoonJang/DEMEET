@@ -235,106 +235,106 @@ setup() {
 			);
 		};
 
-		const httpPostRequest = (url, body, callback) => {
-			axios({
-							'url': api.conferences.conference() + url,
-							'method': 'post',
-							'data': JSON.stringify(body),
-			// 추후 연결 필요
-			headers: account.authHeader
-					})
-					.then(res => {
-			console.log(res.data[0]);
-							const token = res.data[0];
-							console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
-							callback(token);
-					})
-					.catch(err => (
-							console.error(err.response),
-							alert('컨퍼런스 토큰 저장에 실패하였습니다.')
-					))
-		};
+	const httpPostRequest = (url, body, callback) => {
+		axios({
+						'url': api.conferences.conference() + url,
+						'method': 'post',
+						'data': JSON.stringify(body),
+		// 추후 연결 필요
+		headers: account.authHeader
+				})
+				.then(res => {
+		console.log(res.data[0]);
+						const token = res.data[0];
+						console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
+						callback(token);
+				})
+				.catch(err => (
+						console.error(err.response),
+						alert('컨퍼런스 토큰 저장에 실패하였습니다.')
+				))
+	};
 
-		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
-		const createSession = (sessionId) => {
-			return new Promise((resolve, reject) => {
-				axios
-					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
-						customSessionId: sessionId,
-					}), {
-						auth: {
-							username: 'OPENVIDUAPP',
-							password: OPENVIDU_SERVER_SECRET,
-						},
-					})
-					.then(response => response.data)
-					.then(data => resolve(data.id))
-					.catch(error => {
-						if (error.response.status === 409) {
-							resolve(sessionId);
-						} else {
-							console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
-							if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
-								location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
-							}
-							reject(error.response);
+	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
+	const createSession = (sessionId) => {
+		return new Promise((resolve, reject) => {
+			axios
+				.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
+					customSessionId: sessionId,
+				}), {
+					auth: {
+						username: 'OPENVIDUAPP',
+						password: OPENVIDU_SERVER_SECRET,
+					},
+				})
+				.then(response => response.data)
+				.then(data => resolve(data.id))
+				.catch(error => {
+					if (error.response.status === 409) {
+						resolve(sessionId);
+					} else {
+						console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
+						if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
+							location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
 						}
-					});
-			});
-		};
+						reject(error.response);
+					}
+				});
+		});
+	};
 
-		// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
-		const createToken = (sessionId) => {
-			return new Promise((resolve, reject) => {
-				axios
-					.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
-						auth: {
-							username: 'OPENVIDUAPP',
-							password: OPENVIDU_SERVER_SECRET,
-						},
-					})
-					.then(response => response.data)
-					.then(data => resolve(data.token))
-					.catch(error => reject(error.response));
-			});
-		};
+	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
+	const createToken = (sessionId) => {
+		return new Promise((resolve, reject) => {
+			axios
+				.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, {}, {
+					auth: {
+						username: 'OPENVIDUAPP',
+						password: OPENVIDU_SERVER_SECRET,
+					},
+				})
+				.then(response => response.data)
+				.then(data => resolve(data.token))
+				.catch(error => reject(error.response));
+		});
+	};
 
-		const sendMsg =(msg) => {
-      // Sender of the message (after 'session.connect')
-      		this.session
+	const sendMsg =(msg) => {
+	// Sender of the message (after 'session.connect')
+		this.session
 			.signal({
-			data: msg, // Any string (optional)
-			to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-			type: "my-chat" // The type of message (optional)
+				data: msg, // Any string (optional)
+				to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+				type: "my-chat" // The type of message (optional)
 			})
 			.then(() => {
-			console.log("Message successfully sent");
+				console.log("Message successfully sent");
 			})
 			.catch(error => {
-			console.error(error);
-        	});
-    	}
+				console.error(error);
+			});
+	}
 
-		return {
-			OV,
-			session,
-			mainStreamManager,
-			publisher,
-			subscribers,
-			mySessionId,
-			myUserName,
-			msgs,
-			chatting,
-			joinSession,
-			leaveSession,
-			updateMainVideoStreamManager,
-			getToken,
-			httpPostRequest,
-			createSession,
-			createToken,
-			sendMsg,
-			fromId,
-			myId
+	return {
+		OV,
+		session,
+		mainStreamManager,
+		publisher,
+		subscribers,
+		mySessionId,
+		myUserName,
+		msgs,
+		chatting,
+		joinSession,
+		leaveSession,
+		updateMainVideoStreamManager,
+		getToken,
+		httpPostRequest,
+		createSession,
+		createToken,
+		sendMsg,
+		fromId,
+		myId
 	}
 },
 
