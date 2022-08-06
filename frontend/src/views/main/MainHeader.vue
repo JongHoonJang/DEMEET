@@ -6,9 +6,7 @@
             <span class="material-symbols-outlined" id="add">add</span>
         </div>
         <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
-          <CreateProject 
-          
-          />
+          <CreateProject />
         </ModalView>
       </div>
         <ProjectList 
@@ -41,7 +39,8 @@ export default defineComponent({
     const projects = useAccountStore()
     projects.fetchProjects()
     return {
-      projects
+      projects,
+
     }
   }
 })

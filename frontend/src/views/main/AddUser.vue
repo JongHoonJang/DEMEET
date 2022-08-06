@@ -6,7 +6,7 @@
       class="search" 
       placeholder="Search User"
       v-model="searchUser" 
-      @keyup.enter="findData(searchUser)"
+      @input="findData(searchUser)"
       >
       <div class="user-list">
         <div 

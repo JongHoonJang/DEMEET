@@ -13,7 +13,7 @@ const routes = [
     component: MainView
   },
   {
-    path: '/project/:project_pk',
+    path: '/project/:pid',
     name: 'DetailView',
     component: DetailView
   },

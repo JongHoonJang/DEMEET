@@ -10,6 +10,7 @@ export const useAccountStore = defineStore("account", {
     userList: [],
     project: {},
     projects: [],
+    search: '',
     authError: null,
   }),
   getters: {
@@ -87,7 +88,6 @@ export const useAccountStore = defineStore("account", {
 
     // 회원가입
     signup(signdata) {
-      console.log(signdata)
       axios({
         url: api.accounts.checkemail(),
         method: 'get',
@@ -200,7 +200,6 @@ export const useAccountStore = defineStore("account", {
       })
         .then(res => {
           this.projects = res.data.activateProjects
-          // console.log(this.projects)
         })
         .catch(err => console.error(err.response))
     },
@@ -247,7 +246,6 @@ export const useAccountStore = defineStore("account", {
         })
         .catch(err => console.error(err.response))
     },
-
 
     // 프로젝트 데이터 수정 
     updateProject(projectData) {
