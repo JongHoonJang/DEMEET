@@ -4,7 +4,7 @@
       <img src="@/assets/DEMEET_logo.png" alt="">
     </a>
     <div>
-      <input type="text" placeholder="Search">
+      <input v-model.trim="search" @input="setData" type="text" placeholder="Search">
     </div>
     <div class="list-box">
       <div class="list-box">
@@ -20,15 +20,25 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   setup() {
     const account = useAccountStore()
     account.fetchProfile()
+    const search = ref('')
+    const setData = () => {
+      account.search = search.value
+      if (account.search){
+        account.projects = account.projects.filter(res => res.pjtName.includes(account.search))
+      }else{
+        account.fetchProjects()
+      }
+    }
     return {
       account,
-
+      search,
+      setData
     }
   },
 

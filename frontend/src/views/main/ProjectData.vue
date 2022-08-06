@@ -9,7 +9,14 @@
   <div class="container">
     <div class="pjt-list">
       <p>PJT-Name</p>
-      <span v-if="!isEditName" @click="isEditName=true" class="material-symbols-outlined" id="edit">edit</span>
+      <span 
+      v-if="!isEditName && host.uid===account.profile.uid" 
+      @click="isEditName=true" 
+      class="material-symbols-outlined" 
+      id="edit"
+      >
+      edit</span>
+      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
       <div v-if="isEditName">  
         <span 
         class="material-symbols-outlined" 
@@ -33,7 +40,14 @@
     </div>
     <div class="pjt-list">
       <p>PJT-Detail</p>
-      <span v-if="!isEditDetail" @click="isEditDetail=true" class="material-symbols-outlined" id="edit">edit</span>
+      <span 
+      v-if="!isEditDetail&& host.uid===account.profile.uid" 
+      @click="isEditDetail=true" 
+      class="material-symbols-outlined" 
+      id="edit"
+      >
+      edit</span>
+      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
       <div v-if="isEditDetail">  
         <span 
         class="material-symbols-outlined" 
@@ -70,12 +84,19 @@
     </div>
     <div class="pjt-list">
       <p>Member</p>
-      <span class="material-symbols-outlined" id="add" @click="isModalViewed=true">add</span>
+      <span 
+      v-if="host.uid===account.profile.uid" 
+      @click="isModalViewed=true"
+      class="material-symbols-outlined" 
+      id="add" 
+      >
+      add</span>
       <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
         <AddUser 
         :project="pjt"
         />
       </ModalView>
+      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
     </div>
     <div class="member-box">
       <UserIcon 
@@ -203,6 +224,10 @@ export default defineComponent({
   display: flex;
   align-items: flex-start;
   text-align: start;
+}
+.flex-box {
+  width: 16px;
+  height: 16px;
 }
 #person {
   font-size: 60px;
