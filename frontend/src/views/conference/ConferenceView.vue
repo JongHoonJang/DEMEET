@@ -179,7 +179,7 @@ setup() {
 			getToken((token) => {
 				session.value.connect(token, {'clientData':myUserName})
 				.then(() => {
-					console.log("Connection Success");
+
 					let publisher = OV.initPublisher(undefined, {
 						audioSource: undefined, // The source of audio. If undefined default microphone
 						videoSource: undefined, // The source of video. If undefined default webcam
@@ -190,7 +190,7 @@ setup() {
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 						mirror: false       	// Whether to mirror your local video or not
 					});
-					console.log("Publish Success");
+
 					mainStreamManager  = publisher;
 					publisher.value = publisher;
 
@@ -237,7 +237,7 @@ setup() {
 	 */
 	
 	const getToken = (callback) => {
-		console.log('gettoken 확인')
+
 		httpPostRequest(
 			'get-token',
 				{sessionName : mySessionId},
@@ -258,9 +258,7 @@ setup() {
 		headers: account.authHeader
 				})
 				.then(res => {
-		console.log(res.data[0]);
 						const token = res.data[0];
-						console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
 						callback(token);
 				})
 				.catch(err => (
@@ -322,7 +320,6 @@ setup() {
 				type: "my-chat" // The type of message (optional)
 			})
 			.then(() => {
-				console.log("Message successfully sent");
 			})
 			.catch(error => {
 				console.error(error);
@@ -340,7 +337,7 @@ setup() {
 	}
 
 	const dumpMethod = () => {  // 작동 확인을 위한 함수
-		alert('dumpMethod 작동 확인')
+		// alert('dumpMethod 작동 확인')
 	}
 
 	return {

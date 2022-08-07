@@ -26,11 +26,9 @@ export default {
 	},
 
 	setup(props){
-		console.log(props)
 
 	const getConnectionData = () => {
 			const { connection } = props.streamManager.stream
-			console.log(connection.data.split('%')[0])
 			return JSON.parse(connection.data.split('%')[0])
 		}
 	
