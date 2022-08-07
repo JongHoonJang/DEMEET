@@ -40,4 +40,11 @@ public class UserProjectRepositorySupport {
     }
 
 
+    public Optional<List<Projects>> getDeactivateProjectsByUid(Long uid) {
+        List<Projects> projectInfoDTOList = jpaQueryFactory.select(qProjects).from(qUserProject)
+                .where(qUserProject.users.uid.eq((uid))).where(qUserProject.projects.activation.eq(false)).fetch();
+        if (projectInfoDTOList == null) return Optional.empty();
+        return Optional.ofNullable(projectInfoDTOList);
+
+    }
 }
