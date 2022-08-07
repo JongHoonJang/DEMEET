@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service("projectsService")
 public class ProjectsServiceImpl implements ProjectsService {
@@ -78,26 +75,30 @@ public class ProjectsServiceImpl implements ProjectsService {
                 throw new UidNullException("can not find user that uid is " + member);
             }
         }
-//        3. 유저가 다 있는걸 확인했으니 이제 프로젝트를 생성해준다.
+        // 3. 유저가 다 있는걸 확인했으니 이제 프로젝트를 생성해준다.
         LocalDateTime localDateTime;
-//        // 프로젝트 이름지정
+        // 프로젝트 이름지정
         project.setPjtName(projectsCreatePostReq.getPjt_name());
-//        // 프로젝트 설명 지정
+        // 프로젝트 설명 지정
         if (projectsCreatePostReq.getPjt_desc() != null) {
             project.setPjtDesc(projectsCreatePostReq.getPjt_desc());
         }
-//        // 프로젝트 오너 지정
+        // 프로젝트 오너 지정
         project.setOwnerId(projectsCreatePostReq.getOwner_id());
-//        // 프로젝트 활성화
+        // 프로젝트 활성화
         project.setActivation(true);
-//        // 프로젝트 시작 날짜 설정
+        // 프로젝트 시작 날짜 설정
         localDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         project.setPjtStartDate(localDateTime);
-//        // 프로젝트 토탈시간 초기화
+        // 프로젝트 토탈시간 초기화
         localDateTime = LocalDateTime.of(0, 1, 1, 0, 0, 0, 0);
         System.out.println("ProjectsServiceImpl.createProject");
         System.out.println("localdateTime = " + localDateTime);
         project.setTotalMeetTime(localDateTime);
+        // 프로젝트의 세션ID 지정
+        String baseString = project.getPjtName()+project.getPjtStartDate().toString();
+        String sessionId = Base64.getEncoder().encodeToString(baseString.getBytes());
+        project.setSessionId(sessionId);
         // 프로젝트 저장
         Projects savedProject = projectRepository.save(project);
         System.out.println("프로젝트 저장 완료");
@@ -134,7 +135,7 @@ public class ProjectsServiceImpl implements ProjectsService {
             // 리스트속 객체(Projects)들을들을 우리가 원하는 객체(ProjectSimpleInfoDTO)로 바꿔준다.
             projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
         }
-        System.out.println("새로운 프로젝트 사이즈 = "+projectSimpleInfoList.size());
+        System.out.println("새로운 프로젝트 사이즈 = " + projectSimpleInfoList.size());
 
         return projectSimpleInfoList;
     }
@@ -167,17 +168,16 @@ public class ProjectsServiceImpl implements ProjectsService {
     public Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException {
 //        0. 프로젝트를 가져와 저장한다.
 //        조건 : 해당하는 pid의 프로젝트가 있고, 내가 그 프로젝트의 오너이고, 프로젝트는 활성화되어있어야한다.
-        Projects currProject = projectRepository.findProjectsByPidAndOwnerIdAndActivationIsTrue(projectPatchPostReq.getPid(),uid)
-                .orElseThrow(() -> new ProjectNullException("Your request does not meet the criteria."));
+        Projects currProject = projectRepository.findProjectsByPidAndOwnerIdAndActivationIsTrue(projectPatchPostReq.getPid(), uid).orElseThrow(() -> new ProjectNullException("Your request does not meet the criteria."));
         System.out.println(currProject.toString());
 //         변경할 정보(name, desc, decativate)모두 null일경우 똑같이 오류를 띄워준다.
-        if(projectPatchPostReq.getName()==null & projectPatchPostReq.getDesc() == null & !projectPatchPostReq.getDeactivate().orElse(false)){
+        if (projectPatchPostReq.getName() == null & projectPatchPostReq.getDesc() == null & !projectPatchPostReq.getDeactivate().orElse(false)) {
             System.out.println(projectPatchPostReq.getDeactivate().orElse(true));
-           throw new NullPointerException();
+            throw new NullPointerException();
         }
 
         // 위 모든 조건들을 통과하였을경우 이제 변환작업을 시작한다.
-        if(projectPatchPostReq.getName()!=null){
+        if (projectPatchPostReq.getName() != null) {
             currProject.setPjtName(projectPatchPostReq.getName());
         }
         if (projectPatchPostReq.getDesc() != null) {

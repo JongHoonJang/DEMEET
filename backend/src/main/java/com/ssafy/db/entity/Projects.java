@@ -28,6 +28,9 @@ public class Projects {
     String pjtName;
 
     String pjtDesc;
+
+    String sessionId;
+
     @Column(nullable = false)
     LocalDateTime totalMeetTime;
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
