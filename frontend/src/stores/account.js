@@ -38,7 +38,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(res => {
-          this.profile = res.data
+          this.profile = res.data.user
         })
     },
 
