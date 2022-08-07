@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
+import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -96,7 +97,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         System.out.println("localdateTime = " + localDateTime);
         project.setTotalMeetTime(localDateTime);
         // 프로젝트의 세션ID 지정
-        String baseString = project.getPjtName()+project.getPjtStartDate().toString();
+        String baseString = project.getPjtName() + project.getPjtStartDate().toString();
         String sessionId = Base64.getEncoder().encodeToString(baseString.getBytes());
         project.setSessionId(sessionId);
         // 프로젝트 저장
@@ -162,6 +163,18 @@ public class ProjectsServiceImpl implements ProjectsService {
             projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
         }
         return projectSimpleInfoList;
+    }
+
+    @Override
+    public Projects deactivateProject(int pid, Long userUid) throws ProjectNullException, NoAuthorizedException {
+        Projects project = projectRepository.findProjectsByPid(Long.valueOf(pid)).orElseThrow(() -> new ProjectNullException("ProjectNullException"));
+        if (project.getOwnerId() != userUid) {
+            // 본 uid의 사용자가 해당 프로젝트의 오너가 아니기때문에 비활성화 못함
+            throw new NoAuthorizedException("this user is not allowed to deactivate " + pid + " project");
+        }
+        project.setActivation(false);
+        projectRepository.save(project);
+        return projectRepository.save(project);
     }
 
     @Override
