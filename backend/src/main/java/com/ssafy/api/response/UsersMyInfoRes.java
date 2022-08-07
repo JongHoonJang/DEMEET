@@ -21,7 +21,7 @@ public class UsersMyInfoRes extends BaseResponseBody {
         res.user.setNickname(user.getNickname());
         res.user.setRegdate(user.getRegDate());
         res.user.setProfileImagePath(user.getProfileImagePath().getPath());
-        res.user.setActivateProjects(deActivateProjects);
+        res.user.setDeActivateProjects(deActivateProjects);
         return res;
     }
 
