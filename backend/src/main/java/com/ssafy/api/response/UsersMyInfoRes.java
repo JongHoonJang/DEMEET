@@ -16,11 +16,11 @@ public class UsersMyInfoRes extends BaseResponseBody {
         UsersMyInfoRes res = new UsersMyInfoRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        System.out.println(user.toString());
         res.user.setUid(user.getUid());
         res.user.setEmail(user.getEmail());
         res.user.setNickname(user.getNickname());
         res.user.setRegdate(user.getRegDate());
+        res.user.setProfileImagePath(user.getProfileImagePath().getPath());
         res.user.setActivateProjects(deActivateProjects);
         return res;
     }

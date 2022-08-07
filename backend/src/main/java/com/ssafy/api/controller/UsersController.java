@@ -102,6 +102,7 @@ public class UsersController {
             String email = ssafyUsersDetails.getUsername();
             Users newUser = usersService.getUsersByUserEmail(email);
             List<ProjectSimpleInfoDTO> deActivateProjects = projectsService.getDeActivateProjectsByUid(newUser.getUid());
+
             return ResponseEntity.status(200).body(UsersMyInfoRes.of(200, "Success", newUser, deActivateProjects));
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, "not found"));
