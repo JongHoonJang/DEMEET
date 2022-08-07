@@ -1,7 +1,7 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
-		<div id="join" v-if="!session">
+		<div id="join" v-if="!testData">
 			<div id="img-div"> <img class='bg-image' src="@/assets/DEMEET_logo.png" alt=""></div>
 			<div id="join-dialog" class="jumbotron vertical-center">
 				<h1>Join a video session</h1>
@@ -21,19 +21,18 @@
 			</div>
 		</div>
 
-	<div id="session" v-if="session">
+	<div id="session" v-if="testData">
   <nav>
-		<div id="session-header">
+		<!-- <div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
 				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
-		</div>
+		</div> -->
   </nav>
   <main>
     <section>
       <article>
         <!-- 영상, 드로잉 등 -->
         <ConferenceVideo
-				:OV="OV"
 				:session = "session"
 				:mainStreamManager = "mainStreamManager"
 				:publisher ="publisher"
@@ -42,7 +41,13 @@
       </article>
       <footer>
         <!-- 동작 버튼 등,  -->
-        <ConferenceFooter/>
+        <ConferenceFooter
+				@audio-on-off="audioOnOff"  
+				@video-on-off="videoOnOff"
+				@share-screen="dumpMethod"
+				@share-drawing="dumpMethod"
+				@session-exit="leaveSession"
+				/>
       </footer>
     </section>
     <aside>
@@ -50,6 +55,7 @@
       <ConferenceUsers
       :publisher="publisher"
       :subscribers="subscribers"
+			:users="users"
       />
       <transition name="slide">
         <div
@@ -64,7 +70,7 @@
           />
           <ChatForm
             style="width:100%"
-            @sendMsg="sendMsg"
+            v-bind:sendMsg="sendMsg"
             :user-name="myUserName"
           />
         </div>
@@ -72,8 +78,8 @@
     </aside>
   </main>
 	</div>
-	
-  
+
+
 </template>
 
 <script>
@@ -112,10 +118,12 @@ setup() {
 	const account = useAccountStore()
 
 	let OV = undefined
-	let session = undefined
-	let mainStreamManager= undefined
+	let session = ref(undefined)
+	let mainStreamManager= ref(undefined)
 	let publisher = ref(undefined)
-	let subscribers = []
+	let subscribers = ref([])
+	let testData = ref(false)
+	let users = ref([])
 
 	const mySessionId = 'SessionA'
 	const myUserName = 'Participant' + Math.floor(Math.random() * 100)
@@ -124,35 +132,40 @@ setup() {
 	const chatting = true
 	const fromId = ref("")
 	const myId = ref("")
+
+	// foooter 작동을 위한 변수
+	const audioStatus = ref(true)
+	const videoStatus = ref(true)
 	
 	const joinSession = () => {
 			// --- Get an OpenVidu object ---
 			OV = new OpenVidu();
 
 			// --- Init a session ---
-			session = OV.initSession();
+			session.value = OV.initSession();
 
 			// --- Specify the actions when events take place in the session ---
 			// On every new Stream received...
-			session.on('streamCreated', ({ stream }) => {
-				const subscriber = session.subscribe(stream);
-				subscribers.push(subscriber);
+			session.value.on('streamCreated', ({ stream }) => {
+				const subscriber = session.value.subscribe(stream);
+				subscribers.value.push(subscriber);
+				users.value.push(subscriber)
 			});
 
 			// On every Stream destroyed...
-			session.on('streamDestroyed', ({ stream }) => {
-				const index = subscribers.indexOf(stream.streamManager, 0);
+			session.value.on('streamDestroyed', ({ stream }) => {
+				const index = subscribers.value.indexOf(stream.streamManager, 0);
 				if (index >= 0) {
-					subscribers.splice(index, 1);
+					subscribers.value.splice(index, 1);
 				}
 			});
 
 			// On every asynchronous exception...
-			session.on('exception', ({ exception }) => {
+			session.value.on('exception', ({ exception }) => {
 				console.warn(exception);
 			});
 			// Receiver of the message (usually before calling 'session.connect')
-			session.on("signal:my-chat", event => {
+			session.value.on("signal:my-chat", event => {
 				fromId.value = event.from.connectionId;
 				const tmp = msgs.value.slice();
 				tmp.push(event.data);
@@ -164,7 +177,7 @@ setup() {
 			// 'token' parameter should be retrieved and returned by your own backend
 
 			getToken((token) => {
-				session.connect(token, {'clientData':myUserName, idData: this.myUserId})
+				session.value.connect(token, {'clientData':myUserName})
 				.then(() => {
 					console.log("Connection Success");
 					let publisher = OV.initPublisher(undefined, {
@@ -182,7 +195,7 @@ setup() {
 					publisher.value = publisher;
 
 					// publish your stream
-					session.publish(publisher);
+					session.value.publish(publisher);
 				})
 				.catch( error => {
 					console.log('There was an error connecting to the session:', error.code, error.message)
@@ -194,20 +207,21 @@ setup() {
 		const leaveSession = () => {
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 
-			if (session ) session .disconnect();
+			if (session.value ) session.value.disconnect();
 
-			session  = undefined;
-			mainStreamManager  = undefined;
-			publisher  = undefined;
-			subscribers  = [];
-			OV  = undefined;
+			session.value  = undefined;
+			mainStreamManager.value  = undefined;
+			publisher.value = undefined;
+			subscribers.value = [];
+			OV = undefined;
+			testData.value = false
 
 			window.removeEventListener('beforeunload', leaveSession);
 		};
 
 		const updateMainVideoStreamManager = (stream) => {
-			if (mainStreamManager  === stream) return;
-			mainStreamManager  = stream;
+			if (mainStreamManager.value  === stream) return;
+			mainStreamManager.value  = stream;
 		};
 
 			/**
@@ -315,6 +329,20 @@ setup() {
 			});
 	}
 
+	const audioOnOff = () => {
+		publisher.value.publishAudio(!audioStatus.value)
+		audioStatus.value = !audioStatus.value
+	}
+
+	const videoOnOff = () => {
+		publisher.value.publishVideo(!videoStatus.value)
+		videoStatus.value = !videoStatus.value;
+	}
+
+	const dumpMethod = () => {  // 작동 확인을 위한 함수
+		alert('dumpMethod 작동 확인')
+	}
+
 	return {
 		OV,
 		session,
@@ -323,18 +351,30 @@ setup() {
 		subscribers,
 		mySessionId,
 		myUserName,
+		testData,
+		users,
+		// 채팅 변수
 		msgs,
 		chatting,
+		fromId,
+		myId,
+		// footer 함수 작동 변수
+		audioStatus,
+		videoStatus,
+		// 기본 함수
+		dumpMethod,
 		joinSession,
 		leaveSession,
 		updateMainVideoStreamManager,
 		getToken,
-		httpPostRequest,
+		// httpPostRequest,
 		createSession,
 		createToken,
+		// 채팅 함수
 		sendMsg,
-		fromId,
-		myId
+		// footer 함수
+		audioOnOff,
+		videoOnOff
 	}
 },
 

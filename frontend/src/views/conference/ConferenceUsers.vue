@@ -1,19 +1,57 @@
 <template>
   <div id="ConferenceUsers">
     <p>유저 목록입니다.</p>
+    <div><p>{{ clientData.clientData }}</p></div>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
   name: 'ConferenceUsers',
   components: {},
-  data() {
-    return {
-      sampleData: ''
-    };
+    props:{ 
+		publisher:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		subscribers:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		},
+		users:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		}
+	},
+  setup(props) {
+    console.log('유저 데이터 들어오는지 확인')
+    console.log(props.users)
+
+    const getConnectionData = () => {
+    const { connection } = props.publisher.stream
+    console.log(connection.data)
+    return JSON.parse(connection.data)
+   }
+
+   const clientData = computed(() => {
+			const clientData  = getConnectionData()
+      console.log(clientData)
+			return clientData
+	})
+  
+  return {
+    getConnectionData,
+    clientData
+  }
   },
-  setup() {},
   create() {},
   mounted() {},
   unmounted() {},
