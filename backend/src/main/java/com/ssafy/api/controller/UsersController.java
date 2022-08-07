@@ -16,9 +16,11 @@ import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.response.UsersMyInfoRes;
 import com.ssafy.api.response.UsersRes;
 import com.ssafy.api.service.ProjectsService;
+import com.ssafy.api.service.UserProjectService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
 import com.ssafy.common.customException.ProjectNullException;
+import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Users;
@@ -49,6 +51,8 @@ public class UsersController {
 
     @Autowired
     ProjectsService projectsService;
+    @Autowired
+    UserProjectService userProjectService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -102,10 +106,15 @@ public class UsersController {
             String email = ssafyUsersDetails.getUsername();
             Users newUser = usersService.getUsersByUserEmail(email);
             List<ProjectSimpleInfoDTO> deActivateProjects = projectsService.getDeActivateProjectsByUid(newUser.getUid());
-
+            for (int i = 0; i < deActivateProjects.size(); i++) {
+                List<userSimpleInfoDTO> userList = userProjectService.getUserListByPid(deActivateProjects.get(i).getPid());
+                deActivateProjects.get(i).setMember(userList);
+            }
             return ResponseEntity.status(200).body(UsersMyInfoRes.of(200, "Success", newUser, deActivateProjects));
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, "not found"));
+        } catch (UidNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "fail to find user"));
         }
     }
 

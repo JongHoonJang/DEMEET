@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
+import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
@@ -26,4 +27,6 @@ public interface ProjectsService {
     List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
 
     List<ProjectSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
+
+    Projects deactivateProject(int pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
 }
