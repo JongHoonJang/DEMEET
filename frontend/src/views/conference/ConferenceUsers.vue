@@ -32,18 +32,14 @@ export default {
 		}
 	},
   setup(props) {
-    console.log('유저 데이터 들어오는지 확인')
-    console.log(props.users)
 
     const getConnectionData = () => {
     const { connection } = props.publisher.stream
-    console.log(connection.data)
     return JSON.parse(connection.data)
    }
 
    const clientData = computed(() => {
 			const clientData  = getConnectionData()
-      console.log(clientData)
 			return clientData
 	})
   
