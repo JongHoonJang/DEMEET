@@ -4,14 +4,12 @@
       <img src="@/assets/DEMEET_logo.png" alt="">
     </a>
     <div>
-      <form action="">
-        <input type="text" placeholder="Search">
-      </form>
+      <input v-model.trim="search" @input="setData" type="text" placeholder="Search">
     </div>
     <div class="list-box">
       <div class="list-box">
         <span class="material-symbols-outlined" id="account">account_box</span>
-        <a href="/profile/me">Profile</a>
+        <a href="/profile/me">{{ account.profile.nickname }}님</a>
       </div>
       <div class="list-box" @click="account.logout">
         <span class="material-symbols-outlined" id="logout">logout</span>
@@ -22,13 +20,25 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   setup() {
     const account = useAccountStore()
+    account.fetchProfile()
+    const search = ref('')
+    const setData = () => {
+      account.search = search.value
+      if (account.search){
+        account.projects = account.projects.filter(res => res.pjtName.includes(account.search))
+      }else{
+        account.fetchProjects()
+      }
+    }
     return {
       account,
+      search,
+      setData
     }
   },
 
@@ -38,12 +48,12 @@ export default defineComponent({
 <style scoped>
 #account {
   font-size: 32px;
-  color: #4C4E50;
+  color: white;
 }
 
 #logout {
   font-size: 32px;
-  color: #4C4E50;
+  color: white;
 }
 
 .list-box {
@@ -72,25 +82,28 @@ nav input {
   margin-top: 16px;
   background: #111315;
   border-radius: 10px;
-  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 32px;
   line-height: 48px;
   text-align: start;
-  color: white;
+  color: white; 
 }
+
+nav input[type=text]::placeholder {
+  font-family: 'Material Icons Outlined';
+}
+
 
 nav div a {
   font-weight: bold;
-  color: #4C4E50;
+  color: white;
   text-decoration-line: none;
   margin-right: 20px;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
-  color: #4C4E50;
 }
 
 nav a.router-link-exact-active {

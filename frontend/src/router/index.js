@@ -5,6 +5,7 @@ import ConferenceView from '@/views/conference/ConferenceView'
 import ProfileView from '@/views/account/ProfileView'
 import LoginView from '@/views/account/LoginView'
 import SignupView from '@/views/account/SignupView'
+import GuestLogin from '@/views/account/GuestLogin'
 const routes = [
   {
     path: '/',
@@ -12,7 +13,7 @@ const routes = [
     component: MainView
   },
   {
-    path: '/project/:project_pk',
+    path: '/project/:pid',
     name: 'DetailView',
     component: DetailView
   },
@@ -30,6 +31,11 @@ const routes = [
     path: '/login',
     name: 'LoginView',
     component: LoginView
+  },
+  {
+    path: '/login/guest',
+    name: 'GuestLogin',
+    component: GuestLogin
   },
   {
     path: '/signup',
@@ -67,6 +73,11 @@ router.beforeEach((to, from, next) => {
   else if (to.name === 'ProfileView') {
     if(!token) {
       next({ name:'LoginView' })
+    }
+  }
+  if (to.name === 'ConferenceView') {
+    if(!token) {
+      next({ name: 'GuestLogin'})
     }
   }
   next()

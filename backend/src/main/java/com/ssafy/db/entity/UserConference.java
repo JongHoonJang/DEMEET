@@ -11,13 +11,13 @@ import javax.persistence.*;
 public class UserConference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int ucid;
+    Long ucid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "uid")
     Users user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cid")
     Conferences conference;
 }

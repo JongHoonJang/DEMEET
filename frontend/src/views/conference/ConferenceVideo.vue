@@ -1,24 +1,64 @@
 <template>
   <div class="dump">
-    <h2 style="margin:0;">여기는 컨퍼런스 입니다.</h2>
-    
+		<!-- <div id="session" v-if="session"> -->
+		<div id="session">
+			<!-- <div id="main-video" class="col-md-6">
+				<user-video :stream-manager="mainStreamManager"/>
+			</div> -->
+			<div id="video-container" class="col-md-6">
+				<user-video :streamManager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" @click="updateMainVideoStreamManager(sub)"/>
+			</div>
+		</div>
   </div>
 </template>
 
 <script>
+// 튜토리얼 복붙
+import UserVideo from './UserVideo'
+
+
 export default {
+  
   name: 'ConferenceVideo',
-  components: {},
-  data() {
-    return {
-      Data: ''
-    };
-  },
-  setup() {},
-  create() {},
-  mounted() {},
-  unmounted() {},
-  methods: {},
+  components: {    UserVideo},
+	
+	props:{ 
+		session:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		mainStreamManager:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		publisher:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		subscribers:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		},
+	},
+
+	setup(){
+		const mySessionId = 'SessionA'
+		const myUserName = 'Participant' + Math.floor(Math.random() * 100)
+
+	return {
+		mySessionId,
+		myUserName,
+		}
+	},
 }
 </script>
 

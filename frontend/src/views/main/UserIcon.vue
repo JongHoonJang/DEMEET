@@ -1,14 +1,38 @@
 <template>
   <div class="user-icon">
-    <span class="material-symbols-outlined" id="close">close</span>
-    <p class="username">장종훈</p>
+    <span v-if="project.project.projectOwner===project.profile.uid" @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
+    <div v-if="project.project.projectOwner!==project.profile.uid" class="none-box"></div>
+    <p class="username">{{ user.member.nickname }}</p>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+import { defineComponent, ref } from "vue"
+import router from "@/router"
+import { useAccountStore } from "@/stores/account"
+export default defineComponent({
+  props: ['member','host'],
+  setup(props) {
+    const user = props
+    const hostdata = user.host
+    const project = useAccountStore()
+    const pjt = ref(project.project)
+    const remove = (user) => {
+      if (user.member.uid===project.profile.uid) {
+        alert('호스트를 추방할 수 없습니다.')
+      }else {
+        project.removeUser({pid:pjt.value.pid,uid:user.member.uid})
+        router.go({name:'DetailView'})
+      }
+    }
+    return {
+      user,
+      project,
+      hostdata,
+      remove
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -16,7 +40,11 @@ export default {
   font-size: 16px;
   color: black;
 }
-
+.none-box{
+  width: 40px;
+  height: 16px;
+  margin-bottom: 18px;
+}
 .user-icon {
   margin-left: 8px;
   margin-top: 2px;
@@ -27,6 +55,7 @@ export default {
   border-radius: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   text-align: end;
 }
 

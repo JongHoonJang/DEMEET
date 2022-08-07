@@ -1,6 +1,8 @@
 package com.ssafy.db.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,7 +14,7 @@ public class UserProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int upid;
+    Long upid;
 
     @ManyToOne
     @JoinColumn(name = "uid")

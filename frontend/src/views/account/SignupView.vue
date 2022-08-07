@@ -7,11 +7,12 @@
         <h1 class='sign-head'>Sign Up</h1>
     </div>
     <form @submit.prevent="account.signup(signdata)" class='account-info'>
-      <p><input v-model="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
-      <p><input v-model="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
-      <p><input v-model="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
-      <p><input v-model="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
-      <button>Sign Up</button>
+      <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
+      <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
+      <p><input v-model.trim="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model.trim="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
+      <button class="signup-btn">Sign Up</button>
+      <router-link class="back" :to="{ name: 'LoginView' }">back</router-link>
     </form>
       </div>
       <div class='account-right'>
@@ -24,19 +25,19 @@
 
 <script>
 
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 export default defineComponent({
 
   setup() {
-    const signdata = {
+    const signdata = ref({
       nickname: '',
       email: '',
       password: '',
-    }
+    })
     const password2 = ''
     const sign = () => {
-      if (signdata.password === password2){
+      if (signdata.value.password === password2){
         account.signup(signdata)
       }
     }
@@ -115,6 +116,8 @@ export default defineComponent({
   line-height: 2;
 }
 
+input::placeholder {color:white;}
+
 .sign-head {
   color:rgba(255, 1, 214, 0);
 
@@ -129,5 +132,22 @@ export default defineComponent({
   font-size: 4rem;
   line-height: 5rem;
   display: flex;
+}
+
+.signup-btn {
+  width: 80px;
+  height: 30px;
+  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
+  border-radius: 5px;
+}
+
+.back {
+  color: white;
+  text-decoration: none;
+  margin-left: 100px;
+}
+
+.back:hover {
+  color: rgba(255, 1, 214, 1);
 }
 </style>

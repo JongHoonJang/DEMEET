@@ -1,13 +1,13 @@
 <template>
-  <a href="/project/1" class="project-box">
+  <router-link :to="{ name: 'DetailView', params: {pid: pid}}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
-      <span style="font-size: 20px">PJT-name</span>
+      <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
     </div>
     <div class="box">
       <span class="material-symbols-outlined" id="group">group</span>
       <span style="font-size: 20px">Members</span>
-      <span class="member">3</span>
+      <span class="member">{{ member.length }}</span>
     </div>
     <!-- <div class="box">
       <span class="material-symbols-outlined" id="cancel">cancel_presentation</span>
@@ -20,16 +20,34 @@
     <div class="host-box">
       <span class="material-symbols-outlined" id="person">person</span>
       <div class="host-data">
-        <p>Host</p>
-        <p>SSAFY@SSAFY.com</p>
+        <p>{{ host.nickname }}</p>
+        <p>{{ host.email }}</p>
       </div>
     </div>
-  </a>
+  </router-link>
 </template>
 
 <script>
-export default {
-}
+import { defineComponent,ref } from "vue"
+import { useAccountStore } from "@/stores/account"
+export default defineComponent({
+  props: ['project'],
+  setup(props) {
+    const demeet = ref(props)
+    const account = useAccountStore()
+    account.fetchUserList()
+    const pid = ref(demeet.value.project.pid)
+    const member = ref(demeet.value.project.member)
+    const host = ref(member.value.find(user => user.uid === demeet.value.project.projectOwner))
+    return {
+      demeet,
+      host,
+      member,
+      pid
+    }
+  }
+
+})
 </script>
 
 <style scoped>
