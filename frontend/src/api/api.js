@@ -1,4 +1,7 @@
-const HOST = 'http://127.0.0.1:8080/'
+// 로컬호스트 테스트 용 주소
+// const HOST = 'http://127.0.0.1:8080/'
+// 배포용 주소 - push 하기전에 변경해줄것
+const HOST = 'https://i7b309.p.ssafy.io/api'
 
 const ACCOUNTS = 'users/'
 const PROJECTS = 'projects/'
@@ -14,7 +17,6 @@ export default {
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch
     profileimage_update: () => HOST + ACCOUNTS + 'image/', //patch
-    // projectslist: () => HOST + ACCOUNTS + `${user_pk}/` + PROJECTS, //get
   },
   projects: {
     projects_create_update: () => HOST + PROJECTS, //get, patch
