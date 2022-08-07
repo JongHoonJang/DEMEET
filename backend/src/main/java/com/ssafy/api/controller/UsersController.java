@@ -6,15 +6,19 @@ package com.ssafy.api.controller;
  * Users테이블을 사용한다.
  */
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UserPwChangePostReq;
 import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
+import com.ssafy.api.response.UsersMyInfoRes;
 import com.ssafy.api.response.UsersRes;
+import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
+import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Users;
@@ -27,7 +31,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.lang.reflect.Field;
@@ -43,6 +46,9 @@ public class UsersController {
 
     @Autowired
     UsersService usersService;
+
+    @Autowired
+    ProjectsService projectsService;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -85,21 +91,21 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UsersRes> getUsersInfo(@ApiIgnore @Validated Authentication authentication) {
+    public ResponseEntity<BaseResponseBody> getMyInfo(Authentication authentication) {
         /**
          * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
          * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
          */
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-        String email = ssafyUsersDetails.getUsername();
-        Users newUser = usersService.getUsersByUserEmail(email);
-        System.out.println("%&%&%&%&%&%&%&%&%&%&%&%&%&%UsersController 79");
-        System.out.println(newUser);
-        System.out.println(newUser.getUid());
-        System.out.println(newUser.getEmail());
-        System.out.println(newUser.getNickname());
-        System.out.println(newUser.getRegDate());
-        return ResponseEntity.status(200).body(UsersRes.of(newUser));
+        // 내가 속한 프로젝트들중에서 끝난 프로젝트들을 가지고온다.
+        try {
+            String email = ssafyUsersDetails.getUsername();
+            Users newUser = usersService.getUsersByUserEmail(email);
+            List<ProjectSimpleInfoDTO> deActivateProjects = projectsService.getDeActivateProjectsByUid(newUser.getUid());
+            return ResponseEntity.status(200).body(UsersMyInfoRes.of(200, "Success", newUser, deActivateProjects));
+        } catch (ProjectNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "not found"));
+        }
     }
 
     @GetMapping("/{email}")
