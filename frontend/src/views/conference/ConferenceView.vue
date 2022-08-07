@@ -1,7 +1,7 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
-		<div id="join" v-if="!testData">
+		<div id="join" v-if="!conferenceAction">
 			<div id="img-div"> <img class='bg-image' src="@/assets/DEMEET_logo.png" alt=""></div>
 			<div id="join-dialog" class="jumbotron vertical-center">
 				<h1>Join a video session</h1>
@@ -21,7 +21,7 @@
 			</div>
 		</div>
 
-	<div id="session" v-if="testData">
+	<div id="session" v-if="conferenceAction">
   <nav>
 		<!-- <div id="session-header">
 				<h1 id="session-title">{{ mySessionId }}</h1>
@@ -47,17 +47,20 @@
 				@share-screen="dumpMethod"
 				@share-drawing="dumpMethod"
 				@session-exit="leaveSession"
+				@user-list-on-off="userListOnOff"
+				@chatting-on-off="chattingOnOff"
 				/>
       </footer>
     </section>
     <aside>
       <!-- 참자가 목록, 채팅 -->
       <ConferenceUsers
+			v-if="userListStatus"
       :publisher="publisher"
       :subscribers="subscribers"
 			:users="users"
       />
-      <transition name="slide">
+      <transition name="slide" v-if="chattingStatus">
         <div
           id="chat-box"
           v-if="chatting"
@@ -122,7 +125,7 @@ setup() {
 	let mainStreamManager= ref(undefined)
 	let publisher = ref(undefined)
 	let subscribers = ref([])
-	let testData = ref(false)
+	let conferenceAction = ref(false)
 	let users = ref([])
 
 	const mySessionId = 'SessionA'
@@ -136,9 +139,11 @@ setup() {
 	// foooter 작동을 위한 변수
 	const audioStatus = ref(true)
 	const videoStatus = ref(true)
+	const userListStatus = ref(true)
+	const chattingStatus = ref(true)
 	
 	const joinSession = () => {
-			// --- Get an OpenVidu object ---
+		// --- Get an OpenVidu object ---
 			OV = new OpenVidu();
 
 			// --- Init a session ---
@@ -179,7 +184,7 @@ setup() {
 			getToken((token) => {
 				session.value.connect(token, {'clientData':myUserName})
 				.then(() => {
-
+					
 					let publisher = OV.initPublisher(undefined, {
 						audioSource: undefined, // The source of audio. If undefined default microphone
 						videoSource: undefined, // The source of video. If undefined default webcam
@@ -214,7 +219,7 @@ setup() {
 			publisher.value = undefined;
 			subscribers.value = [];
 			OV = undefined;
-			testData.value = false
+			conferenceAction.value = false
 
 			window.removeEventListener('beforeunload', leaveSession);
 		};
@@ -237,7 +242,7 @@ setup() {
 	 */
 	
 	const getToken = (callback) => {
-
+		
 		httpPostRequest(
 			'get-token',
 				{sessionName : mySessionId},
@@ -250,8 +255,9 @@ setup() {
 		};
 
 	const httpPostRequest = (url, body, callback) => {
+
 		axios({
-						'url': api.conferences.conference() + url,
+			'url': api.conferences.conference() + url,
 						'method': 'post',
 						'data': JSON.stringify(body),
 		// 추후 연결 필요
@@ -331,6 +337,14 @@ setup() {
 		audioStatus.value = !audioStatus.value
 	}
 
+	const userListOnOff = () =>{
+	userListStatus.value = !userListStatus.value
+	}
+
+	const chattingOnOff = () =>{
+		chattingStatus.value = !chattingStatus.value
+	}
+
 	const videoOnOff = () => {
 		publisher.value.publishVideo(!videoStatus.value)
 		videoStatus.value = !videoStatus.value;
@@ -348,7 +362,7 @@ setup() {
 		subscribers,
 		mySessionId,
 		myUserName,
-		testData,
+		conferenceAction,
 		users,
 		// 채팅 변수
 		msgs,
@@ -358,6 +372,8 @@ setup() {
 		// footer 함수 작동 변수
 		audioStatus,
 		videoStatus,
+		userListStatus,
+		chattingStatus,
 		// 기본 함수
 		dumpMethod,
 		joinSession,
@@ -371,7 +387,9 @@ setup() {
 		sendMsg,
 		// footer 함수
 		audioOnOff,
-		videoOnOff
+		videoOnOff,
+		userListOnOff,
+		chattingOnOff
 	}
 },
 
