@@ -23,6 +23,14 @@ public class UsersRepositorySupport {
     QUsers qNewUsers = QUsers.users;
 
 
+    public Optional<Users> findUserById(Long id) {
+        Users User = jpaQueryFactory.select(qNewUsers)
+                .from(qNewUsers)
+                .where(qNewUsers.uid.eq(id)).fetchOne();
+        if (User == null) return Optional.empty();
+        return Optional.ofNullable(User);
+    }
+
     public Optional<Users> findUserByEmail(String email) {
         Users newUser = jpaQueryFactory.select(qNewUsers).from(qNewUsers)
                 .where(qNewUsers.email.eq(email)).fetchOne();
@@ -56,13 +64,13 @@ public class UsersRepositorySupport {
         return userlist;
     }
 
-    public Boolean changeUserPassword(int uid, String newPassword) {
+    public Boolean changeUserPassword(Long uid, String newPassword) {
         Long res = jpaQueryFactory.update(qNewUsers).set(qNewUsers.password, newPassword).where(qNewUsers.uid.eq(uid)).execute();
 
         return res > 0;
     }
 
-    public Boolean changeUserNickname(int uid, String newNickname) {
+    public Boolean changeUserNickname(Long uid, String newNickname) {
         Long res = jpaQueryFactory.update(qNewUsers).set(qNewUsers.nickname, newNickname).where(qNewUsers.uid.eq(uid)).execute();
         return res > 0;
     }

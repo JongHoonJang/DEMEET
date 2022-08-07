@@ -1,7 +1,9 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
+import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Users;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
  */
 public interface UsersService {
 
+    boolean deleteUser(String username);
+
     Users createUsers(UsersRegisterPostReq usersRegisterInfo);
 
     Users getUsersByUserEmail(String userEmail);
@@ -18,7 +22,9 @@ public interface UsersService {
 
     List<userSimpleInfoDTO> getUserList();
 
-    Boolean changeUserPassword(int uid, String newPassword);
+    Boolean changeUserPassword(Long uid, String newPassword);
 
-    Boolean changeUserNickname(int uid, String newNickname);
+    Boolean changeUserNickname(Long uid, String newNickname);
+
+    Users getUsersByUid(Long ownerId) throws UidNullException;
 }

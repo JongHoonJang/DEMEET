@@ -1,49 +1,49 @@
 <template>
   <header>
     <div class="container">
-      <a href="/project/1" class="create">
-        <div class="create-box">
+      <div class="create">
+        <div class="create-box" @click="isModalViewed=true">
             <span class="material-symbols-outlined" id="add">add</span>
         </div>
-      </a>
+        <ModalView v-if="isModalViewed" @close-modal="isModalViewed=false">
+          <CreateProject />
+        </ModalView>
+      </div>
         <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
-        />
-        <ProjectList 
-
+        v-for="project in projects.projects"
+        :key="project.pid"
+        :project="project"
         />
       </div>
   </header>
 </template>
 
 <script>
+import { defineComponent } from "vue"
+import { useAccountStore } from "@/stores/account"
+import ModalView from '@/views/main/ModalView'
 import ProjectList from '@/views/main/ProjectList'
-export default {
+import CreateProject from '@/views/main/CreateProject'
+export default defineComponent({
   components: {
-    ProjectList
+    ProjectList,
+    ModalView,
+    CreateProject
+  },
+  data() {
+    return {
+      isModalViewed: false,
+    }
+  },
+  setup() {
+    const projects = useAccountStore()
+    projects.fetchProjects()
+    return {
+      projects,
+
+    }
   }
-}
+})
 </script>
 
 <style scoped>

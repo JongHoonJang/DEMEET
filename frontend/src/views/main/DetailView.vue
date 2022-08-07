@@ -1,35 +1,48 @@
 <template>
-    <MainNav />
+<div>
+  <MainNav class="nav"/>
     <div class="container">
       <div>
         <h1>저장된 이미지</h1>
         <img src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
       </div>
       <div class="detail-box">
-        <div class="host-box">
-          <span class="material-symbols-outlined" id="person">person</span>
-          <div class="host-data">
-            <h3>Host</h3>
-            <p>SSAFY@SSAFY.com</p>
-          </div>
-        </div>
-        <ProjectData />
+        <ProjectData 
+        :project="project.project"
+        :key="project.pid"
+        />
       </div>
     </div>
+</div>
 </template>
 
 <script>
+import { defineComponent,ref } from "vue"
+import { useAccountStore } from "@/stores/account"
+import { useRoute } from 'vue-router'
 import MainNav from '@/views/main/MainNav'
 import ProjectData from '@/views/main/ProjectData'
-export default {
+export default defineComponent({
   components: {
     MainNav,
     ProjectData
-  }
-}
+  },
+  setup() {
+    const route = useRoute()  
+    const project_pk = ref(route.params.pid)
+    const project = useAccountStore()
+    project.fetchProject(project_pk.value)
+    return {
+      project,
+    }
+  },
+})
 </script>
 
 <style scoped>
+.nav {
+  width:80%; 
+}
 #person {
   font-size: 60px;
   margin-left: 16px;

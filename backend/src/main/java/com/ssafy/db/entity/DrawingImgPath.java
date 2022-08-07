@@ -11,15 +11,11 @@ import javax.persistence.*;
 public class DrawingImgPath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int dipid;
+    Long dipid;
 
     @ManyToOne
     @JoinColumn(name="uid")
     Users user;
-
-    @ManyToOne
-    @JoinColumn(name="pid")
-    Projects project;
 
     @ManyToOne
     @JoinColumn(name="cid")

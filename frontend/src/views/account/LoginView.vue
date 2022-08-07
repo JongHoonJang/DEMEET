@@ -5,26 +5,12 @@
         <div style='display:flex; justify-content:center;'>
       <h1 class='sign-head'>Sign In</h1>
     </div>
-    <div class='account-info'>
-      <p><input v-model="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
-      <p><input v-model="credentials.password" type="password" placeholder="password" class="input-prop"></p>
-    </div>
-    <div>
-      <button @click="account.login(credentials)">Sign In</button>
-    </div>
-    <!-- <div style='color: white;'>Signin as a Guest</div>
-    <div>
-      <div>
-        <img src="@/assets/btn_google_signin_dark_focus_web.png" alt="">
-      </div>
-      <div style="height:46px; width:190px; display:flex; background-color: black; margin:auto; border-radius: 0.5rem;">
-        <img src="@/assets/GitHub-Mark-Light-32px.png" style="height: 36px; margin: 2px;" alt="">
-        <p>Sign In with GitHub</p>                
-      </div>
-      <div style="margin:4px">
-        <img src="@/assets/kakao_login_medium_narrow.png" alt="">
-      </div>
-    </div> -->
+    <form @submit.prevent="account.login(credentials)" class='account-info'>
+      <p><input v-model.trim="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
+      <p><input v-model.trim="credentials.password" type="password" placeholder="password" class="input-prop"></p>
+      <button class="login-btn">Sign In</button>
+      <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
+    </form>
       </div>
       <div class='account-right'>
         <h1 class="main-logo">DEMEET</h1>
@@ -144,4 +130,20 @@ input::placeholder {color:white;}
   display: flex;
 }
 
+.createuser {
+  color: white;
+  text-decoration: none;
+  margin-left: 100px;
+}
+
+.createuser:hover {
+  color: rgba(255, 1, 214, 1);
+}
+
+.login-btn {
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
+  border-radius: 5px;
+}
 </style>

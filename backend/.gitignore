@@ -20,6 +20,7 @@ bin/
 
 ### IntelliJ IDEA ###
 **/database.properties
+**/awsS3.properties
 .idea
 *.iws
 *.iml
