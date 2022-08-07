@@ -11,6 +11,7 @@ import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UserProjectService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
+import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Demmet에 사용되는 프로젝트 관리 컨트롤러
@@ -57,8 +59,21 @@ public class ProjectsController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to make project"));
     }
 
+    @PatchMapping("/deactivate")
+    public ResponseEntity<BaseResponseBody> deactivateProject(Authentication authentication, @RequestBody Map<String, Integer> request) {
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        int pid = request.get("pid").intValue();
+        System.out.println(pid + "");
+        try {
+            Projects project = projectsService.deactivateProject(pid, ssafyUsersDetails.getUserUid());
+        } catch (ProjectNullException | NoAuthorizedException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(200, e.getMessage()));
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to deactivate " + pid + " project"));
+    }
+
     @GetMapping("/{pid}")
-    public ResponseEntity<BaseResponseBody> getProject(Authentication authentication,@PathVariable Long pid) {
+    public ResponseEntity<BaseResponseBody> getProject(Authentication authentication, @PathVariable Long pid) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         System.out.println("ProjectsController.getProject");
         System.out.println("pid = " + pid);
@@ -89,7 +104,7 @@ public class ProjectsController {
 
 
     @GetMapping("/activate/joind")
-    public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication){
+    public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         System.out.println(uid);
@@ -171,8 +186,9 @@ public class ProjectsController {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         }
     }
+
     @DeleteMapping("/user")
-    public ResponseEntity<BaseResponseBody> deleteUserInProject(Authentication authentication, @RequestBody AddDelUserInProjectPostReq addDelUserInProjectPostReq){
+    public ResponseEntity<BaseResponseBody> deleteUserInProject(Authentication authentication, @RequestBody AddDelUserInProjectPostReq addDelUserInProjectPostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         try {
