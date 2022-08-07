@@ -2,12 +2,12 @@
   <div class="dump">
 		<!-- <div id="session" v-if="session"> -->
 		<div id="session">
-			<div id="main-video" class="col-md-6">
+			<!-- <div id="main-video" class="col-md-6">
 				<user-video :stream-manager="mainStreamManager"/>
-			</div>
+			</div> -->
 			<div id="video-container" class="col-md-6">
-				<user-video :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+				<user-video :streamManager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" @click="updateMainVideoStreamManager(sub)"/>
 			</div>
 		</div>
   </div>
@@ -17,30 +17,48 @@
 // 튜토리얼 복붙
 import UserVideo from './UserVideo'
 
+
 export default {
   
   name: 'ConferenceVideo',
   components: {    UserVideo},
-  
-  data () {
-		return {
-			// OV: undefined,
-			// session: undefined,
-			// mainStreamManager: undefined,
-			// publisher: undefined,
-			// subscribers: [],
-
-			mySessionId: 'SessionA',
-			myUserName: 'Participant' + Math.floor(Math.random() * 100),
-		}
-	},
 	
-	props:{
-		OV:Object,
-		session:Object,
-		mainStreamManager:Object,
-		publisher:Object,
-		subscribers :Object
+	props:{ 
+		session:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		mainStreamManager:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		publisher:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
+		subscribers:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		},
+	},
+
+	setup(props){
+		const mySessionId = 'SessionA'
+		const myUserName = 'Participant' + Math.floor(Math.random() * 100)
+		console.log(props.publisher)
+
+	return {
+		mySessionId,
+		myUserName,
+		}
 	},
 }
 </script>

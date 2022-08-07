@@ -1,10 +1,12 @@
 <template>
   <div>
-    <button>음소거</button>
-    <button>영상On</button>
-    <button>화면공유??</button>
-    <button>드로잉</button>
-    <button>퇴장</button>
+    <!-- 내가 다른 사람 소리 안 듣게 -->
+    <button type="button" @click="$emit('audioOnOff')">음소거</button>  
+    <!-- 내 영상 공유 중지 -->
+    <button type="button" @click="$emit('videoOnOff')">영상On</button>
+    <button type="button" @click="$emit('shareScreen')">화면공유??</button>
+    <button type="button" @click="$emit('shareDrawing')">드로잉</button>
+    <button type="button" @click="$emit('sessionExit')">퇴장</button>
   </div>
 </template>
 

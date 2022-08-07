@@ -7,7 +7,12 @@ export default {
 	name: 'OvVideo',
 
 	props: {
-		streamManager: Object,
+		streamManager:{
+			type:Object,
+			default: () => {
+				return {}
+			}
+		},
 	},
 
 	mounted () {
