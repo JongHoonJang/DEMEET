@@ -63,14 +63,14 @@
           v-if="chatting"
           style="box: 5px 5px 5px"
         >
-          <ChatList
+          <messageList
             :msgs="msgs"
             :myId="myId"
             :fromId="fromId"
           />
-          <ChatForm
+          <messageForm
             style="width:100%"
-            v-bind:sendMsg="sendMsg"
+            v-on:sendMsg="sendMsg"
             :user-name="myUserName"
           />
         </div>
@@ -87,8 +87,8 @@ import ConferenceVideo from './ConferenceVideo'
 import ConferenceUsers from './ConferenceUsers'
 import ConferenceFooter from './ConferenceFooter'
 
-import ChatForm from './chat/messageForm.vue'
-import ChatList from './chat/messageList.vue'
+import messageForm from './chat/messageForm.vue'
+import messageList from './chat/messageList.vue'
 
 // 튜토리얼 복붙
 import axios from 'axios';
@@ -110,8 +110,8 @@ components: {
 	ConferenceVideo,
 	ConferenceUsers,
 	ConferenceFooter,
-	ChatForm,
-	ChatList
+	messageForm,
+	messageList
 },
 
 setup() {
@@ -272,7 +272,7 @@ setup() {
 		return new Promise((resolve, reject) => {
 			axios
 				.post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions`, JSON.stringify({
-					customSessionId: sessionId,
+					mySessionId: sessionId,
 				}), {
 					auth: {
 						username: 'OPENVIDUAPP',

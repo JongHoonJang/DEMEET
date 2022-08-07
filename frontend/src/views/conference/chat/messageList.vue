@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="chat_list" class="container" v-on:scroll.passive="scrolled">
+    <div id="chat_list" class="container" >
       <ConferenceMessage
         v-for="(msg, index) in msgs"
         :key="index"
@@ -22,51 +22,32 @@ export default {
   },
 props: {
     msgs: {
-      type: Array
+      type: Array,
+    default: ()=> {
+      return []
+    }
     },
     myId: {
-      type: String
+      type: String,
+    default: ()=> {
+      return ""
+    }
     },
     fromId: {
-      type: String
+      type: String,
+    default: ()=> {
+      return ""
+    }
     }
   },
   data() {
     return {
-      isScrolled: false,
-      recentmsg: 0
+
     };
   },
-  watch: {
-    msgs: (window.onload = function() {
-      if (this.isScrolled) {
-        this.recentmsg += 1;
-      }
-    })
-  },
-  updated() {
-    if (!this.isScrolled) {
-      var objDiv = document.getElementById("app_chat_list");
-      objDiv.scrollTop = objDiv.scrollHeight + 500;
-    }
-  },
-  methods: {
-    scrolled() {
-      var objDiv = document.getElementById("app_chat_list");
-      if (objDiv.scrollTop >= objDiv.scrollHeight - 500) {
-        this.isScrolled = false;
-        this.recentmsg = 0;
-      } else {
-        this.isScrolled = true;
-      }
-    },
-    scrolldown() {
-      var objDiv = document.getElementById("app_chat_list");
-      objDiv.scrollTop = objDiv.scrollHeight;
-      this.isScrolled = false;
-      this.recentmsg = 0;
-    }
-  }
+
+
+
 };
 </script>
 

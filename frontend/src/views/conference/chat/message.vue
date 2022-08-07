@@ -3,7 +3,7 @@
     <div id="chat" v-if="!ismy">
       <span id="msgs">[{{ sendname }}]:{{ chat }}</span>
     </div>
-02  </div>
+    </div>
   <div id="mychatbox">
     <div id="mychat" v-if="ismy">
       <span id="msgs">{{ chat }}</span>
@@ -16,13 +16,22 @@ export default {
   name: "ConferenceMessage",
   props: {
     msg: {
-      type: String
+      type: String,
+			default: () => {
+				return ""
+			}      
     },
     myId: {
-      type: String
+      type: String,
+			default: () => {
+				return ""
+			}      
     },
     fromId: {
-      type: String
+      type: String,
+			default: () => {
+				return ""
+			}      
     }
   },
   data() {
@@ -33,7 +42,7 @@ export default {
     };
   },
   mounted() {
-    this.sendname = JSON.parse(this.msg).nickName;
+    this.sendname = JSON.parse(this.msg).userName;
     this.chat = JSON.parse(this.msg).msg;
   },
   methods: {

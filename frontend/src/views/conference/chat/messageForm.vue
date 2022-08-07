@@ -18,6 +18,7 @@
 
 <script>
 export default {
+  name: 'MessageForm',
   data() {
     return {
       messageForm: {
@@ -27,7 +28,10 @@ export default {
   },
 
   props: {
-    userName: String
+    userName: String,
+    default: ()=> {
+      return ""
+    }
   },
 
   methods: {
