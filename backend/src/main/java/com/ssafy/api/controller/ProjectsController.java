@@ -58,8 +58,8 @@ public class ProjectsController {
     }
 
     @GetMapping("/{pid}")
-    public ResponseEntity<BaseResponseBody> getProject(@PathVariable Long pid) {
-//        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+    public ResponseEntity<BaseResponseBody> getProject(Authentication authentication,@PathVariable Long pid) {
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         System.out.println("ProjectsController.getProject");
         System.out.println("pid = " + pid);
         try {
@@ -70,9 +70,7 @@ public class ProjectsController {
             // 이후 pid로 userprojects테이블에서 해당 pid를 가진 유저들을 모조리 가지고온다.
             List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(pid);
 
-//            // owner_id에 넣어줄 userSimpleInfoDTO 또한 만들어준다.
-//            userSimpleInfoDTO projectOwner = usersService.getUsersByUid(project.getOwnerId());
-            // owner_id는 uid값만 넣어준다.
+            // 유저 세션Id 또한 추가해준다.
 
             // 이제 이 모든걸 하나로 합쳐준다.
             System.out.println("하나로 합쳐준다~");
