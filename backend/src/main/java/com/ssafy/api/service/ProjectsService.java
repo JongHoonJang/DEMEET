@@ -24,4 +24,6 @@ public interface ProjectsService {
     Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException;
 
     List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
+
+    List<ProjectSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
 }

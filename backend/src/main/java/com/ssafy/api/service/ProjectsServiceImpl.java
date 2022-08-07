@@ -152,6 +152,18 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
+    public List<ProjectSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException {
+        List<Projects> deActivateProjects = userProjectRepositorySupport.getDeactivateProjectsByUid(uid).orElseThrow(() -> new ProjectNullException("Projets not found"));
+        List<ProjectSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectSimpleInfoDTO>();
+        for (Projects project : deActivateProjects) {
+            System.out.println(project.toString());
+            // 리스트속 객체(Projects)들을들을 우리가 원하는 객체(ProjectSimpleInfoDTO)로 바꿔준다.
+            projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
+        }
+        return projectSimpleInfoList;
+    }
+
+    @Override
     public Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException {
 //        0. 프로젝트를 가져와 저장한다.
 //        조건 : 해당하는 pid의 프로젝트가 있고, 내가 그 프로젝트의 오너이고, 프로젝트는 활성화되어있어야한다.
