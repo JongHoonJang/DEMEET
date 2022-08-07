@@ -1,5 +1,6 @@
 package com.ssafy.api.response;
 
+import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Users;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ApiModel("UsersResponse")
-public class UsersRes {
+public class UsersRes extends BaseResponseBody {
 
 
     @ApiModelProperty(name="user's uid")
