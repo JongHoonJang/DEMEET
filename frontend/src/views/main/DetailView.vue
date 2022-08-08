@@ -30,11 +30,14 @@ export default defineComponent({
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
     const project = useAccountStore()
-    project.fetchProject(project_pk.value)
     return {
       project,
+      project_pk
     }
   },
+  async created() {
+    await this.project.fetchProject(this.project_pk)
+  }
 })
 </script>
 

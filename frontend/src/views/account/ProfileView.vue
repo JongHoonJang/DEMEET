@@ -7,7 +7,7 @@
       </div>
       <div class='profile-id'>
         <div class='profile-image'>
-          <span class="material-symbols-outlined" id='account'>account_circle</span>
+          <img :src="`${ account.profile.profileImagePath }`" alt="">
         </div>
         <div class='profile-detail'>
           <div class='profile-rough'>
@@ -102,10 +102,9 @@ export default defineComponent({
   width:80%; 
   margin:auto;
 }
-#account {
-  font-size:10rem;
-  color: white;
-}
+/* .profile-img {
+
+} */
 
 h1 {
   color: white;

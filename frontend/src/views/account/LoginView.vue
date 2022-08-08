@@ -5,8 +5,8 @@
         <div style='display:flex; justify-content:center;'>
       <h1 class='sign-head'>Sign In</h1>
     </div>
-    <form @submit.prevent="account.login(credentials)" class='account-info'>
-      <p><input v-model.trim="credentials.email" type="text" placeholder="Email" class="input-prop"></p>
+    <form @submit.prevent="login(credentials)" class='account-info'>
+      <p><input v-model.trim="credentials.email" type="email" placeholder="Email" class="input-prop"></p>
       <p><input v-model.trim="credentials.password" type="password" placeholder="password" class="input-prop"></p>
       <button class="login-btn">Sign In</button>
       <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
@@ -31,9 +31,17 @@ export default defineComponent({
       password: ''
     }
     const account = useAccountStore()
+    const login = (data) => {
+      if (data.password) {
+        account.login(data)
+      }else {
+        alert('비밀번호를 입력해주세요')
+      }
+    }
     return {
       account,
-      credentials
+      credentials,
+      login
     }
   },
 })

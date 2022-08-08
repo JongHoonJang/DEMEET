@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import ModalView from '@/views/main/ModalView'
 import ProjectList from '@/views/main/ProjectList'
@@ -36,13 +36,20 @@ export default defineComponent({
     }
   },
   setup() {
-    const projects = useAccountStore()
-    projects.fetchProjects()
+    const projects = ref(useAccountStore())
     return {
       projects,
 
     }
-  }
+  },
+  async created() {
+    await this.projects.fetchProjects()
+    await this.projects.fetchUserList()
+    await this.projects.projects
+  },
+  async updated() {
+    await this.projects.fetchProjects()
+  },
 })
 </script>
 
