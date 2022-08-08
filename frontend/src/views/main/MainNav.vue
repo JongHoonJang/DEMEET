@@ -25,7 +25,6 @@ import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   setup() {
     const account = useAccountStore()
-    account.fetchProfile()
     const search = ref('')
     const setData = () => {
       account.search = search.value
@@ -41,7 +40,9 @@ export default defineComponent({
       setData
     }
   },
-
+  async created() {
+    await this.account.fetchProfile()
+  },
 })
 </script>
 

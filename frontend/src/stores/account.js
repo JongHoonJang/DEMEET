@@ -190,7 +190,6 @@ export const useAccountStore = defineStore("account", {
 
     // 유저가 속한 프로젝트 조회
     fetchProjects() {
-      console.log(this.token)
       axios({
         url: api.projects.projects_list(),
         method: 'get',
@@ -240,7 +239,6 @@ export const useAccountStore = defineStore("account", {
       })
         .then(() => {
           alert('팀에서 제외시켰습니다.')
-          router.push({name: 'DetailView', parmas: {project_pk:idData.pid}})
         })
         .catch(err => console.error(err.response))
     },
@@ -286,10 +284,11 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 프로젝트 이미지 저장
-    saveImage(project_pk) {
+    saveImage(imageData) {
       axios({
-        url: api.projects.image_save(project_pk),
+        url: api.projects.image_save(imageData.project_pk),
         method: 'post',
+        data: imageData,
         headers: this.authHeader,
       })
         .then(res => {

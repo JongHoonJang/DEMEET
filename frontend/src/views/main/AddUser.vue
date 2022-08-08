@@ -95,6 +95,9 @@ export default defineComponent({
       add,
       remove,
     }
+  },
+  async created() {
+    await this.account.fetchUserList()
   }
 })
 </script>

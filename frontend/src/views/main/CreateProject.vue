@@ -67,7 +67,6 @@ export default defineComponent({
       projectData.value.memberList.pop(addUser.uid)
     }
     const account = useAccountStore()
-    account.fetchUserList()
     const userData = ref(account.userList)
     const searchUser = ref('')
     const searchList = ref([]) 
@@ -86,6 +85,9 @@ export default defineComponent({
       add,
       remove
     }
+  },
+  async created () {
+    await this.account.fetchUserList()
   }
 })
 </script>
