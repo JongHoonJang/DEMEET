@@ -10,7 +10,7 @@
       class="search" 
       placeholder="Search User"
       v-model.trim="searchUser" 
-      @input="findData(searchUser)"
+      @input="findData()"
       >
       <div class="user-list">
         <div 
@@ -69,11 +69,11 @@ export default defineComponent({
     const account = useAccountStore()
     account.fetchUserList()
     const userData = ref(account.userList)
-    const searchUser = ''
+    const searchUser = ref('')
     const searchList = ref([]) 
-    const findData = (inputData) => {
-      if (inputData.length != 0){
-        searchList.value = userData.value.filter(user => user.nickname.includes(inputData))
+    const findData = () => {
+      if (searchUser.value.length != 0){
+        searchList.value = userData.value.filter(user => user.nickname.includes(searchUser.value))
       }
     }
     return {
