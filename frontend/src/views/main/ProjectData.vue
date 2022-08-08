@@ -122,17 +122,18 @@
     <button 
     v-if="demeet.project.projectOwner === account.profile.uid" 
     class="blue-btn"
+    @click="goConference"
     >
     시작하기</button>
     <button 
     v-if="demeet.project.projectOwner === account.profile.uid" 
     class="red-btn"
-    @click="endProject"
     >
     종료하기</button>
     <button 
     v-if="demeet.project.projectOwner !== account.profile.uid" 
     class="blue-btn"
+    @click="goConference"
     >
     입장하기</button>
     <button 
@@ -181,7 +182,9 @@ export default defineComponent({
       desc: demeet.value.project.pjtDesc || 'pjt-detail',
       deactivate: null
     })
-
+    const goConference = () => {
+      router.push({name:'ConferenceView', params: {sessionId: demeet.value.project.sessionId}})
+    }
     const endProject = () => {
       projectData.value.deactivate = true
       account.updateProject(projectData.value)
@@ -195,6 +198,7 @@ export default defineComponent({
         router.push({name:'ProfileView'})
       }
     }
+
     return {
       pjt,
       host,
@@ -203,7 +207,7 @@ export default defineComponent({
       projectData,
       back,
       endProject,
-
+      goConference
     }
   },
 })
