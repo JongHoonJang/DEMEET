@@ -48,7 +48,7 @@ public class ConferenceController {
 
 
     @RequestMapping(value = "/get-token", method = RequestMethod.POST)
-    public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam, HttpSession httpSession) throws ParseException {
+    public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam) throws ParseException {
         // 로그인 유저 검증 -> 우리에 맞게 변경 필요할듯
 
         System.out.println("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
