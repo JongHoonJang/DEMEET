@@ -38,10 +38,11 @@
 
     </div>
     <div class='endproject'>
-      <div class='pjt'>PJT1</div>
-      <div class='pjt'>PJT2</div>
-      <div class='pjt'>PJT3</div>
-      <div class='pjt'>PJT4</div>
+      <EndprojectList 
+      v-for="endProject in account.profile.deActivateProjects"
+      :key="endProject.pid"
+      :endProject="endProject"
+      />
     </div>
     <div class="hidden">
       <p class="signout" @click="signout()">회원탈퇴</p>
@@ -52,15 +53,16 @@
 <script>
 import { defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
 import MainNav from '@/views/main/MainNav'
 import ModalView from '@/views/main/ModalView'
 import ChangePassword from '@/views/account/ChangePassword'
+import EndprojectList from '@/views/account/EndProjectList'
 export default defineComponent({
   components: {
     MainNav,
     ModalView,
     ChangePassword,
+    EndprojectList
   },
   data() {
     return{
