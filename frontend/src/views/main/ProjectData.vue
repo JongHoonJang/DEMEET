@@ -111,34 +111,36 @@
     <div class="box">
       <p class="text-style">{{ demeet.project.pjtStartDate }}</p>
     </div>
-    <div class="time" v-if="demeet.project.pjtEndDate">
+    <div class="time" v-if="!pjt.activation">
       <p>프로젝트 종료일</p>
     </div>
-    <div class="box" v-if="demeet.project.pjtEndDate">
+    <div class="box" v-if="!pjt.activation">
       <p class="text-style">{{ demeet.project.pjtEndDate }}</p>
     </div>
   </div>
   <div class="btn-box">
     <button 
-    v-if="demeet.project.projectOwner === account.profile.uid" 
+    v-if="demeet.project.projectOwner === account.profile.uid && pjt.activation" 
     class="blue-btn"
     @click="goConference"
     >
     시작하기</button>
     <button 
-    v-if="demeet.project.projectOwner === account.profile.uid" 
+    v-if="demeet.project.projectOwner === account.profile.uid && pjt.activation" 
     class="red-btn"
+    @click="endProject"
     >
     종료하기</button>
     <button 
-    v-if="demeet.project.projectOwner !== account.profile.uid" 
+    v-if="demeet.project.projectOwner !== account.profile.uid && pjt.activation" 
     class="blue-btn"
     @click="goConference"
     >
     입장하기</button>
     <button 
-    v-if="demeet.project.projectOwner !== account.profile.uid" 
+    v-if="demeet.project.projectOwner !== account.profile.uid && pjt.activation" 
     class="red-btn"
+    @click="leave"
     >
     팀나가기</button>
     <button 
@@ -156,6 +158,7 @@ import router from "@/router"
 import UserIcon from '@/views/main/UserIcon'
 import ModalView from '@/views/main/ModalView'
 import AddUser from '@/views/main/AddUser'
+
 export default defineComponent({
   components: {
     UserIcon,
@@ -173,9 +176,8 @@ export default defineComponent({
   setup(props) {
     const account = useAccountStore()
     const demeet = ref(props)
-    account.fetchProfile()
-    account.fetchUserList()
     const pjt = ref(demeet.value.project)
+    const member = ref(account.project.member)
     const projectData = ref({
       pid: demeet.value.project.pid,
       name: demeet.value.project.pjtName,
@@ -189,8 +191,13 @@ export default defineComponent({
       projectData.value.deactivate = true
       account.updateProject(projectData.value)
     }
-    const host = ref(pjt.value.member.find(res => res.uid===pjt.value.projectOwner))
-
+    const host = ref(member.value.find(res => res.uid===pjt.value.projectOwner))
+    const leave = () => {
+      if (confirm('정말 팀을 떠나시겠습니까?')){
+        account.removeUser({pid:pjt.value.pid,uid:account.profile.uid})
+        router.push({name:'MainView'})
+      }
+    }
     const back = () => {
       if (pjt.value.activation) {
         router.push({name:'MainView'})
@@ -207,9 +214,10 @@ export default defineComponent({
       projectData,
       back,
       endProject,
-      goConference
+      goConference,
+      leave
     }
-  },
+  }
 })
 </script>
 
