@@ -1,6 +1,5 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.openvidu.SessionCreatedPostReq;
 import com.ssafy.common.auth.SsafyUsersDetails;
 import io.openvidu.java.client.*;
 import org.json.simple.JSONObject;
@@ -10,7 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
@@ -36,14 +38,6 @@ public class ConferenceController {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
-    }
-
-    @PostMapping("/test")
-    public void test(@RequestBody SessionCreatedPostReq sessionCreatedPostReq) {
-        System.out.println(sessionCreatedPostReq.getSessionCreated().get(0));
-        System.out.println(sessionCreatedPostReq.getSessionCreated().get(1));
-
-
     }
 
 
