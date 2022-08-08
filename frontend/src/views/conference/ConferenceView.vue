@@ -92,7 +92,7 @@ import ConferenceFooter from './ConferenceFooter'
 
 import messageForm from './chat/messageForm.vue'
 import messageList from './chat/messageList.vue'
-
+import { useRoute } from 'vue-router'
 // 튜토리얼 복붙
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
@@ -119,7 +119,7 @@ components: {
 
 setup() {
 	const account = useAccountStore()
-
+	const route = useRoute()  
 	let OV = undefined
 	let session = ref(undefined)
 	let mainStreamManager= ref(undefined)
@@ -128,9 +128,9 @@ setup() {
 	let conferenceAction = ref(false)
 	let users = ref([])
 
-	const mySessionId = 'SessionA'
-	const myUserName = 'Participant' + Math.floor(Math.random() * 100)
-	
+	const mySessionId = route.params.sessionId
+	// pinai 
+	const myUserName = account.profile.nickname + Math.floor(Math.random() * 100)
 	const msgs = ref([])
 	const chatting = true
 	const fromId = ref("")
