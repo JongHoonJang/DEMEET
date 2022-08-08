@@ -12,6 +12,7 @@ import com.ssafy.db.repository.UserProjectRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,21 @@ public class UserProjectServiceImpl implements UserProjectService{
             System.out.println(user.toString());
         }
         return userList;
+    }
+
+    @Override
+    public List<Long> getUserUidListByPid(Long pid) throws UidNullException {
+        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserListByPid(pid);
+        List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
+        for(userSimpleInfoDTO user : userList) {
+            System.out.println(user.toString());
+        }
+        List<Long> newUserList = new ArrayList<Long>();
+        for(userSimpleInfoDTO user : userList) {
+            newUserList.add(user.getUid());
+        }
+
+        return newUserList;
     }
 
     @Override

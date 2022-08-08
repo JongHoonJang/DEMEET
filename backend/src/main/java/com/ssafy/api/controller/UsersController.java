@@ -6,6 +6,7 @@ package com.ssafy.api.controller;
  * Users테이블을 사용한다.
  */
 
+import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UserPwChangePostReq;
@@ -105,9 +106,9 @@ public class UsersController {
         try {
             String email = ssafyUsersDetails.getUsername();
             Users newUser = usersService.getUsersByUserEmail(email);
-            List<ProjectSimpleInfoDTO> deActivateProjects = projectsService.getDeActivateProjectsByUid(newUser.getUid());
+            List<ProjectDeactivateSimpleInfoDTO> deActivateProjects = projectsService.getDeActivateProjectsByUid(newUser.getUid());
             for (int i = 0; i < deActivateProjects.size(); i++) {
-                List<userSimpleInfoDTO> userList = userProjectService.getUserListByPid(deActivateProjects.get(i).getPid());
+                List<Long> userList = userProjectService.getUserUidListByPid(deActivateProjects.get(i).getPid());
                 deActivateProjects.get(i).setMember(userList);
             }
             return ResponseEntity.status(200).body(UsersMyInfoRes.of(200, "Success", newUser, deActivateProjects));

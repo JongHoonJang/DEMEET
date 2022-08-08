@@ -24,5 +24,7 @@ public interface UserProjectService {
 
     void deleteUserInProject(Projects project, Users user);
 
+    List<Long> getUserUidListByPid(Long pid) throws UidNullException;
+
     List<Projects> getJoinedProjectList(Long uid) throws ProjectNullException;
 }
