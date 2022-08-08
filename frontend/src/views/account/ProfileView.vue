@@ -82,8 +82,9 @@ export default defineComponent({
       }
     }
     const signout = () => {
-      confirm("회원탈퇴 하시겠습니까?")
-      account.signout()
+      if (confirm("회원탈퇴 하시겠습니까?")){
+        account.signout()
+      }
     }
     account.fetchProfile()
     return {

@@ -9,7 +9,6 @@
       <div class="detail-box">
         <ProjectData 
         :project="project.project"
-        :key="project.pid"
         />
       </div>
     </div>
