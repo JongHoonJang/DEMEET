@@ -1,0 +1,45 @@
+<template>
+  <router-link :to="{ name: 'DetailView', params: {pid: pid}}" class="project-container">
+    <img class="project-img" src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
+    <div class="project-data">
+      <p>PJT name: {{ endPjt.endProject.pjtName }}</p>
+      <p>start PJT: {{}}</p>
+      <p>end PJT: {{}}</p>
+      <p>member: {{ endPjt.endProject.member.length }}</p>
+    </div>
+  </router-link>
+</template>
+
+<script>
+import { defineComponent,ref } from "vue"
+// import { useAccountStore } from "@/stores/account"
+export default defineComponent({
+  props:['endProject'],
+  setup(props) {
+    const endPjt = ref(props)
+    const pid = ref(endPjt.value.endProject.pid)
+    return {
+      pid,
+      endPjt
+    }
+  }
+})
+</script>
+
+<style>
+.project-container {
+  width: 300px;
+  height: 440px;
+  background: #111315;
+  text-decoration: none;
+}
+.project-img {
+  width: 300px;
+  height: 300px;
+}
+.project-data {
+  margin: 8px;
+  text-align: start;
+  color: white;
+}
+</style>

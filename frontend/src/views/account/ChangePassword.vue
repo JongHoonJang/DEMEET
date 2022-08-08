@@ -44,8 +44,6 @@ export default defineComponent({
           }
       }
       else {
-        console.log(credentials.newPassword)
-        console.log(newPassword2)
         alert('비밀번호 확인에 실패하였습니다')
       }
     }  
