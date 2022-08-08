@@ -69,11 +69,11 @@
     <div v-if="isEditDetail">
       <textarea class="desc-input-box" v-model="projectData.desc" name="" id="" cols="30" rows="10"></textarea>
     </div>
-    <div class="pjt-list">
+    <div v-if="pjt.activation" class="pjt-list">
       <p>초대코드</p>
       <span class="material-symbols-outlined" id="content">content_copy</span>
     </div>
-    <div class="box">
+    <div v-if="pjt.activation" class="box">
       <p class="text-style">https://www.demeet.com/meet/1</p>
     </div>
     <div class="time">
@@ -85,7 +85,7 @@
     <div class="pjt-list">
       <p>Member</p>
       <span 
-      v-if="host.uid===account.profile.uid" 
+      v-if="host.uid===account.profile.uid && pjt.activation" 
       @click="isModalViewed=true"
       class="material-symbols-outlined" 
       id="add" 
@@ -96,7 +96,7 @@
         :project="pjt"
         />
       </ModalView>
-      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
+      <div v-if="host.uid!==account.profile.uid || !pjt.activation" class="flex-box"></div>
     </div>
     <div class="member-box">
       <UserIcon 
@@ -179,7 +179,7 @@ export default defineComponent({
     const account = useAccountStore()
     const demeet = ref(props)
     const pjt = ref(demeet.value.project)
-    const member = ref(account.project.member)
+    const member = ref(demeet.value.project.member)
     const projectData = ref({
       pid: demeet.value.project.pid,
       name: demeet.value.project.pjtName,
