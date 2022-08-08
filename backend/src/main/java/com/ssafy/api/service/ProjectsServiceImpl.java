@@ -1,21 +1,19 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,7 +47,14 @@ public class ProjectsServiceImpl implements ProjectsService {
         simpleInfoDTO.setActivation(project.isActivation());
         return simpleInfoDTO;
     }
-
+    public ProjectDeactivateSimpleInfoDTO makeProjectDeactivateSimpleInfoDTO(Projects project) {
+        ProjectDeactivateSimpleInfoDTO simpleInfoDTO = new ProjectDeactivateSimpleInfoDTO();
+        simpleInfoDTO.setPid(project.getPid());
+        simpleInfoDTO.setPjtName(project.getPjtName());
+        simpleInfoDTO.setPjtStartDate(project.getPjtStartDate());
+        simpleInfoDTO.setPjtEndDate(project.getPjtEndDate());
+        return simpleInfoDTO;
+    }
 
     @Override
     @Transactional
@@ -154,15 +159,15 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
-    public List<ProjectSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException {
+    public List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException {
         List<Projects> deActivateProjects = userProjectRepositorySupport.getDeactivateProjectsByUid(uid).orElseThrow(() -> new ProjectNullException("Projets not found"));
-        List<ProjectSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectSimpleInfoDTO>();
+        List<ProjectDeactivateSimpleInfoDTO> projectDeactivateSimpleInfoList = new ArrayList<ProjectDeactivateSimpleInfoDTO>();
         for (Projects project : deActivateProjects) {
             System.out.println(project.toString());
             // 리스트속 객체(Projects)들을들을 우리가 원하는 객체(ProjectSimpleInfoDTO)로 바꿔준다.
-            projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
+            projectDeactivateSimpleInfoList.add(makeProjectDeactivateSimpleInfoDTO(project));
         }
-        return projectSimpleInfoList;
+        return projectDeactivateSimpleInfoList;
     }
 
     @Override
@@ -173,6 +178,8 @@ public class ProjectsServiceImpl implements ProjectsService {
             throw new NoAuthorizedException("this user is not allowed to deactivate " + pid + " project");
         }
         project.setActivation(false);
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        project.setPjtEndDate(localDateTime);
         projectRepository.save(project);
         return projectRepository.save(project);
     }

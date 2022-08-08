@@ -1,5 +1,6 @@
 package com.ssafy.api.response;
 
+import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.UserMyInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -12,7 +13,7 @@ import java.util.List;
 public class UsersMyInfoRes extends BaseResponseBody {
     UserMyInfoDTO user = new UserMyInfoDTO();
 
-    public static UsersMyInfoRes of(Integer statusCode, String message, Users user, List<ProjectSimpleInfoDTO> deActivateProjects){
+    public static UsersMyInfoRes of(Integer statusCode, String message, Users user, List<ProjectDeactivateSimpleInfoDTO> deActivateProjects){
         UsersMyInfoRes res = new UsersMyInfoRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);

@@ -10,5 +10,5 @@ import java.util.List;
 public class UserMyInfoDTO extends userSimpleInfoDTO{
     LocalDateTime regdate;
     String profileImagePath;
-    List<ProjectSimpleInfoDTO> deActivateProjects = new ArrayList<ProjectSimpleInfoDTO>();
+    List<ProjectDeactivateSimpleInfoDTO> deActivateProjects = new ArrayList<>();
 }

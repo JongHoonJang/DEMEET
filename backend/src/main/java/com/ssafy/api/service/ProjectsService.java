@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
@@ -26,7 +27,7 @@ public interface ProjectsService {
 
     List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
 
-    List<ProjectSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
+    List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
 
     Projects deactivateProject(int pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
 }
