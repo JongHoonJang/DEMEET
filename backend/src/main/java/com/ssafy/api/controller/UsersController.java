@@ -9,6 +9,7 @@ package com.ssafy.api.controller;
 import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.api.request.ImageUploadReq;
 import com.ssafy.api.request.UserPwChangePostReq;
 import com.ssafy.api.request.UsersLoginPostReq;
 import com.ssafy.api.request.UsersRegisterPostReq;
@@ -16,10 +17,12 @@ import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.response.UsersMyInfoRes;
 import com.ssafy.api.response.UsersRes;
+import com.ssafy.api.service.AwsS3Service;
 import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UserProjectService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
+import com.ssafy.common.customException.NotImageException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -27,6 +30,7 @@ import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Users;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +40,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -56,6 +61,9 @@ public class UsersController {
     UserProjectService userProjectService;
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AwsS3Service awsS3Service;
 
     @PostMapping()
     @ApiOperation(value = "회원가입", notes = "<Strong>이메일과 패스워드</Strong>")
@@ -191,5 +199,46 @@ public class UsersController {
 
         }
 
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<BaseResponseBody> uploadProfileImage(@ApiIgnore Authentication authentication, @ModelAttribute ImageUploadReq imageUploadReq){
+        SsafyUsersDetails usersDetails = (SsafyUsersDetails) authentication.getDetails();
+//        long uid = usersService.getUsersByUserEmail(usersDetails.getUsername()).getUid();
+        long uid = usersDetails.getUserUid();
+        String path = null;
+        // 이미지 업로드
+        try {
+            // 파일, id, 프로필/드로잉 구분
+            path = awsS3Service.putImage(imageUploadReq.getMultipartFile(), uid, "profile");
+            // 성공시 db에 정보 넣기
+            System.out.println(path);
+            Users users = awsS3Service.saveImagePath(path, uid, "profile");
+            users.toString();
+        }catch (IOException e){
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        }catch (NotImageException e){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseResponseBody.of(HttpStatus.NOT_ACCEPTABLE.value(), "the File is NOT image"));
+        };
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, path));
+    }
+
+    @DeleteMapping("/profile")
+    public ResponseEntity<BaseResponseBody> deleteProfileImage(@ApiIgnore Authentication authentication) {
+        SsafyUsersDetails usersDetails = (SsafyUsersDetails) authentication.getDetails();
+        long uid = usersDetails.getUserUid();
+        try{
+            // 이미지 삭제
+            awsS3Service.DeleteImage(uid, "profile");
+            // DB에서 삭제
+            // uid를 기반으로 pipid를 찾는다 -> 1:1 대응이라 가능
+            awsS3Service.saveImagePath(null, uid, "profile");
+        }catch (NotImageException e1){
+            e1.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseResponseBody.of(HttpStatus.NOT_ACCEPTABLE.value(), "the File is NOT image"));
+        }
+
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Profile image Delete Success"));
     }
 }
