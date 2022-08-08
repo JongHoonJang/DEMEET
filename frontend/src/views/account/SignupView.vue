@@ -37,9 +37,20 @@ export default defineComponent({
     })
     const password2 = ''
     const sign = () => {
-      if (signdata.value.password === password2){
-        account.signup(signdata)
+      if(signdata.value.nickname === '') {
+        alert('닉네임을 입력해 주세요.')
+      }else {
+        if (signdata.value.email === '') {
+          alert('email을 입력해 주세요.')
+        }else{
+          if (signdata.value.password === password2){
+            account.signup(signdata)
+          }else {
+            alert('비밀번호가 일치하지 않습니다.')
+          }
+        }
       }
+
     }
     const account = useAccountStore()
     return {
