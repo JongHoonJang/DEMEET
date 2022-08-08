@@ -204,6 +204,8 @@ public class ProjectsServiceImpl implements ProjectsService {
             currProject.setPjtDesc(projectPatchPostReq.getDesc());
         }
         currProject.setActivation(!projectPatchPostReq.getDeactivate().orElse(false));
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        currProject.setPjtEndDate(localDateTime);
         System.out.println("프로젝트에 회원 추가");
         return projectRepository.save(currProject);
     }
