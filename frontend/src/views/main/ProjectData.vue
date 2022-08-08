@@ -184,7 +184,7 @@ export default defineComponent({
 
     const endProject = () => {
       projectData.value.deactivate = true
-      account.updateProject(projectData)
+      account.updateProject(projectData.value)
     }
     const host = ref(pjt.value.member.find(res => res.uid===pjt.value.projectOwner))
 

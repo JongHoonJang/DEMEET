@@ -1,7 +1,7 @@
 // 로컬호스트 테스트 용 주소
-// const HOST = 'http://127.0.0.1:8080/'
+const HOST = 'http://127.0.0.1:8080/'
 // 배포용 주소 - push 하기전에 변경해줄것
-const HOST = 'https://i7b309.p.ssafy.io/api'
+// const HOST = 'https://i7b309.p.ssafy.io/api'
 
 const ACCOUNTS = 'users/'
 const PROJECTS = 'projects/'
