@@ -69,7 +69,6 @@ export const useAccountStore = defineStore("account", {
 
     // 비밀번호 수정
     changePassword(namedata) {
-      console.log(namedata)
       axios({
         url: api.accounts.password_update(),
         method: 'patch',
@@ -88,7 +87,6 @@ export const useAccountStore = defineStore("account", {
 
     // 회원가입
     signup(signdata) {
-      console.log(signdata)
       axios({
         url: api.accounts.checkemail(signdata.email),
         method: 'get',
@@ -130,12 +128,10 @@ export const useAccountStore = defineStore("account", {
     },
     // 유저 닉네임 변경
     changeName(namedata) {
-      console.log(namedata)
       axios({
         url: api.accounts.nickname_update(),
         method: 'patch',
         data: { nickname: namedata },
-        // 백엔드 완성하면 테스트(postman)후 변경
         headers: this.authHeader
       })
        .then(res => {
@@ -174,7 +170,7 @@ export const useAccountStore = defineStore("account", {
           this.userList = res.data.userList
         })
         .catch(err => {
-          console.log(err)
+          console.error(err)
         })
       
     },
@@ -257,7 +253,11 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          router.go({name:'DetailView', parmas: {project_pk: projectData.pid}})
+          if (projectData.deactivate) {
+            router.push({name:'MainView'})
+          }else {
+            router.go({name:'DetailView', parmas: {project_pk: projectData.pid}})
+          }
         })
         .catch(err => console.error(err.response))
     },
