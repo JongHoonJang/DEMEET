@@ -3,6 +3,7 @@ package com.ssafy.db.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +22,8 @@ public class Conferences {
 
     @Column(nullable = false)
     String sessionName;
+    @Column(nullable = false)
+    String uniqueSessionName;
 
     @Column(nullable = false)
     LocalDateTime confStartTime;

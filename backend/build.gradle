@@ -179,6 +179,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:2.7.1")
     implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
 
+    // 소셜로그인을 위한 oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
     implementation("com.google.guava:guava:29.0-jre")
     annotationProcessor("com.google.guava:guava:29.0-jre")
 

@@ -30,13 +30,15 @@ public class WebhookController {
         log.info(req.toString());
 
         String event = req.getEvent();
+        Conferences conference = null;
         switch (event) {
             case "sessionCreated":
                 OVSessionCreatedReq ovSessionCreatedReq = makeSessionCreatedReq(req);
-                Conferences conference =  webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedReq);
+                conference = webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedReq);
                 break;
             case "sessionDestroyed":
                 OVSessionDestroyedReq ovSessionDestroyedReq = makeSessionDestroyReq(req);
+                conference = webhookService.editConferenceWithOvSessionDestroyed(ovSessionDestroyedReq);
                 break;
             case "participantJoined":
                 OVParticipantJoinedReq ovParticipantJoinedReq = makeParticipantJoinedReq(req);
@@ -51,7 +53,7 @@ public class WebhookController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    public OVSessionCreatedReq makeSessionCreatedReq(OVAllInOneReq ovAllInOneReq){
+    public OVSessionCreatedReq makeSessionCreatedReq(OVAllInOneReq ovAllInOneReq) {
         OVSessionCreatedReq ovSessionCreatedReq = new OVSessionCreatedReq();
 
         ovSessionCreatedReq.setSessionId(ovAllInOneReq.getSessionId());
@@ -62,26 +64,26 @@ public class WebhookController {
         return ovSessionCreatedReq;
     }
 
-    public OVSessionDestroyedReq makeSessionDestroyReq(OVAllInOneReq ovAllInOneReq){
+    public OVSessionDestroyedReq makeSessionDestroyReq(OVAllInOneReq ovAllInOneReq) {
         OVSessionDestroyedReq ovSessionDestroyReq = new OVSessionDestroyedReq();
 
         ovSessionDestroyReq.setSessionId(ovAllInOneReq.getSessionId());
         ovSessionDestroyReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
         ovSessionDestroyReq.setEvent(ovAllInOneReq.getEvent());
-        ovSessionDestroyReq.setTimestamp(ovAllInOneReq.getTimestamp()+32400000);
-        ovSessionDestroyReq.setStartTime(ovAllInOneReq.getStartTime()+32400000);
+        ovSessionDestroyReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
+        ovSessionDestroyReq.setStartTime(ovAllInOneReq.getStartTime() + 32400000);
         ovSessionDestroyReq.setDuration(ovAllInOneReq.getDuration());
         ovSessionDestroyReq.setReason(ovAllInOneReq.getReason());
 
         return ovSessionDestroyReq;
     }
 
-    public OVParticipantJoinedReq makeParticipantJoinedReq(OVAllInOneReq ovAllInOneReq){
+    public OVParticipantJoinedReq makeParticipantJoinedReq(OVAllInOneReq ovAllInOneReq) {
         OVParticipantJoinedReq ovParticipantJoinedReq = new OVParticipantJoinedReq();
 
         ovParticipantJoinedReq.setSessionId(ovAllInOneReq.getSessionId());
         ovParticipantJoinedReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
-        ovParticipantJoinedReq.setTimestamp(ovAllInOneReq.getTimestamp()+32400000);
+        ovParticipantJoinedReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
         ovParticipantJoinedReq.setParticipantId(ovAllInOneReq.getParticipantId());
         ovParticipantJoinedReq.setConnectionId(ovAllInOneReq.getConnectionId());
         ovParticipantJoinedReq.setClientData(ovAllInOneReq.getClientData());
@@ -99,7 +101,7 @@ public class WebhookController {
 
         ovParticipantLeftReq.setSessionId(ovAllInOneReq.getSessionId());
         ovParticipantLeftReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
-        ovParticipantLeftReq.setTimestamp(ovAllInOneReq.getTimestamp()+32400000);
+        ovParticipantLeftReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
         ovParticipantLeftReq.setParticipantId(ovAllInOneReq.getParticipantId());
         ovParticipantLeftReq.setConnectionId(ovAllInOneReq.getConnectionId());
         ovParticipantLeftReq.setClientData(ovAllInOneReq.getClientData());
