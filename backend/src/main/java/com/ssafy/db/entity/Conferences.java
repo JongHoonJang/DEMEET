@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public class Conferences {
     String sessionName;
 
     @Column(nullable = false)
-    Timestamp confStartTime;
+    LocalDateTime confStartTime;
 
-    Timestamp confEndTime;
+    LocalDateTime confEndTime;
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
