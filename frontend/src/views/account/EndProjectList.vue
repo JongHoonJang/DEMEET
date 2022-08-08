@@ -3,8 +3,8 @@
     <img class="project-img" src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
     <div class="project-data">
       <p>PJT name: {{ endPjt.endProject.pjtName }}</p>
-      <p>start PJT: {{}}</p>
-      <p>end PJT: {{}}</p>
+      <p>start PJT: {{ endPjt.endProject.pjtStartDate }}</p>
+      <p>end PJT: {{ endPjt.endProject.pjtEndDate }}</p>
       <p>member: {{ endPjt.endProject.member.length }}</p>
     </div>
   </router-link>

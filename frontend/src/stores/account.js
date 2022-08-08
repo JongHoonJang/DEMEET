@@ -31,8 +31,8 @@ export const useAccountStore = defineStore("account", {
       localStorage.setItem('token', '')
     },
     // 유저 프로필
-    async fetchProfile() {
-      await axios({
+    fetchProfile() {
+      axios({
         url: api.accounts.currentUserInfo(),
         method: 'get',
         headers: this.authHeader,
@@ -62,10 +62,9 @@ export const useAccountStore = defineStore("account", {
 
     // 로그아웃
     logout() {
-      if(confirm('로그아웃 하기겠습니까?')){
-        this.removeToken()
-        router.push({ name: 'LoginView'})
-      }
+      confirm('로그아웃 하기겠습니까?')
+      this.removeToken()
+      router.push({ name: 'LoginView'})
     },
 
     // 비밀번호 수정
@@ -167,7 +166,7 @@ export const useAccountStore = defineStore("account", {
         method: 'get',
         headers: this.authHeader,
       })
-        .then(async res =>  {
+        .then(res => {
           this.userList = res.data.userList
         })
         .catch(err => {
@@ -183,21 +182,22 @@ export const useAccountStore = defineStore("account", {
         method: 'get',
         headers: this.authHeader,
       })
-        .then(async res => {
-          this.project = await res.data.project
+        .then(res => {
+          this.project = res.data.project
         })
         .catch(err => console.error(err.response))
     }, 
 
     // 유저가 속한 프로젝트 조회
     fetchProjects() {
+      console.log(this.token)
       axios({
         url: api.projects.projects_list(),
         method: 'get',
         headers: this.authHeader,
       })
         .then(res => {
-          this.projects = res.data.activateProjects.reverse()
+          this.projects = res.data.activateProjects
         })
         .catch(err => console.error(err.response))
     },
@@ -240,6 +240,7 @@ export const useAccountStore = defineStore("account", {
       })
         .then(() => {
           alert('팀에서 제외시켰습니다.')
+          router.push({name: 'DetailView', parmas: {project_pk:idData.pid}})
         })
         .catch(err => console.error(err.response))
     },
