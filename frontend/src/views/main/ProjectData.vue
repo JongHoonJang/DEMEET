@@ -172,7 +172,9 @@ export default defineComponent({
       isEditDetail: false,
     }
   },
-  props: ['project'],
+  props: {
+    project: Object
+  },
   setup(props) {
     const account = useAccountStore()
     const demeet = ref(props)
@@ -192,6 +194,7 @@ export default defineComponent({
       account.updateProject(projectData.value)
     }
     const host = ref(member.value.find(res => res.uid===pjt.value.projectOwner))
+    
     const leave = () => {
       if (confirm('정말 팀을 떠나시겠습니까?')){
         account.removeUser({pid:pjt.value.pid,uid:account.profile.uid})

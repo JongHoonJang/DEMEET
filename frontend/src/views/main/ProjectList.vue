@@ -35,7 +35,6 @@ export default defineComponent({
   setup(props) {
     const demeet = ref(props)
     const account = useAccountStore()
-    account.fetchUserList()
     const pid = ref(demeet.value.project.pid)
     const member = ref(demeet.value.project.member)
     const host = ref(member.value.find(user => user.uid === demeet.value.project.projectOwner))
@@ -43,7 +42,8 @@ export default defineComponent({
       demeet,
       host,
       member,
-      pid
+      pid,
+      account
     }
   }
 
