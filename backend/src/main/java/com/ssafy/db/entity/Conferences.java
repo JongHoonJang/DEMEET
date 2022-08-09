@@ -3,15 +3,18 @@ package com.ssafy.db.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +22,13 @@ public class Conferences {
 
     @Column(nullable = false)
     String sessionName;
+    @Column(nullable = false)
+    String uniqueSessionName;
 
     @Column(nullable = false)
-    Timestamp confStartTime;
+    LocalDateTime confStartTime;
 
-    Timestamp confEndTime;
+    LocalDateTime confEndTime;
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
