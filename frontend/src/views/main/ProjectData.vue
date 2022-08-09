@@ -194,7 +194,7 @@ export default defineComponent({
       account.updateProject(projectData.value)
     }
     const host = ref(member.value.find(res => res.uid===pjt.value.projectOwner))
-    
+
     const leave = () => {
       if (confirm('정말 팀을 떠나시겠습니까?')){
         account.removeUser({pid:pjt.value.pid,uid:account.profile.uid})
@@ -220,7 +220,11 @@ export default defineComponent({
       goConference,
       leave
     }
+  },
+  async created() {
+    await this.account.fetchProject(this.demeet.project.pid)
   }
+
 })
 </script>
 
