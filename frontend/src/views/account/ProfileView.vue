@@ -6,8 +6,14 @@
         <img class='bg-image' src="@/assets/profile_bg.jpg" alt="">
       </div>
       <div class='profile-id'>
-        <div class='profile-image'>
-          <img :src="`${ account.profile.profileImagePath }`" alt="">
+        <div class='profile-image' @click="isInput=true">
+          <input v-if="isInput" type="file" accept=".jpg,.png,.jpeg" class="ex_file" name="ex_file" @change="fileUpload">
+          <button v-if="isInput" @click="isInput=false">취소</button>
+          <img 
+          v-if="account.profile.profileImagePath && !isInput" 
+          :src="`${ account.profile.profileImagePath }`" 
+          >
+          <img  v-if="!isInput" src="@/assets/기본프로필.jpg" alt="">
         </div>
         <div class='profile-detail'>
           <div class='profile-rough'>
@@ -67,10 +73,12 @@ export default defineComponent({
   data() {
     return{
       isModalViewed: false,
-      isEdit: false
+      isEdit: false,
+      isInput: false
     }
   },
   setup() {
+    const profileImage = ''
     const account = useAccountStore()
     const name = ''
     const onUpdate = (data) => {
@@ -86,12 +94,27 @@ export default defineComponent({
         account.signout()
       }
     }
+    const fileUpload = (e) =>{
+      var fileInput = e.target.files[0]
+      console.log(fileInput)
+      // let imagePath = (window.URL || window.webtkitURL).createObjectURL(fileInput[0].files[0])
+      account.changeImage(e.target.value)
+
+      // for( var i=0; i<fileInput.length; i++ ){
+      // 	if( fileInput[i].files.length > 0 ){
+      // 		for( var j = 0; j < fileInput[i].files.length; j++ ){
+      // 			console.log(fileInput[i].files[j].name) // 파일명 출력
+      // 		}
+      // 	}
+    }
     account.fetchProfile()
     return {
+      profileImage,
       account,
       name,
       onUpdate,
-      signout
+      signout,
+      fileUpload
     }
   },
 })
@@ -102,9 +125,11 @@ export default defineComponent({
   width:80%; 
   margin:auto;
 }
-/* .profile-img {
-
-} */
+.profile-image img {
+  width: 142px;
+  height: 142px;
+  border-radius: 50%;
+}
 
 h1 {
   color: white;
