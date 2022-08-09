@@ -183,7 +183,7 @@ export const useAccountStore = defineStore("account", {
         url: api.projects.project_detail(project_pk),
         method: 'get',
         headers: this.authHeader,
-      })
+      }) 
         .then(res => {
           this.project = res.data.project
         })

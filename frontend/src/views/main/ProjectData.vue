@@ -155,10 +155,11 @@
 import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import router from "@/router"
+import { useRoute } from 'vue-router'
 import UserIcon from '@/views/main/UserIcon'
 import ModalView from '@/views/main/ModalView'
 import AddUser from '@/views/main/AddUser'
-
+import axios from "axios"
 export default defineComponent({
   components: {
     UserIcon,
@@ -172,20 +173,24 @@ export default defineComponent({
       isEditDetail: false,
     }
   },
-  props: {
-    project: Object
-  },
-  setup(props) {
+  async setup() {
     const account = useAccountStore()
-    const demeet = ref(props)
-    const pjt = ref(demeet.value.project)
-    const member = ref(demeet.value.project.member)
+    const route = useRoute()  
+    const project_pk = ref(route.params.pid)
+    const project = await axios("http://localhost:8080/projects/" + 
+    project_pk.value, {
+      method: "get",
+      headers: account.authHeader
+    }).then(res => account.project = res.data.project)
+    const demeet = ref(account)
+    const pjt = ref(account.project)
     const projectData = ref({
       pid: demeet.value.project.pid,
       name: demeet.value.project.pjtName,
       desc: demeet.value.project.pjtDesc || 'pjt-detail',
       deactivate: null
     })
+    const host = ref(pjt.value.member.find(res => res.uid===pjt.value.projectOwner))
     const goConference = () => {
       router.push({name:'ConferenceView', params: {sessionId: demeet.value.project.sessionId}})
     }
@@ -193,7 +198,6 @@ export default defineComponent({
       projectData.value.deactivate = true
       account.updateProject(projectData.value)
     }
-    const host = ref(member.value.find(res => res.uid===pjt.value.projectOwner))
 
     const leave = () => {
       if (confirm('정말 팀을 떠나시겠습니까?')){
@@ -208,23 +212,19 @@ export default defineComponent({
         router.push({name:'ProfileView'})
       }
     }
-
     return {
-      pjt,
-      host,
+      project,
       demeet,
+      host,
+      pjt,
       account,
       projectData,
       back,
       endProject,
       goConference,
-      leave
+      leave,
     }
-  },
-  async created() {
-    await this.account.fetchProject(this.demeet.project.pid)
   }
-
 })
 </script>
 
