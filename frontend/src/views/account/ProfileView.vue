@@ -7,13 +7,13 @@
       </div>
       <div class='profile-id'>
         <div class='profile-image' @click="isInput=true">
-          <input v-if="isInput" type="file" accept=".jpg,.png,.jpeg" class="ex_file" name="ex_file" @change="fileUpload">
-          <button v-if="isInput" @click="isInput=false">취소</button>
+          <input v-if="isInput" type="file" accept=".jpg,.png,.jpeg" class="ex_file" @change="fileUpload">
+          <button v-if="isInput" @click="cancel">취소</button>
           <img 
           v-if="account.profile.profileImagePath && !isInput" 
           :src="`${ account.profile.profileImagePath }`" 
           >
-          <img  v-if="!isInput" src="@/assets/기본프로필.jpg" alt="">
+          <img  v-if="account.profile.profileImagePath===null && !isInput" src="@/assets/기본프로필.jpg" alt="">
         </div>
         <div class='profile-detail'>
           <div class='profile-rough'>
@@ -57,12 +57,13 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import MainNav from '@/views/main/MainNav'
 import ModalView from '@/views/main/ModalView'
 import ChangePassword from '@/views/account/ChangePassword'
 import EndprojectList from '@/views/account/EndProjectList'
+import router from "@/router"
 export default defineComponent({
   components: {
     MainNav,
@@ -95,17 +96,15 @@ export default defineComponent({
       }
     }
     const fileUpload = (e) =>{
-      var fileInput = e.target.files[0]
-      console.log(fileInput)
-      // let imagePath = (window.URL || window.webtkitURL).createObjectURL(fileInput[0].files[0])
-      account.changeImage(e.target.value)
-
-      // for( var i=0; i<fileInput.length; i++ ){
-      // 	if( fileInput[i].files.length > 0 ){
-      // 		for( var j = 0; j < fileInput[i].files.length; j++ ){
-      // 			console.log(fileInput[i].files[j].name) // 파일명 출력
-      // 		}
-      // 	}
+      const fileInput = ref(e.target.files[0])
+      if (fileInput.value !== null) {
+        account.changeImage(fileInput.value)
+      }else {
+        alert('이미지를 업로드해주세요.')
+      }
+    }
+    const cancel = () => {
+      router.go({name : 'ProfileView'})
     }
     account.fetchProfile()
     return {
@@ -114,7 +113,8 @@ export default defineComponent({
       name,
       onUpdate,
       signout,
-      fileUpload
+      fileUpload,
+      cancel
     }
   },
 })

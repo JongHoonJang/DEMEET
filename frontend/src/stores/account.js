@@ -145,7 +145,7 @@ export const useAccountStore = defineStore("account", {
     // 유저 프로필 이미지 변경
     changeImage( image ) {
       const formData = new FormData()
-      formData.append("image", image)
+      formData.append("multipartFile", image)
       axios({
         url: api.accounts.profileimage_update(),
         method: 'post',
