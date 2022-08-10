@@ -1,9 +1,11 @@
 package com.ssafy.api.response;
 
-import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class ProjectDeactivateSimpleInfoRes {
 
     /*

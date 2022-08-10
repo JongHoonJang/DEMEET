@@ -1,7 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
-import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
@@ -15,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
 @Service("UserProjectService")
 public class UserProjectServiceImpl implements UserProjectService{
@@ -26,72 +26,75 @@ public class UserProjectServiceImpl implements UserProjectService{
     UserProjectRepositorySupport userProjectRepositorySupport;
 
     @Override
-    public List<userSimpleInfoDTO> getUserSimpleInfoDTOListByPid(Long pid) throws UidNullException {
-        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid);
-        List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
-        for(userSimpleInfoDTO user : userList) {
-            System.out.println(user.toString());
-        }
+    public List<UserSimpleInfoDTO> getUserSimpleInfoDTOListByPid(Long pid) throws UidNullException {
+        log.info("pid를 이용해서 해당 프로젝트에 속한 유저들의 simpleInfoDTOList반환");
+        List<UserSimpleInfoDTO> userList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid).orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
+        log.debug("userList = {}", userList.toString());
         return userList;
     }
 
-    @Override
-    public List<UserSimpleInfoWithPrifileDTO> getUserSimpleInfoWithPrifileDTOListByPid(Long pid) throws UidNullException {
-        List<Users> optUserList = userProjectRepositorySupport.getUserListByPid(pid).orElseThrow(() -> new UidNullException("cannot get user list by pid"));
-        List<UserSimpleInfoWithPrifileDTO> userSimpleInfoWithPrifileDTOList = new ArrayList<UserSimpleInfoWithPrifileDTO>();
-        for(Users user : optUserList) {
-            UserSimpleInfoWithPrifileDTO userSimpleInfoWithPrifileDTO = new UserSimpleInfoWithPrifileDTO();
-            userSimpleInfoWithPrifileDTO.setUid(user.getUid());
-            userSimpleInfoWithPrifileDTO.setEmail(user.getEmail());
-            userSimpleInfoWithPrifileDTO.setNickname(user.getNickname());
-            userSimpleInfoWithPrifileDTOList.add(userSimpleInfoWithPrifileDTO);
-        }
-        return userSimpleInfoWithPrifileDTOList;
-    }
+//    @Override
+//    public List<UserSimpleInfoDTO> getUserSimpleInfoWithPrifileDTOListByPid(Long pid) throws UidNullException {
+//        List<Users> optUserList = userProjectRepositorySupport.getUserListByPid(pid).orElseThrow(() -> new UidNullException("cannot get user list by pid"));
+//        List<UserSimpleInfoDTO> usersSimpleInfoDTOList = new ArrayList<UserSimpleInfoDTO>();
+//        for(Users user : optUserList) {
+//            UserSimpleInfoDTO usersSimpleInfoDTO = new UserSimpleInfoDTO();
+//            usersSimpleInfoDTO.setUid(user.getUid());
+//            usersSimpleInfoDTO.setEmail(user.getEmail());
+//            usersSimpleInfoDTO.setNickname(user.getNickname());
+//            usersSimpleInfoDTOList.add(usersSimpleInfoDTO);
+//        }
+//        return usersSimpleInfoDTOList;
+//    }
 
     @Override
     public List<Long> getUserUidListByPid(Long pid) throws UidNullException {
-        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid);
-        List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
-        for(userSimpleInfoDTO user : userList) {
-            System.out.println(user.toString());
+        log.info("pid를 기반으로 해당 프로젝트에 속해있는 유저들의 uidList 조회");
+        List<UserSimpleInfoDTO> userList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid).orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
+        log.debug("userList = {}", userList.toString());
+        List<Long> uidList = new ArrayList<Long>();
+        log.info("uidList로 변환");
+        for(UserSimpleInfoDTO user : userList) {
+            uidList.add(user.getUid());
         }
-        List<Long> newUserList = new ArrayList<Long>();
-        for(userSimpleInfoDTO user : userList) {
-            newUserList.add(user.getUid());
-        }
-
-        return newUserList;
+        log.debug("newUserList = {}",uidList.toString());
+        return uidList;
     }
 
     @Override
     public List<Projects> getJoinedProjectList(Long uid) throws ProjectNullException {
-        Optional<List<Projects>> joinedProjectList = userProjectRepositorySupport.getJoinedProjectList(uid);
-        List<Projects> projectList = joinedProjectList.orElseThrow(() -> new ProjectNullException("cannot get project list by uid " + uid));
-
-        return projectList;
+        log.info("uid 기반으로 현재 유저가 속해있는 프로젝트 목록 조회");
+        List<Projects> joinedProjectList = userProjectRepositorySupport.getJoinedProjectList(uid).orElseThrow(() -> new ProjectNullException("cannot get project list by uid " + uid));
+        log.debug("joinedProjectList = {}", joinedProjectList.toString());
+        return joinedProjectList;
     }
 
     @Override
     public UserProject addUserInProject(AddDelUserInProjectPostReq addDelUserInProjectPostReq, Projects project, Users user) {
+        log.info("특정 프로젝트에 유저 추가");
         UserProject userProject = new UserProject();
         userProject.setUsers(user);
         userProject.setProjects(project);
-        return userProjectRepository.save(userProject);
+        UserProject saved = userProjectRepository.save(userProject);
+        log.debug("saved = {}", saved.toString());
+        return saved;
     }
 
     @Override
     public boolean userDuplicateCheck(Projects project, Users user) {
-        // 프로젝트에 유저가 있는지 확인하는 메소드
-//        true면 중복됨, false면 중복 없음
+        log.info("유저 중복 체크, true면 중복, false면 중복 아님");
         UserProject userProject =userProjectRepository.getUserProjectByProjectsAndUsers(project, user);
-        return userProject != null ? true:false;
+        boolean check = userProject != null ? true:false;
+        log.debug("중복여부 = {}", check);
+        return check;
     }
 
     @Override
     public void deleteUserInProject(Projects project, Users user) {
+        log.info("프로젝트에서 특정 유저 삭제");
         UserProject userProject = userProjectRepository.getUserProjectByProjectsAndUsers(project, user);
-        System.out.println(userProject.toString());
+        log.debug("UserProject = {}", userProject.toString());
         userProjectRepository.delete(userProject);
+        log.info("유저 삭제 완료");
     }
 }

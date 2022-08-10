@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(of = {"cid", "sessionName", "uniqueSessionName", "confStartTime", "confEndTime", "activation"})
 public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

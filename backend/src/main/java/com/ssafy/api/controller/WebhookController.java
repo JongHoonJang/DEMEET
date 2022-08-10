@@ -1,5 +1,9 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.DTO.openvidu.OVParticipantJoinedDTO;
+import com.ssafy.DTO.openvidu.OVParticipantLeftDTO;
+import com.ssafy.DTO.openvidu.OVSessionCreatedDTO;
+import com.ssafy.DTO.openvidu.OVSessionDestroyedDTO;
 import com.ssafy.api.request.openvidu.*;
 import com.ssafy.api.service.WebhookService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -33,18 +37,18 @@ public class WebhookController {
         Conferences conference = null;
         switch (event) {
             case "sessionCreated":
-                OVSessionCreatedReq ovSessionCreatedReq = makeSessionCreatedReq(req);
-                conference = webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedReq);
+                OVSessionCreatedDTO ovSessionCreatedDTO = makeSessionCreatedDTO(req);
+                conference = webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedDTO);
                 break;
             case "sessionDestroyed":
-                OVSessionDestroyedReq ovSessionDestroyedReq = makeSessionDestroyReq(req);
+                OVSessionDestroyedDTO ovSessionDestroyedReq = makeSessionDestroyDTO(req);
                 conference = webhookService.editConferenceWithOvSessionDestroyed(ovSessionDestroyedReq);
                 break;
             case "participantJoined":
-                OVParticipantJoinedReq ovParticipantJoinedReq = makeParticipantJoinedReq(req);
+                OVParticipantJoinedDTO ovParticipantJoinedReq = makeParticipantJoinedDTO(req);
                 break;
             case "participantLeft":
-                OVParticipantLeftReq ovParticipantLeftReq = makeParticipantLeftReq(req);
+                OVParticipantLeftDTO ovParticipantLeftDTO = makeParticipantLeftDTO(req);
                 break;
             default:
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
@@ -53,68 +57,68 @@ public class WebhookController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    public OVSessionCreatedReq makeSessionCreatedReq(OVAllInOneReq ovAllInOneReq) {
-        OVSessionCreatedReq ovSessionCreatedReq = new OVSessionCreatedReq();
+    public OVSessionCreatedDTO makeSessionCreatedDTO(OVAllInOneReq ovAllInOneReq) {
+        OVSessionCreatedDTO ovSessionCreatedDTO = new OVSessionCreatedDTO();
 
-        ovSessionCreatedReq.setSessionId(ovAllInOneReq.getSessionId());
-        ovSessionCreatedReq.setUniqueSessionId((ovAllInOneReq.getUniqueSessionId()));
-        ovSessionCreatedReq.setEvent(ovAllInOneReq.getEvent());
+        ovSessionCreatedDTO.setSessionId(ovAllInOneReq.getSessionId());
+        ovSessionCreatedDTO.setUniqueSessionId((ovAllInOneReq.getUniqueSessionId()));
+        ovSessionCreatedDTO.setEvent(ovAllInOneReq.getEvent());
         // 로컬은 상관없지만 서버와 한국시간은 다르기에 시간을 맞춰주기위해 시간을 더해줌
-        ovSessionCreatedReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
+        ovSessionCreatedDTO.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
 
-        return ovSessionCreatedReq;
+        return ovSessionCreatedDTO;
     }
 
-    public OVSessionDestroyedReq makeSessionDestroyReq(OVAllInOneReq ovAllInOneReq) {
-        OVSessionDestroyedReq ovSessionDestroyReq = new OVSessionDestroyedReq();
+    public OVSessionDestroyedDTO makeSessionDestroyDTO(OVAllInOneReq ovAllInOneReq) {
+        OVSessionDestroyedDTO ovSessionDestroyedDTO = new OVSessionDestroyedDTO();
 
-        ovSessionDestroyReq.setSessionId(ovAllInOneReq.getSessionId());
-        ovSessionDestroyReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
-        ovSessionDestroyReq.setEvent(ovAllInOneReq.getEvent());
-        ovSessionDestroyReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
-        ovSessionDestroyReq.setStartTime(ovAllInOneReq.getStartTime() + 32400000);
-        ovSessionDestroyReq.setDuration(ovAllInOneReq.getDuration());
-        ovSessionDestroyReq.setReason(ovAllInOneReq.getReason());
+        ovSessionDestroyedDTO.setSessionId(ovAllInOneReq.getSessionId());
+        ovSessionDestroyedDTO.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
+        ovSessionDestroyedDTO.setEvent(ovAllInOneReq.getEvent());
+        ovSessionDestroyedDTO.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
+        ovSessionDestroyedDTO.setStartTime(ovAllInOneReq.getStartTime() + 32400000);
+        ovSessionDestroyedDTO.setDuration(ovAllInOneReq.getDuration());
+        ovSessionDestroyedDTO.setReason(ovAllInOneReq.getReason());
 
-        return ovSessionDestroyReq;
+        return ovSessionDestroyedDTO;
     }
 
-    public OVParticipantJoinedReq makeParticipantJoinedReq(OVAllInOneReq ovAllInOneReq) {
-        OVParticipantJoinedReq ovParticipantJoinedReq = new OVParticipantJoinedReq();
+    public OVParticipantJoinedDTO makeParticipantJoinedDTO(OVAllInOneReq ovAllInOneReq) {
+        OVParticipantJoinedDTO ovParticipantJoinedDTO = new OVParticipantJoinedDTO();
 
-        ovParticipantJoinedReq.setSessionId(ovAllInOneReq.getSessionId());
-        ovParticipantJoinedReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
-        ovParticipantJoinedReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
-        ovParticipantJoinedReq.setParticipantId(ovAllInOneReq.getParticipantId());
-        ovParticipantJoinedReq.setConnectionId(ovAllInOneReq.getConnectionId());
-        ovParticipantJoinedReq.setClientData(ovAllInOneReq.getClientData());
-        ovParticipantJoinedReq.setServerData(ovAllInOneReq.getServerData());
-        ovParticipantJoinedReq.setLocation(ovAllInOneReq.getLocation());
-        ovParticipantJoinedReq.setIp(ovAllInOneReq.getIp());
-        ovParticipantJoinedReq.setPlatform(ovAllInOneReq.getPlatform());
-        ovParticipantJoinedReq.setEvent(ovAllInOneReq.getEvent());
+        ovParticipantJoinedDTO.setSessionId(ovAllInOneReq.getSessionId());
+        ovParticipantJoinedDTO.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
+        ovParticipantJoinedDTO.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
+        ovParticipantJoinedDTO.setParticipantId(ovAllInOneReq.getParticipantId());
+        ovParticipantJoinedDTO.setConnectionId(ovAllInOneReq.getConnectionId());
+        ovParticipantJoinedDTO.setClientData(ovAllInOneReq.getClientData());
+        ovParticipantJoinedDTO.setServerData(ovAllInOneReq.getServerData());
+        ovParticipantJoinedDTO.setLocation(ovAllInOneReq.getLocation());
+        ovParticipantJoinedDTO.setIp(ovAllInOneReq.getIp());
+        ovParticipantJoinedDTO.setPlatform(ovAllInOneReq.getPlatform());
+        ovParticipantJoinedDTO.setEvent(ovAllInOneReq.getEvent());
 
-        return ovParticipantJoinedReq;
+        return ovParticipantJoinedDTO;
     }
 
-    public OVParticipantLeftReq makeParticipantLeftReq(OVAllInOneReq ovAllInOneReq) {
-        OVParticipantLeftReq ovParticipantLeftReq = new OVParticipantLeftReq();
+    public OVParticipantLeftDTO makeParticipantLeftDTO(OVAllInOneReq ovAllInOneReq) {
+        OVParticipantLeftDTO ovParticipantLeftDTO = new OVParticipantLeftDTO();
 
-        ovParticipantLeftReq.setSessionId(ovAllInOneReq.getSessionId());
-        ovParticipantLeftReq.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
-        ovParticipantLeftReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
-        ovParticipantLeftReq.setParticipantId(ovAllInOneReq.getParticipantId());
-        ovParticipantLeftReq.setConnectionId(ovAllInOneReq.getConnectionId());
-        ovParticipantLeftReq.setClientData(ovAllInOneReq.getClientData());
-        ovParticipantLeftReq.setServerData(ovAllInOneReq.getServerData());
-        ovParticipantLeftReq.setLocation(ovAllInOneReq.getLocation());
-        ovParticipantLeftReq.setIp(ovAllInOneReq.getIp());
-        ovParticipantLeftReq.setPlatform(ovAllInOneReq.getPlatform());
-        ovParticipantLeftReq.setEvent(ovAllInOneReq.getEvent());
-        ovParticipantLeftReq.setReason(ovAllInOneReq.getReason());
-        ovParticipantLeftReq.setDuration(ovAllInOneReq.getDuration());
+        ovParticipantLeftDTO.setSessionId(ovAllInOneReq.getSessionId());
+        ovParticipantLeftDTO.setUniqueSessionId(ovAllInOneReq.getUniqueSessionId());
+        ovParticipantLeftDTO.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
+        ovParticipantLeftDTO.setParticipantId(ovAllInOneReq.getParticipantId());
+        ovParticipantLeftDTO.setConnectionId(ovAllInOneReq.getConnectionId());
+        ovParticipantLeftDTO.setClientData(ovAllInOneReq.getClientData());
+        ovParticipantLeftDTO.setServerData(ovAllInOneReq.getServerData());
+        ovParticipantLeftDTO.setLocation(ovAllInOneReq.getLocation());
+        ovParticipantLeftDTO.setIp(ovAllInOneReq.getIp());
+        ovParticipantLeftDTO.setPlatform(ovAllInOneReq.getPlatform());
+        ovParticipantLeftDTO.setEvent(ovAllInOneReq.getEvent());
+        ovParticipantLeftDTO.setReason(ovAllInOneReq.getReason());
+        ovParticipantLeftDTO.setDuration(ovAllInOneReq.getDuration());
 
-        return ovParticipantLeftReq;
+        return ovParticipantLeftDTO;
     }
 
 

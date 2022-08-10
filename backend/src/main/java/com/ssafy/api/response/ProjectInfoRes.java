@@ -1,15 +1,17 @@
 package com.ssafy.api.response;
 
 
-import com.ssafy.DTO.ProjectInfoDTO;
-import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectInfoDTO;
+import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class ProjectInfoRes extends BaseResponseBody {
 
 
@@ -18,7 +20,7 @@ public class ProjectInfoRes extends BaseResponseBody {
     public ProjectInfoRes(){
         super();
     }
-    public static ProjectInfoRes of(Integer statusCode, String message, Projects project, Long projectOwner,  List<userSimpleInfoDTO> userList){
+    public static ProjectInfoRes of(Integer statusCode, String message, Projects project, Long projectOwner,  List<UserSimpleInfoDTO> userList){
         ProjectInfoRes res = new ProjectInfoRes();
 //         project = new ProjectInfoDTO();
         res.setStatusCode(statusCode);

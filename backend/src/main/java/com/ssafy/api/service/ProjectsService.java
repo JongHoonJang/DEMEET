@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
-import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
-import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.NoAuthorizedException;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface ProjectsService {
 
-    Long createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException;
+    Projects createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException;
 
     Projects getProject(Long pid) throws ProjectNullException;
 
@@ -27,9 +27,14 @@ public interface ProjectsService {
 
     List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
 
-    List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
+    List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException, UidNullException;
 
-    Projects deactivateProject(int pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
+    Projects deactivateProject(long pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
 
     Projects getProjectBySessionId(String sessionId) throws ProjectNullException;
+
+    List<Projects> getDeactivatedProjectsByUid(Long uid) throws ProjectNullException;
+
+
+    List<ProjectDeactivateSimpleInfoDTO> changetProjectListToProjectDeactivateSimpleInfoDTOList(List<Projects> deActivateProjectsList) throws UidNullException;
 }

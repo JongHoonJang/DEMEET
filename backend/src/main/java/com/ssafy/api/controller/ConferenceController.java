@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,9 +56,6 @@ public class ConferenceController {
         // 연결할 비디오 콜
         String sessionName = (String) sessionJSON.get("sessionName");
         // 전체 프로젝트들리스트를 가져와서 그 안에 sessionName이 위 sessionName과 같지 않으면 토큰생성해주는걸 막아야할듯하다.
-
-
-
         // 프로젝트 목록에서 SessionName과 같은 값이 있는지 확인
         try{
             projectsService.getProjectBySessionId(sessionName);

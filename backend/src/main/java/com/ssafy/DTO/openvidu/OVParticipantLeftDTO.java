@@ -1,9 +1,11 @@
-package com.ssafy.api.request.openvidu;
+package com.ssafy.DTO.openvidu;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class OVParticipantLeftReq extends OVParticipantJoinedReq{
+@EqualsAndHashCode(callSuper=false)
+public class OVParticipantLeftDTO extends OVParticipantJoinedDTO {
 //    {sessionId=ses_KEY10EWVwb,
 //    uniqueSessionId=ses_KEY10EWVwb_1659920022264,
 //    timestamp=1659920064492,
