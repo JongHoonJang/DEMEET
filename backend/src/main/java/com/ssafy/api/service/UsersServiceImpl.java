@@ -10,6 +10,7 @@ import com.ssafy.common.customException.UserNullException;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
 import com.ssafy.db.repository.ProjectsRepository;
+import com.ssafy.db.repository.UserProjectRepositorySupport;
 import com.ssafy.db.repository.UsersRepository;
 import com.ssafy.db.repository.UsersRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
@@ -33,6 +35,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Autowired
     UsersRepositorySupport usersRepositorySupport;
+
+    @Autowired
+    UserProjectRepositorySupport userProjectRepositorySupport;
 
     @Autowired
     ProjectsRepository projectsRepository;
@@ -132,23 +137,53 @@ public class UsersServiceImpl implements UsersService {
 
 
     @Override
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(Long targetUid) {
         log.info("유저 삭제");
-        // 호스트가 자기가만든 진행중인 프로젝트가 있을경우 그 프로젝트들 전부 비활성화시킨다.
+        // 호스트가 자기가만든 프로젝트가 있을경우 그 프로젝트들 전부 비활성화시킨다.
         // 오너아이디는 그 다음사람에게 넘긴다.
         // 만약에 그 다음사람이 없으면, 그냥 프로젝트 삭제
 
         try {
-            Long uid = usersRepositorySupport.findUserByEmail(username).get().getUid();
-            // 여기서 사용자가 만든 프로젝트가 있는지 조회한다.
-            List<Projects> projectsList = projectsRepository.findProjectsByOwnerId(uid);
-            System.out.println(projectsList.size());
+            log.info("해당 유저가 생성한 프로젝트들 중 아직 활성화된 프로젝트들 조회");
+            List<Projects> projectsList = projectsRepository.findProjectsByOwnerId(targetUid);
+            log.debug("사용자가 생성한 프로젝트 = {}", projectsList.toString());
             if (projectsList.size() != 0) {
+                log.info("해당하는 프로젝트들이 있으므로 프로젝트 처리작업 시작");
+                for (Projects projects : projectsList) {
+                    log.debug("Project = {} ", projects.toString());
 
+//                    if (projects.isActivation()) {
+//                        log.info("해당 프로젝트가 활성화된 프로젝트니 프로젝트 비활성화");
+//                        projects.setActivation(false);
+//                    }
+                    // 해당 프로젝트에 속한 유저들의 리스트 가져오기.
+                    List<UserSimpleInfoDTO> userList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(projects.getPid()).orElse(new ArrayList<>());
+                    if (userList.size() <= 1) {
+                        log.info("프로젝트에 오너 한사람만 있으므로 해당 프로젝트 삭제");
+                        log.debug("{}명 있음.", userList.size());
+                        projectsRepository.delete(projects);
+                    } else {
+                        log.info("프로젝트 오너를 다음사람으로 변경");
+                        for (UserSimpleInfoDTO user : userList) {
+                            if (user.getUid() != targetUid) {
+                                projects.setOwnerId(user.getUid());
+                                break;
+                            }
+                        }
+                        log.debug("owner가 {}에서 {}로 바뀜.", targetUid, projects.getOwnerId());
+                    }
+                }
             }
-            usersRepository.deleteById(uid);
-            log.debug("유저 삭제 성공여부 = {}", true);
-            return true;
+            log.info("유저 삭제");
+            usersRepository.deleteById(targetUid);
+            Optional<Users> user = usersRepository.findByUid(targetUid);
+            if (user.isPresent()) {
+                log.error("유저 삭제 실패");
+                return false;
+            } else {
+                log.debug("유저 삭제 성공");
+                return true;
+            }
         } catch (IllegalArgumentException e) {
             log.error("유저 삭제 실패");
             return false;

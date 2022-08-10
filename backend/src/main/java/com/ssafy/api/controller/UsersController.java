@@ -217,7 +217,7 @@ public class UsersController {
     public ResponseEntity<BaseResponseBody> deleteUser(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         log.info("유저 삭제");
-        boolean deleteCheck = usersService.deleteUser(ssafyUsersDetails.getUsername());
+        boolean deleteCheck = usersService.deleteUser(ssafyUsersDetails.getUserUid());
         log.debug("유저 삭제 성공여부 = {}", deleteCheck);
         if (deleteCheck) {
             log.info("삭제 성공");
