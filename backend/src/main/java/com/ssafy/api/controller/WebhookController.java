@@ -59,7 +59,8 @@ public class WebhookController {
         ovSessionCreatedReq.setSessionId(ovAllInOneReq.getSessionId());
         ovSessionCreatedReq.setUniqueSessionId((ovAllInOneReq.getUniqueSessionId()));
         ovSessionCreatedReq.setEvent(ovAllInOneReq.getEvent());
-        ovSessionCreatedReq.setTimestamp(ovAllInOneReq.getTimestamp());
+        // 로컬은 상관없지만 서버와 한국시간은 다르기에 시간을 맞춰주기위해 시간을 더해줌
+        ovSessionCreatedReq.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
 
         return ovSessionCreatedReq;
     }

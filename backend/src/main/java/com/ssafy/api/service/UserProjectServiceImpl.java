@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.common.customException.ProjectNullException;
@@ -25,8 +26,8 @@ public class UserProjectServiceImpl implements UserProjectService{
     UserProjectRepositorySupport userProjectRepositorySupport;
 
     @Override
-    public List<userSimpleInfoDTO> getUserListByPid(Long pid) throws UidNullException {
-        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserListByPid(pid);
+    public List<userSimpleInfoDTO> getUserSimpleInfoDTOListByPid(Long pid) throws UidNullException {
+        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid);
         List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
         for(userSimpleInfoDTO user : userList) {
             System.out.println(user.toString());
@@ -35,8 +36,22 @@ public class UserProjectServiceImpl implements UserProjectService{
     }
 
     @Override
+    public List<UserSimpleInfoWithPrifileDTO> getUserSimpleInfoWithPrifileDTOListByPid(Long pid) throws UidNullException {
+        List<Users> optUserList = userProjectRepositorySupport.getUserListByPid(pid).orElseThrow(() -> new UidNullException("cannot get user list by pid"));
+        List<UserSimpleInfoWithPrifileDTO> userSimpleInfoWithPrifileDTOList = new ArrayList<UserSimpleInfoWithPrifileDTO>();
+        for(Users user : optUserList) {
+            UserSimpleInfoWithPrifileDTO userSimpleInfoWithPrifileDTO = new UserSimpleInfoWithPrifileDTO();
+            userSimpleInfoWithPrifileDTO.setUid(user.getUid());
+            userSimpleInfoWithPrifileDTO.setEmail(user.getEmail());
+            userSimpleInfoWithPrifileDTO.setNickname(user.getNickname());
+            userSimpleInfoWithPrifileDTOList.add(userSimpleInfoWithPrifileDTO);
+        }
+        return userSimpleInfoWithPrifileDTOList;
+    }
+
+    @Override
     public List<Long> getUserUidListByPid(Long pid) throws UidNullException {
-        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserListByPid(pid);
+        Optional<List<userSimpleInfoDTO>> optUserList = userProjectRepositorySupport.getUserSimpleInfoDTOListByPid(pid);
         List<userSimpleInfoDTO> userList = optUserList.orElseThrow(() -> new UidNullException("cannot get user list by pid " + pid));
         for(userSimpleInfoDTO user : userList) {
             System.out.println(user.toString());

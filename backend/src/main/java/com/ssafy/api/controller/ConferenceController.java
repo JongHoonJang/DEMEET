@@ -51,6 +51,9 @@ public class ConferenceController {
 
         // 연결할 비디오 콜
         String sessionName = (String) sessionJSON.get("sessionName");
+        // 전체 프로젝트들리스트를 가져와서 그 안에 sessionName이 위 sessionName과 같지 않으면 토큰생성해주는걸 막아야할듯하다.
+
+
 
         // 이 유저의 역할
         //OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
@@ -58,6 +61,7 @@ public class ConferenceController {
 
         // 유저가 컨퍼런스에 참여할 때, 다른 유저에게 넘겨줄 정보
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+
         // 여기선 로그인할 때 있는 httpSession에 JSON에 넣는다.
         String serverData = "{\"serverData\": \"" + ssafyUsersDetails.getUsername() + "\"}";
 

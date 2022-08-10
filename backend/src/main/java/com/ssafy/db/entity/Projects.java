@@ -29,6 +29,7 @@ public class Projects {
 
     String pjtDesc;
 
+    // 프로젝트명 + 시작시간을 base64로 인코딩한값
     String sessionId;
 
     @Column(nullable = false)

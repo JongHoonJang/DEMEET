@@ -8,6 +8,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.ImageUploadReq;
 import com.ssafy.api.request.UserPwChangePostReq;
@@ -144,7 +145,7 @@ public class UsersController {
     public ResponseEntity<UserListRes> getUserList(@ApiIgnore Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         String email = ssafyUsersDetails.getUsername();
-        List<userSimpleInfoDTO> userList = usersService.getUserList();
+        List<UserSimpleInfoWithPrifileDTO> userList = usersService.getUserList();
         return ResponseEntity.status(200).body(UserListRes.of(200, "user list lookup success", userList));
     }
 

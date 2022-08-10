@@ -1,13 +1,9 @@
 package com.ssafy.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.DTO.ProjectInfoDTO;
 import com.ssafy.DTO.QuserSimpleInfoDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
-import com.ssafy.db.entity.Projects;
-import com.ssafy.db.entity.QProjects;
-import com.ssafy.db.entity.QUserProject;
-import com.ssafy.db.entity.QUsers;
+import com.ssafy.db.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +20,15 @@ public class UserProjectRepositorySupport {
     QUsers qUsers = QUsers.users;
     QProjects qProjects = QProjects.projects;
 
-    public Optional<List<userSimpleInfoDTO>> getUserListByPid(Long pid) {
+    public Optional<List<Users>> getUserListByPid(Long pid) {
+        List<Users> userList = jpaQueryFactory.select(qUsers)
+                .from(qUserProject)
+                .where(qUserProject.projects.pid.eq(pid)).fetch();
+        if (userList == null) return Optional.empty();
+        return Optional.ofNullable(userList);
+    }
+
+    public Optional<List<userSimpleInfoDTO>> getUserSimpleInfoDTOListByPid(Long pid) {
         List<userSimpleInfoDTO> userList = jpaQueryFactory.select(new QuserSimpleInfoDTO(qUserProject.users.uid, qUserProject.users.email, qUserProject.users.nickname))
                 .from(qUserProject)
                 .where(qUserProject.projects.pid.eq(pid)).fetch();

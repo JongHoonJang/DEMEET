@@ -8,7 +8,7 @@ import java.util.List;
 public class ProjectSimpleInfoDTO {
     Long pid;
     Long projectOwner;
-    List<userSimpleInfoDTO> member;
+    List<UserSimpleInfoWithPrifileDTO> member;
     String pjtName;
     String pjtDesc;
     boolean activation;
