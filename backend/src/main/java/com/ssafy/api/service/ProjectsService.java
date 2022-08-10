@@ -30,4 +30,6 @@ public interface ProjectsService {
     List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException;
 
     Projects deactivateProject(int pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
+
+    Projects getProjectBySessionId(String sessionId) throws ProjectNullException;
 }
