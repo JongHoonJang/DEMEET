@@ -3,21 +3,20 @@
   <div class="item-box">
     <div class="drawing-box">
       <button id="clear-canvas">clear</button>
-      <button id="drawing-mode">Enter drawing mode</button>
-      <label for="drawing-line-width">굵기: </label>
+      <button id="drawing-mode">펜 사용</button>
+      <label class="width-label" for="drawing-line-width">굵기: </label>
       <span class="info">1</span>
       <input type="range" value="1" min="1" max="20" id="drawing-line-width">
-      <label for="drawing-color">색깔: </label>
+      <label class="color-label" for="drawing-color">색깔: </label>
       <input type="color" value="#000000" id="drawing-color">
     </div>
     <div id="drawing-mode-options">
-      <input type="text" id="circle-text">
+      <button id="itext">text</button>
       <button id="circle"><span class="material-symbols-outlined">circle</span></button>
       <button id="rect"><span class="material-symbols-outlined">check_box_outline_blank</span></button>
       <button id="triangle"><span class="material-symbols-outlined">change_history</span></button>
-      <button id="itext">text</button>
       <button id="delete"><span class="material-symbols-outlined">delete</span></button>
-      <button id="line">선그리기</button>
+      <button id="line">직선</button>
       <button id="look"><span class="material-symbols-outlined">save</span></button>
     </div>
   </div>
@@ -61,8 +60,6 @@ export default {
             ITextEl = $('itext'),
             // 삭제 버튼
             deleteEl = $('delete'),
-            // 도형안에 들어갈 텍스트
-            inputdata = $('circle-text'),
             // 선그리기
             drawingLineEl = $('line'),
             //보기모드 및 백엔드로 보낼 데이터
@@ -77,11 +74,11 @@ export default {
       drawingModeEl.onclick = function() {
         canvas.isDrawingMode = !canvas.isDrawingMode
         if (canvas.isDrawingMode) {
-          drawingModeEl.innerText = 'Cancel drawing mode'
+          drawingModeEl.innerText = '중지'
           drawingOptionsEl.style.display = 'none'
         }
         else {
-          drawingModeEl.innerText = 'Enter drawing mode'
+          drawingModeEl.innerText = '펜 사용'
           drawingOptionsEl.style.display = ''
         }
       }
@@ -113,15 +110,15 @@ export default {
           originY: 'center'
         })
 
-        let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-          left: 150,
-          top: 100,
-          fontSize: 30,
-          originX: 'center',
-          originY: 'center'
-        })
+        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
+        //   left: 150,
+        //   top: 100,
+        //   fontSize: 30,
+        //   originX: 'center',
+        //   originY: 'center'
+        // })
 
-        canvas.add(circle,text)
+        canvas.add(circle)
       }
       //사각형 텍스트 박스
       drawingRectEl.onclick = function() {
@@ -136,15 +133,15 @@ export default {
           originY: 'center'
         })
 
-        let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-          left: 150,
-          top: 100,
-          fontSize: 30,
-          originX: 'center',
-          originY: 'center'
-        })
+        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
+        //   left: 150,
+        //   top: 100,
+        //   fontSize: 30,
+        //   originX: 'center',
+        //   originY: 'center'
+        // })
 
-        canvas.add(rect,text)
+        canvas.add(rect)
       }
       // 삼각형 텍스트 박스
       drawingTriangleEl.onclick = function() {
@@ -159,15 +156,15 @@ export default {
           originY: 'center'
         })
 
-        let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-          left: 150,
-          top: 100,
-          fontSize: 30,
-          originX: 'center',
-          originY: 'center'
-        })
+        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
+        //   left: 150,
+        //   top: 100,
+        //   fontSize: 30,
+        //   originX: 'center',
+        //   originY: 'center'
+        // })
 
-        canvas.add(triangle,text)
+        canvas.add(triangle)
       }
 
 
@@ -177,7 +174,7 @@ export default {
       }
 
       ITextEl.onclick = function () {
-        let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
+        let text = new fabric.IText('textbox',{
           left: 100,
           top: 100,
           fontSize: 30,
@@ -194,6 +191,7 @@ export default {
         isLine = !isLine
         if (isLine) {
           drawingLineEl.innerText = '중지'
+          canvas.selection=false
           canvas.getObjects('selectable', false)
           // 마우스 눌렀을 때 좌표 값 저장
           canvas.on('mouse:down', function(options) {
@@ -209,10 +207,11 @@ export default {
         else {
           canvas.getObjects('selectable', true)
           // 선그리기 종료
-          drawingLineEl.innerText = '선그리기'
+          drawingLineEl.innerText = '직선'
           // 마우스 함수 off
           canvas.off('mouse:down')
           canvas.off('mouse:up')
+          canvas.selection=true
         }
       }
       // 보기용 그림띄우는 법
@@ -253,7 +252,31 @@ export default {
 
 </script>
 <style>
+.drawing-box button {
+  margin: 4px;
+  border-radius: 5px;
+  background: #2097F7;
+  color: white;
+}
+.drawing-box button span{
+  margin-top: 4px;
+}
+.drawing-box button span:hover{
+  transform: scale(1.4);
+}
 
+.color-label {
+  margin: 4px;
+  color: white;
+}
+.width-label {
+  margin-top: 4px;
+  color: white;
+}
+.info{
+  color: white;
+  margin: 8px;
+}
 #imageview svg{
   width: 300px;
   height: auto;
@@ -266,9 +289,23 @@ export default {
 .drawing-box{
   display: flex;
   justify-content: start;
+  margin: 8px;
 }
 #drawing-mode-options {
   display: flex;
   justify-content: start;
+}
+#drawing-mode-options button {
+  margin: 4px;
+  border-radius: 5px;
+  background: #2097F7;
+  color: white;
+}
+#drawing-mode-options button span:hover{
+  transform: scale(1.4);
+}
+
+#drawing-mode-options button span{
+  margin-top: 4px;
 }
 </style>

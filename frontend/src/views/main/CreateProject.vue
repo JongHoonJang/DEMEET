@@ -233,10 +233,15 @@ export default defineComponent({
   color: red;
 }
 .create-btn {
-  margin-top: 20px;
+  margin: 20px;
   width: 120px;
   height: 30px;
-  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
+  background: #2097F7;
   border-radius: 5px;
+  color: white;
+}
+.create-btn:hover{
+  transform: scale(1.1);
+  color: blue;
 }
 </style>
