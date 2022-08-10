@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.common.customException.UidNullException;
@@ -20,7 +21,7 @@ public interface UsersService {
     Users getUsersByUserEmail(String userEmail);
     Boolean checkEmailDuplicate(String email);
 
-    List<userSimpleInfoDTO> getUserList();
+    List<UserSimpleInfoWithPrifileDTO> getUserList();
 
     Boolean changeUserPassword(Long uid, String newPassword);
 

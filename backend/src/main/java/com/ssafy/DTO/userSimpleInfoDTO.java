@@ -9,6 +9,7 @@ public class userSimpleInfoDTO {
     String email;
     String nickname;
 
+
     public userSimpleInfoDTO() {
     }
 
@@ -18,4 +19,5 @@ public class userSimpleInfoDTO {
         this.email = email;
         this.nickname = nickname;
     }
+
 }

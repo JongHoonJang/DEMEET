@@ -5,6 +5,7 @@ package com.ssafy.api.service;
  */
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.UsersRegisterPostReq;
 import com.ssafy.common.customException.UidNullException;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,9 +80,19 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<userSimpleInfoDTO> getUserList() {
-        List<userSimpleInfoDTO> userList = usersRepositorySupport.getUserList();
-        return userList;
+    public List<UserSimpleInfoWithPrifileDTO> getUserList() {
+//        List<UserSimpleInfoWithPrifileDTO> userList = usersRepositorySupport.getUserList();
+        List<Users> userList = usersRepository.findAll();
+        List<UserSimpleInfoWithPrifileDTO> userDTOList = new ArrayList<UserSimpleInfoWithPrifileDTO>();
+        for (Users user : userList) {
+            UserSimpleInfoWithPrifileDTO userSimpleInfoWithPrifileDTO = new UserSimpleInfoWithPrifileDTO();
+            userSimpleInfoWithPrifileDTO.setUid(user.getUid());
+            userSimpleInfoWithPrifileDTO.setEmail(user.getEmail());
+            userSimpleInfoWithPrifileDTO.setNickname(user.getNickname());
+            userSimpleInfoWithPrifileDTO.setProfileImagePath(user.getProfileImagePath()+"");
+            userDTOList.add(userSimpleInfoWithPrifileDTO);
+        }
+        return userDTOList;
     }
 
     @Override
