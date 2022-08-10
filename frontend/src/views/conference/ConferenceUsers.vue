@@ -33,10 +33,10 @@ export default {
 	},
   setup(props) {
 
-    const getConnectionData = () => {
-    const { connection } = props.publisher.stream
-    return JSON.parse(connection.data)
-   }
+	async function getConnectionData() {
+		const { connection } = await props.publisher.stream
+		return  JSON.parse(connection.data)
+		}
 
    const clientData = computed(() => {
 			const clientData  = getConnectionData()

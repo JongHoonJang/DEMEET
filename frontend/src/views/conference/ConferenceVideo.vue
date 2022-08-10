@@ -6,8 +6,8 @@
 				<user-video :stream-manager="mainStreamManager"/>
 			</div> -->
 			<div id="video-container" class="col-md-6">
-				<user-video :streamManager="publisher" @click="updateMainVideoStreamManager(publisher)"/>
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" @click="updateMainVideoStreamManager(sub)"/>
+				<user-video :streamManager="publisher"/>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" />
 			</div>
 		</div>
   </div>
@@ -50,9 +50,10 @@ export default {
 		},
 	},
 
-	setup(){
+	setup(props){
 		const mySessionId = 'SessionA'
 		const myUserName = 'Participant' + Math.floor(Math.random() * 100)
+		console.log(props.publisher)
 
 	return {
 		mySessionId,
@@ -63,5 +64,10 @@ export default {
 </script>
 
 <style scoped>
+div.dump {
+  background-color: 0D131E;
+  width: 100vh;
+  height: 100vh;
+}
 
 </style>
