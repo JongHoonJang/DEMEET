@@ -1,15 +1,15 @@
 package com.ssafy.api.response;
 
-import com.ssafy.DTO.ProjectDeactivateSimpleInfoDTO;
-import com.ssafy.DTO.ProjectSimpleInfoDTO;
-import com.ssafy.DTO.UserMyInfoDTO;
+import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
+import com.ssafy.DTO.user.UserMyInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Users;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
 import java.util.List;
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class UsersMyInfoRes extends BaseResponseBody {
     UserMyInfoDTO user = new UserMyInfoDTO();
 
