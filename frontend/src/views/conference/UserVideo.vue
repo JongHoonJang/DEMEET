@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import OvVideo from './OvVideo';
+import OvVideo from './OvVideo'
 import { computed } from 'vue'
 
 export default {
@@ -29,17 +29,16 @@ export default {
 		
 	async function getConnectionData() {
 		const { connection } = await props.streamManager.stream
-		return  JSON.parse(connection.data)
+		return  JSON.parse(connection.data.split('%')[0])
 		}
 
 	const clientData = computed(() => {
-			const clientData  = getConnectionData()
+			const clientData = getConnectionData()
 			return clientData
 	})
 		return {
 			clientData,
-			// getConnectionData,
 		}
 	}
-};
+}
 </script>

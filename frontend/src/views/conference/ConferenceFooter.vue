@@ -1,5 +1,10 @@
 <template>
   <div>
+    <!-- 마이크 음소거 -->
+    <button type="button" @click="$emit('micOnOff'), micIcon()">
+      <span v-if="micValue" class="material-symbols-outlined">mic</span>
+      <span v-if="!micValue" class="material-symbols-outlined">mic_off</span>
+    </button>  
     <!-- 스피커 끄기 내가 다른 사람 소리 안 듣게 -->
     <button type="button" @click="$emit('audioOnOff'), audioIcon()">
       <span v-if="audioValue" class="material-symbols-outlined">volume_up</span>
@@ -11,8 +16,8 @@
       <span v-if="!videoValue" class="material-symbols-outlined">play_circle</span>
     </button>
 
-    <!-- <button type="button" @click="$emit('shareScreen')">화면공유??</button> 추후 개발
-    <button type="button" @click="$emit('shareDrawing')">드로잉</button> --> 
+    <button type="button" @click="$emit('shareScreen')">화면공유??</button> 추후 개발
+    <!-- <button type="button" @click="$emit('shareDrawing')">드로잉</button>  -->
 
     <!-- 나가기 -->
     <button type="button" class="leave-meeting" @click="$emit('sessionExit')"><span class="material-symbols-outlined">
@@ -34,6 +39,7 @@ export default {
   setup() {
     const audioValue = ref(true)
     const videoValue = ref(true)
+    const micValue = ref(true)
 
     const audioIcon = () =>{
       audioValue.value = !audioValue.value
@@ -42,12 +48,18 @@ export default {
     const videoIcon = () =>{
       videoValue.value = !videoValue.value
     }
+
+    const micIcon = () =>{
+      micValue.value = !micValue.value
+    }
     
     return {
       audioValue,
       videoValue,
+      micValue,
       audioIcon,
       videoIcon,
+      micIcon,
     }
   },
   create() {},
@@ -58,8 +70,7 @@ export default {
 </script>
 
 <style scoped>
-
-#sideBar {
+div #sideBar {
   float: right;
 }
 
@@ -76,4 +87,3 @@ button.leave-meeting{
 }
 
 </style>
-
