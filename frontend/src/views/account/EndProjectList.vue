@@ -32,14 +32,21 @@ export default defineComponent({
   height: 440px;
   background: #111315;
   text-decoration: none;
+  border-radius: 10px;
+  margin: 50px;
 }
 .project-img {
   width: 300px;
   height: 300px;
+  border-radius: 10px;
 }
 .project-data {
-  margin: 8px;
+  display: flex;
+  flex-direction: column;
   text-align: start;
   color: white;
+}
+.project-data p {
+  margin: 8px;
 }
 </style>

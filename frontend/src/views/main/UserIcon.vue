@@ -1,7 +1,7 @@
 <template>
   <div class="user-icon">
-    <span v-if="project.project.projectOwner===project.profile.uid" @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
-    <div v-if="project.project.projectOwner!==project.profile.uid" class="none-box"></div>
+    <span v-if="project.project.projectOwner===project.profile.uid && project.project.activation" @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
+    <div v-if="project.project.projectOwner!==project.profile.uid || !project.project.activation" class="none-box"></div>
     <p class="username">{{ user.member.nickname }}</p>
   </div>
 </template>
@@ -21,8 +21,10 @@ export default defineComponent({
       if (user.member.uid===project.profile.uid) {
         alert('호스트를 추방할 수 없습니다.')
       }else {
-        project.removeUser({pid:pjt.value.pid,uid:user.member.uid})
-        router.go({name:'DetailView'})
+        if(confirm('추방시키겠습니까?')){
+          project.removeUser({pid:pjt.value.pid,uid:user.member.uid})
+          router.go({name:'DetailView'})
+        }
       }
     }
     return {
