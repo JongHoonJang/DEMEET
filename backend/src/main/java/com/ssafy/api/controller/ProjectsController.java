@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.DTO.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.api.request.ProjectPatchPostReq;
@@ -83,7 +84,7 @@ public class ProjectsController {
             System.out.println(project.toString());
 
             // 이후 pid로 userprojects테이블에서 해당 pid를 가진 유저들을 모조리 가지고온다.
-            List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(pid);
+            List<userSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(pid);
 
             // 유저 세션Id 또한 추가해준다.
 
@@ -103,7 +104,7 @@ public class ProjectsController {
     }
 
 
-    @GetMapping("/activate/joind")
+    @GetMapping("/activate/joined")
     public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
@@ -111,7 +112,8 @@ public class ProjectsController {
         try {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
             for (int i = 0; i < projectList.size(); i++) {
-                List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(projectList.get(i).getPid());
+                //
+                List<UserSimpleInfoWithPrifileDTO> userList = usersProjectService.getUserSimpleInfoWithPrifileDTOListByPid(projectList.get(i).getPid());
                 projectList.get(i).setMember(userList);
             }
             return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
@@ -132,7 +134,7 @@ public class ProjectsController {
         try {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getActivateProjectsList(uid);
             for (int i = 0; i < projectList.size(); i++) {
-                List<userSimpleInfoDTO> userList = usersProjectService.getUserListByPid(projectList.get(i).getPid());
+                List<UserSimpleInfoWithPrifileDTO> userList = usersProjectService.getUserSimpleInfoWithPrifileDTOListByPid(projectList.get(i).getPid());
                 projectList.get(i).setMember(userList);
             }
             return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
