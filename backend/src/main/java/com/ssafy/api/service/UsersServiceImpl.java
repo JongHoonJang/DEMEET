@@ -134,6 +134,10 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public boolean deleteUser(String username) {
         log.info("유저 삭제");
+        // 호스트가 자기가만든 진행중인 프로젝트가 있을경우 그 프로젝트들 전부 비활성화시킨다.
+        // 오너아이디는 그 다음사람에게 넘긴다.
+        // 만약에 그 다음사람이 없으면, 그냥 프로젝트 삭제
+
         try {
             Long uid = usersRepositorySupport.findUserByEmail(username).get().getUid();
             // 여기서 사용자가 만든 프로젝트가 있는지 조회한다.
