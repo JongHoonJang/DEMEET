@@ -95,8 +95,8 @@ import messageForm from './chat/messageForm.vue'
 import messageList from './chat/messageList.vue'
 import { useRoute } from 'vue-router'
 // 튜토리얼 복붙
-import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import axios from 'axios'
+import { OpenVidu } from 'openvidu-browser'
 import { ref } from 'vue'
 //추가
 import api from "@/api/api"
@@ -121,6 +121,7 @@ components: {
 setup() {
 	const account = useAccountStore()
 	const route = useRoute()  
+
 	let OV = ref(undefined)
 	let session = ref(undefined)
 	let mainStreamManager= ref(undefined)
@@ -132,13 +133,14 @@ setup() {
 
 	const mySessionId = route.params.sessionId
 	// pinai 
-	const myUserName = account.profile.nickname + Math.floor(Math.random() * 100)
+	const myUserName = account.profile.nickname
 	const msgs = ref([])
 	const chatting = true
 	const fromId = ref("")
 	const myId = ref("")
 
 	// foooter 작동을 위한 변수
+	const micStatus = ref(100)
 	const audioStatus = ref(true)
 	const videoStatus = ref(true)
 	const userListStatus = ref(true)
@@ -146,38 +148,38 @@ setup() {
 	
 	const joinSession = () => {
 		// --- Get an OpenVidu object ---
-			OV.value = new OpenVidu();
+			OV.value = new OpenVidu()
 
 			// --- Init a session ---
-			session.value = OV.value.initSession();
+			session.value = OV.value.initSession()
 
 			// --- Specify the actions when events take place in the session ---
 			// On every new Stream received...
 			session.value.on('streamCreated', ({ stream }) => {
-				const subscriber = session.value.subscribe(stream);
-				subscribers.value.push(subscriber);
+				const subscriber = session.value.subscribe(stream)
+				subscribers.value.push(subscriber)
 				users.value.push(subscriber)
-			});
+			})
 
 			// On every Stream destroyed...
 			session.value.on('streamDestroyed', ({ stream }) => {
-				const index = subscribers.value.indexOf(stream.streamManager, 0);
+				const index = subscribers.value.indexOf(stream.streamManager, 0)
 				if (index >= 0) {
-					subscribers.value.splice(index, 1);
+					subscribers.value.splice(index, 1)
 				}
-			});
+			})
 
 			// On every asynchronous exception...
 			session.value.on('exception', ({ exception }) => {
-				console.warn(exception);
-			});
+				console.warn(exception)
+			})
 			// Receiver of the message (usually before calling 'session.connect')
 			session.value.on("signal:my-chat", event => {
-				fromId.value = event.from.connectionId;
-				const tmp = msgs.value.slice();
-				tmp.push(event.data);
-				msgs.value = tmp;
-			});
+				fromId.value = event.from.connectionId
+				const tmp = msgs.value.slice()
+				tmp.push(event.data)
+				msgs.value = tmp
+			})
 			// --- Connect to the session with a valid user token ---
 
 			// 'getToken' method is simulating what your server-side should do.
@@ -187,7 +189,7 @@ setup() {
 				session.value.connect(token, {'clientData':myUserName})
 				.then(() => {
 					
-					let publisher = OV.value.initPublisher(undefined, {
+					let ppublisher = OV.value.initPublisher(undefined, {
 						audioSource: undefined, // The source of audio. If undefined default microphone
 						videoSource: undefined, // The source of video. If undefined default webcam
 						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
@@ -196,41 +198,42 @@ setup() {
 						frameRate: 30,			// The frame rate of your video
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 						mirror: false       	// Whether to mirror your local video or not
-					});
+					})
 
-					mainStreamManager  = publisher;
-					publisher.value = publisher;
+					mainStreamManager  = ppublisher
+					publisher.value = ppublisher
 
 					// publish your stream
-					session.value.publish(publisher);
+					session.value.publish(publisher.value)
+					conferenceAction.value = true
 				})
 				.catch( error => {
 					console.log('There was an error connecting to the session:', error.code, error.message)
 				})
 			})
 			window.addEventListener('beforeunload', leaveSession)
-		};
+		}
 
 		const leaveSession = () => {
 			// --- Leave the session by calling 'disconnect' method over the Session object ---
 
-			if (session.value ) session.value.disconnect();
+			if (session.value ) session.value.disconnect()
 
-			session.value  = undefined;
-			mainStreamManager.value  = undefined;
-			publisher.value = undefined;
+			session.value  = undefined
+			mainStreamManager.value  = undefined
+			publisher.value = undefined
 			subscribers.value = []
-			OV.value = undefined;
+			OV.value = undefined
 			conferenceAction.value = false
 			secondPublisher.value = undefined
 
-			window.removeEventListener('beforeunload', leaveSession);
-		};
+			window.removeEventListener('beforeunload', leaveSession)
+		}
 
 		const updateMainVideoStreamManager = (stream) => {
-			if (mainStreamManager.value  === stream) return;
-			mainStreamManager.value  = stream;
-		};
+			if (mainStreamManager.value  === stream) return
+			mainStreamManager.value  = stream
+		}
 
 			/**
 			 * --------------------------
@@ -250,15 +253,13 @@ setup() {
 			'get-token',
 				{sessionName : mySessionId},
 				(response) => {
-					let token = response; // Get token from response
-					console.warn('Request of TOKEN gone WELL (TOKEN:' + token + ')');
-					callback(token); // Continue the join operation
+					let token = response // Get token from response
+					callback(token) // Continue the join operation
 				}
-			);
-		};
+			)
+		}
 
 	const httpPostRequest = (url, body, callback) => {
-			console.log(getToken)
 		axios({
 			'url': api.conferences.conference() + url,
 						'method': 'post',
@@ -268,14 +269,14 @@ setup() {
 				
 				})
 				.then(res => {
-						const token = res.data[0];
-						callback(token);
+						const token = res.data[0]
+						callback(token)
 				})
 				.catch(err => (
 						console.error(err.response),
 						alert('컨퍼런스 토큰 저장에 실패하였습니다.')
 				))
-	};
+	}
 
 	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-session
 	const createSession = (sessionId) => {
@@ -293,17 +294,17 @@ setup() {
 				.then(data => resolve(data.id))
 				.catch(error => {
 					if (error.response.status === 409) {
-						resolve(sessionId);
+						resolve(sessionId)
 					} else {
-						console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`);
+						// console.warn(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}`)
 						if (window.confirm(`No connection to OpenVidu Server. This may be a certificate error at ${OPENVIDU_SERVER_URL}\n\nClick OK to navigate and accept it. If no certificate warning is shown, then check that your OpenVidu Server is up and running at "${OPENVIDU_SERVER_URL}"`)) {
-							location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`);
+							location.assign(`${OPENVIDU_SERVER_URL}/accept-certificate`)
 						}
-						reject(error.response);
+						reject(error.response)
 					}
-				});
-		});
-	};
+				})
+		})
+	}
 
 	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
 	const createToken = (sessionId) => {
@@ -317,9 +318,9 @@ setup() {
 				})
 				.then(response => response.data)
 				.then(data => resolve(data.token))
-				.catch(error => reject(error.response));
-		});
-	};
+				.catch(error => reject(error.response))
+		})
+	}
 
 	const sendMsg =(msg) => {
 	// Sender of the message (after 'session.connect')
@@ -332,8 +333,8 @@ setup() {
 			.then(() => {
 			})
 			.catch(error => {
-				console.error(error);
-			});
+				console.error(error)
+			})
 	}
 
 	const audioOnOff = () => {
@@ -341,17 +342,32 @@ setup() {
 		audioStatus.value = !audioStatus.value
 	}
 
+	const videoOnOff = () => {
+		publisher.value.publishVideo(!videoStatus.value)
+		videoStatus.value = !videoStatus.value
+	}
+
+	const micOnOff = () => {
+		if (micStatus.value){
+			OV.value.setAdvancedConfiguration({
+				publisherSpeakingEventsOptions: {interval: 100,threshold: -50}
+
+			})
+		}else{
+			OV.value.setAdvancedConfiguration({
+				publisherSpeakingEventsOptions: {interval: 100,   threshold: -50 }
+			})
+		}
+		micStatus.value = !micStatus.value
+	}
+
 	const userListOnOff = () =>{
-	userListStatus.value = !userListStatus.value
+		userListStatus.value = !userListStatus.value
+
 	}
 
 	const chattingOnOff = () =>{
 		chattingStatus.value = !chattingStatus.value
-	}
-
-	const videoOnOff = () => {
-		publisher.value.publishVideo(!videoStatus.value)
-		videoStatus.value = !videoStatus.value;
 	}
 
 	const dumpMethod = () => {  // 작동 확인을 위한 함수
@@ -377,27 +393,23 @@ setup() {
 			newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
 				// 정지 누르면 다시 원상 복귀
 				session.value.unpublish(publisher.value).then(() => {
-					console.log('User pressed the "Stop sharing" button')  
 				mainStreamManager.value = secondPublisher.value
 				publisher.value = secondPublisher.value
 				}).then(()=> {
 					// publish your stream
 					session.value.publish(publisher.value).then(()=>{
 						secondPublisher.value = undefined
-						console.log('success')
 					})
 				})
 			})
 
 		// Unpublishing the old publisher
 		session.value.unpublish(publisher.value).then(() => {
-			console.log('Old publisher unpublished!')
 			// Assigning the new publisher to our global variable 'publisher'
 			mainStreamManager.value = newPublisher
 			publisher.value = newPublisher}).then(() => {
 				// Publishing the new publisher
 				session.value.publish(publisher.value).then(() => {
-					console.log('New publisher published!');
 				})
 			})
 		})
@@ -424,6 +436,7 @@ setup() {
 		videoStatus,
 		userListStatus,
 		chattingStatus,
+		micStatus,
 		// 기본 함수
 		dumpMethod,
 		joinSession,
@@ -441,6 +454,7 @@ setup() {
 		videoOnOff,
 		userListOnOff,
 		chattingOnOff,
+		micOnOff,
 		
 	}
 },
