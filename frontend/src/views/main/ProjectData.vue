@@ -10,13 +10,13 @@
     <div class="pjt-list">
       <p>PJT-Name</p>
       <span 
-      v-if="!isEditName && host.uid===account.profile.uid" 
+      v-if="!isEditName && host.uid===account.profile.uid && pjt.activation" 
       @click="isEditName=true" 
       class="material-symbols-outlined" 
       id="edit"
       >
       edit</span>
-      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
+      <div v-if="host.uid!==account.profile.uid || !pjt.activation" class="flex-box"></div>
       <div v-if="isEditName">  
         <span 
         class="material-symbols-outlined" 
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="box" v-if="!isEditName">
-      <p class="text-style">{{ demeet.project.pjtName }}</p>
+      <p class="text-style">{{ pjt.pjtName }}</p>
     </div>
     <div v-if="isEditName">
       <input class="name-input-box" v-model="projectData.name" id="edit-box" type="text" placeholder="Project1">
@@ -41,13 +41,13 @@
     <div class="pjt-list">
       <p>PJT-Detail</p>
       <span 
-      v-if="!isEditDetail&& host.uid===account.profile.uid" 
+      v-if="!isEditDetail&& host.uid===account.profile.uid && pjt.activation" 
       @click="isEditDetail=true" 
       class="material-symbols-outlined" 
       id="edit"
       >
       edit</span>
-      <div v-if="host.uid!==account.profile.uid" class="flex-box"></div>
+      <div v-if="host.uid!==account.profile.uid || !pjt.activation" class="flex-box"></div>
       <div v-if="isEditDetail">  
         <span 
         class="material-symbols-outlined" 
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div v-if="!isEditDetail" class="box">
-      <p class="text-style">{{ demeet.project.pjtDesc || 'pjt-detail' }}</p>
+      <p class="text-style">{{ pjt.pjtDesc || 'pjt-detail' }}</p>
     </div>
     <div v-if="isEditDetail">
       <textarea class="desc-input-box" v-model="projectData.desc" name="" id="" cols="30" rows="10"></textarea>
@@ -80,7 +80,7 @@
       <p>누적 미팅시간</p>
     </div>
     <div class="box">
-      <p class="text-style">{{ demeet.project.totalMeetTime }}</p>
+      <p class="text-style">{{ pjt.totalMeetTime }}</p>
     </div>
     <div class="pjt-list">
       <p>Member</p>
@@ -100,7 +100,7 @@
     </div>
     <div class="member-box">
       <UserIcon 
-      v-for="member in demeet.project.member"
+      v-for="member in pjt.member"
       :key="member.uid"
       :member="member"
       />
@@ -109,45 +109,43 @@
       <p>프로젝트 시작일</p>
     </div>
     <div class="box">
-      <p class="text-style">{{ demeet.project.pjtStartDate }}</p>
+      <p class="text-style">{{ pjt.pjtStartDate }}</p>
     </div>
     <div class="time" v-if="!pjt.activation">
       <p>프로젝트 종료일</p>
     </div>
     <div class="box" v-if="!pjt.activation">
-      <p class="text-style">{{ demeet.project.pjtEndDate }}</p>
+      <p class="text-style">{{ pjt.pjtEndDate }}</p>
     </div>
   </div>
   <div class="btn-box">
-    <button 
-    v-if="demeet.project.projectOwner === account.profile.uid && pjt.activation" 
-    class="blue-btn"
-    @click="goConference"
-    >
-    시작하기</button>
-    <button 
-    v-if="demeet.project.projectOwner === account.profile.uid && pjt.activation" 
-    class="red-btn"
-    @click="endProject"
-    >
-    종료하기</button>
-    <button 
-    v-if="demeet.project.projectOwner !== account.profile.uid && pjt.activation" 
-    class="blue-btn"
-    @click="goConference"
-    >
-    입장하기</button>
-    <button 
-    v-if="demeet.project.projectOwner !== account.profile.uid && pjt.activation" 
-    class="red-btn"
-    @click="leave"
-    >
-    팀나가기</button>
-    <button 
-    @click="back"
-    class="blue-btn"
-    >
-    뒤로가기</button>
+    <button @click="back" class="back-btn">뒤로가기</button>
+    <div >
+      <button 
+      v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
+      class="blue-btn"
+      @click="goConference"
+      >
+      시작하기</button>
+      <button 
+      v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
+      class="red-btn"
+      @click="endProject"
+      >
+      종료하기</button>
+      <button 
+      v-if="pjt.projectOwner !== account.profile.uid && pjt.activation" 
+      class="blue-btn"
+      @click="goConference"
+      >
+      입장하기</button>
+      <button 
+      v-if="pjt.projectOwner !== account.profile.uid && pjt.activation" 
+      class="red-btn"
+      @click="leave"
+      >
+      팀나가기</button>
+    </div>
   </div>
 </template>
 
@@ -177,22 +175,22 @@ export default defineComponent({
     const account = useAccountStore()
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
-    const project = await axios("http://localhost:8080/projects/" + 
+    await axios("http://localhost:8080/projects/" + 
+    // await axios("https://i7b309.p.ssafy.io/api/projects/" + 
     project_pk.value, {
       method: "get",
       headers: account.authHeader
     }).then(res => account.project = res.data.project)
-    const demeet = ref(account)
     const pjt = ref(account.project)
     const projectData = ref({
-      pid: demeet.value.project.pid,
-      name: demeet.value.project.pjtName,
-      desc: demeet.value.project.pjtDesc || 'pjt-detail',
+      pid: pjt.value.pid,
+      name: pjt.value.pjtName,
+      desc: pjt.value.pjtDesc || 'pjt-detail',
       deactivate: null
     })
     const host = ref(pjt.value.member.find(res => res.uid===pjt.value.projectOwner))
     const goConference = () => {
-      router.push({name:'ConferenceView', params: {sessionId: demeet.value.project.sessionId}})
+      router.push({name:'ConferenceView', params: {sessionId: pjt.value.sessionId}})
     }
     const endProject = () => {
       projectData.value.deactivate = true
@@ -201,7 +199,7 @@ export default defineComponent({
 
     const leave = () => {
       if (confirm('정말 팀을 떠나시겠습니까?')){
-        account.removeUser({pid:pjt.value.pid,uid:account.profile.uid})
+        account.removeUser({ pid:pjt.value.pid, uid:account.profile.uid })
         router.push({name:'MainView'})
       }
     }
@@ -213,8 +211,6 @@ export default defineComponent({
       }
     }
     return {
-      project,
-      demeet,
       host,
       pjt,
       account,
@@ -270,7 +266,19 @@ export default defineComponent({
   border-radius: 5px;
   color: white;
   font: bold;
-  margin: 8px;
+  margin-left: 210px;
+}
+.back-btn {
+  width: 92px;
+  height: 36px;
+  background: #333333;
+  border-radius: 5px;
+  color: white;
+  font: bold;
+  margin-left: 160px;
+}
+.back-btn:hover{
+  color: #2097F7;
 }
 
 .red-btn {
@@ -280,13 +288,14 @@ export default defineComponent({
   border-radius: 5px;
   color: white;
   font: bold;
-  margin: 8px;
+  margin-left: 16px;
 }
 
 .btn-box {
   margin-top: 30px;
   margin-right: 20px;
-  text-align: end;
+  display: flex;
+  justify-content: start;
 }
 
 .time {

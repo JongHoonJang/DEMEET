@@ -72,7 +72,11 @@ export default defineComponent({
     const searchList = ref([]) 
     const findData = () => {
       if (searchUser.value.length != 0){
-        searchList.value = userData.value.filter(user => user.nickname.includes(searchUser.value))
+        const result = account.userList.filter(user => user.nickname.includes(searchUser.value))
+        result.push(...account.userList.filter(user => user.email.includes(searchUser.value)))
+        const res = new Set(result)
+        const resData = [...res]
+        searchList.value = resData.slice(0,3)
       }
     }
     return {
@@ -123,7 +127,7 @@ export default defineComponent({
 .user-list {
   margin-top: 50px;
   width: 328px;
-  height: 234px;
+  height: 250px;
   background: #333333;
   display: flex;
   flex-direction: column;

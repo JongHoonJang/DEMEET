@@ -198,7 +198,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(res => {
-          this.projects = res.data.activateProjects
+          this.projects = res.data.activateProjects.reverse()
         })
         .catch(err => console.error(err.response))
     },
