@@ -26,24 +26,20 @@ export default {
 	},
 
 	setup(props){
-
-	const getConnectionData = () => {
-			const { connection } = props.streamManager.stream
-			return JSON.parse(connection.data.split('%')[0])
+		
+	async function getConnectionData() {
+		const { connection } = await props.streamManager.stream
+		return  JSON.parse(connection.data)
 		}
-	
+
 	const clientData = computed(() => {
 			const clientData  = getConnectionData()
 			return clientData
 	})
-
 		return {
 			clientData,
-			getConnectionData,
+			// getConnectionData,
 		}
 	}
-
-
-
 };
 </script>
