@@ -6,6 +6,9 @@ import ProfileView from '@/views/account/ProfileView'
 import LoginView from '@/views/account/LoginView'
 import SignupView from '@/views/account/SignupView'
 import GuestLogin from '@/views/account/GuestLogin'
+//코딩을 위한 import 추후 삭제
+import DrawingView from '@/views/conference/DrawingView'
+
 const routes = [
   {
     path: '/',
@@ -42,6 +45,12 @@ const routes = [
     name: 'SignupView',
     component: SignupView
   },
+  //코딩을 하기위해 생성 - 추후 삭제
+  {
+    path: '/drawing',
+    name: 'DrawingView',
+    component: DrawingView
+  },
 ]
 
 const router = createRouter({
@@ -55,6 +64,12 @@ router.beforeEach((to, from, next) => {
   if(to.name === 'LoginView') {
     if(token) {
       next({ name:'MainView' })
+    }
+  }
+  // 토근이 존재할때 회원가입화면으로 가려고하면 메인으로 이동
+  else if (to.name === 'SignupView') {
+    if(token) {
+      next({ name:'LoginView' })
     }
   }
   // 메인화면에서 토큰이 존재하지 않으면 로그인화면으로 이동
