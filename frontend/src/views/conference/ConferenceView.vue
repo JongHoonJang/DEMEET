@@ -44,7 +44,8 @@
         <ConferenceFooter
 				@audio-on-off="audioOnOff"  
 				@video-on-off="videoOnOff"
-				@share-screen="dumpMethod"
+				@mic-on-off="micOnOff"
+				@share-screen="startShareScreen"
 				@share-drawing="dumpMethod"
 				@session-exit="leaveSession"
 				@user-list-on-off="userListOnOff"
@@ -120,10 +121,11 @@ components: {
 setup() {
 	const account = useAccountStore()
 	const route = useRoute()  
-	let OV = undefined
+	let OV = ref(undefined)
 	let session = ref(undefined)
 	let mainStreamManager= ref(undefined)
 	let publisher = ref(undefined)
+	let secondPublisher = ref(undefined)
 	let subscribers = ref([])
 	let conferenceAction = ref(false)
 	let users = ref([])
@@ -144,10 +146,10 @@ setup() {
 	
 	const joinSession = () => {
 		// --- Get an OpenVidu object ---
-			OV = new OpenVidu();
+			OV.value = new OpenVidu();
 
 			// --- Init a session ---
-			session.value = OV.initSession();
+			session.value = OV.value.initSession();
 
 			// --- Specify the actions when events take place in the session ---
 			// On every new Stream received...
@@ -185,7 +187,7 @@ setup() {
 				session.value.connect(token, {'clientData':myUserName})
 				.then(() => {
 					
-					let publisher = OV.initPublisher(undefined, {
+					let publisher = OV.value.initPublisher(undefined, {
 						audioSource: undefined, // The source of audio. If undefined default microphone
 						videoSource: undefined, // The source of video. If undefined default webcam
 						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
@@ -217,9 +219,10 @@ setup() {
 			session.value  = undefined;
 			mainStreamManager.value  = undefined;
 			publisher.value = undefined;
-			subscribers.value = [];
-			OV = undefined;
+			subscribers.value = []
+			OV.value = undefined;
 			conferenceAction.value = false
+			secondPublisher.value = undefined
 
 			window.removeEventListener('beforeunload', leaveSession);
 		};
@@ -255,13 +258,14 @@ setup() {
 		};
 
 	const httpPostRequest = (url, body, callback) => {
-
+			console.log(getToken)
 		axios({
 			'url': api.conferences.conference() + url,
 						'method': 'post',
 						'data': JSON.stringify(body),
 		// 추후 연결 필요
 		headers: account.authHeader
+				
 				})
 				.then(res => {
 						const token = res.data[0];
@@ -354,6 +358,51 @@ setup() {
 		// alert('dumpMethod 작동 확인')
 	}
 
+
+	// share screen 화면 공유 uservideo, users 전부 다 비동기 처리
+	const startShareScreen = () => {
+		secondPublisher.value = publisher.value
+		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
+		{ 
+			videoSource: "screen", 
+			resolution: "1280x720",
+			insertMode: "APPEND",
+			publishAudio: true,
+			publishVideo: true,
+			frameRate: 30,
+			mirror: false
+		})
+
+		newPublisher.once('accessAllowed', () => {
+			newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+				// 정지 누르면 다시 원상 복귀
+				session.value.unpublish(publisher.value).then(() => {
+					console.log('User pressed the "Stop sharing" button')  
+				mainStreamManager.value = secondPublisher.value
+				publisher.value = secondPublisher.value
+				}).then(()=> {
+					// publish your stream
+					session.value.publish(publisher.value).then(()=>{
+						secondPublisher.value = undefined
+						console.log('success')
+					})
+				})
+			})
+
+		// Unpublishing the old publisher
+		session.value.unpublish(publisher.value).then(() => {
+			console.log('Old publisher unpublished!')
+			// Assigning the new publisher to our global variable 'publisher'
+			mainStreamManager.value = newPublisher
+			publisher.value = newPublisher}).then(() => {
+				// Publishing the new publisher
+				session.value.publish(publisher.value).then(() => {
+					console.log('New publisher published!');
+				})
+			})
+		})
+	}
+
 	return {
 		OV,
 		session,
@@ -364,6 +413,7 @@ setup() {
 		myUserName,
 		conferenceAction,
 		users,
+		secondPublisher,
 		// 채팅 변수
 		msgs,
 		chatting,
@@ -380,6 +430,7 @@ setup() {
 		leaveSession,
 		updateMainVideoStreamManager,
 		getToken,
+		startShareScreen,
 		// httpPostRequest,
 		createSession,
 		createToken,
@@ -389,7 +440,8 @@ setup() {
 		audioOnOff,
 		videoOnOff,
 		userListOnOff,
-		chattingOnOff
+		chattingOnOff,
+		
 	}
 },
 
