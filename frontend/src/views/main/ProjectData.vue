@@ -1,6 +1,7 @@
 <template>
   <div class="host-box">
-    <span class="material-symbols-outlined" id="person">person</span>
+    <img class="host-img" v-if="host.profileImagePath!==null" :src="`${host.profileImagePath}`" alt="">
+    <img class="host-img" v-else src="@/assets/기본프로필.jpg" alt="">
     <div class="host-data">
       <h3>{{ host.nickname }}</h3>
       <p>{{ host.email }}</p>
@@ -234,16 +235,17 @@ export default defineComponent({
   align-items: flex-start;
   text-align: start;
 }
+.host-img {
+  height: 80px;
+  width: 80px;
+  margin: 6px;
+  border-radius: 50%;
+}
 .flex-box {
   width: 16px;
   height: 16px;
 }
-#person {
-  font-size: 60px;
-  margin-left: 16px;
-  margin-top: 16px;
-  margin-right: 200px;
-}
+
 #add {
   margin-top: 16px;
   color: #9E9E9E;
@@ -370,5 +372,9 @@ export default defineComponent({
 #close:hover {
   color: red;
   transform: scale(1.4);
+}
+
+.host-data{
+  margin-left: 200px;
 }
 </style>
