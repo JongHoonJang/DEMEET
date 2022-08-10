@@ -50,10 +50,9 @@ export default {
 		},
 	},
 
-	setup(props){
+	setup(){
 		const mySessionId = 'SessionA'
-		const myUserName = 'Participant' + Math.floor(Math.random() * 100)
-		console.log(props.publisher)
+		const myUserName = 'Participant'
 
 	return {
 		mySessionId,
