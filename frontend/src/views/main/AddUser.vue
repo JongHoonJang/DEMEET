@@ -16,7 +16,8 @@
         >
           <div class="user-box" v-if="user.uid !== account.profile.uid">
             <div class="user-data">
-              <img class="user-img" src="@/assets/profile.jpg" alt="">
+              <img class="user-img" v-if="user.profileImagePath===null" src="@/assets/기본프로필.jpg" alt="">
+              <img class="user-img" v-else-if="user.profileImagePath!==null" :src="`${user.profileImagePath}`" alt="">
               <div>
                 <div class="text-type">{{ user.nickname }}</div>
                 <div class="text-type">{{ user.email }}</div>

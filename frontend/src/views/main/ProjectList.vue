@@ -18,7 +18,8 @@
       <div class="on">ON</div>
     </div>
     <div class="host-box">
-      <span class="material-symbols-outlined" id="person">person</span>
+      <img class="host-img" v-if="host.profileImagePath!==null" :src="`${host.profileImagePath}`" alt="">
+      <img class="host-img" v-else src="@/assets/기본프로필.jpg" alt="">
       <div class="host-data">
         <p>{{ host.nickname }}</p>
         <p>{{ host.email }}</p>
@@ -43,7 +44,8 @@ export default defineComponent({
       host,
       member,
       pid,
-      account
+      account,
+      
     }
   }
 
@@ -65,13 +67,6 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 
-#person {
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
-  font-size: 52px;
-}
-
 #cancel{
   font-size: 24px;
   margin-right: 20px;
@@ -81,7 +76,6 @@ export default defineComponent({
   font-size: 24px;
   margin-right: 20px;
 }
-
 .project-box {
   margin-bottom: 50px;
   margin-left: 25px;
@@ -135,6 +129,13 @@ export default defineComponent({
   margin-left: 28px;
 }
 
+.host-img {
+  height: 80px;
+  width: 80px;
+  margin: 6px;
+  border-radius: 50%;
+}
+
 .box {
   margin-top: 20px;
   margin-left: 50px;
@@ -152,5 +153,6 @@ export default defineComponent({
 
 .host-data {
   text-align: start;
+  margin-left: 10px;
 }
 </style>

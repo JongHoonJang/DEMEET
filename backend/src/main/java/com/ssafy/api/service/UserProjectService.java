@@ -1,7 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
-import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
@@ -17,9 +16,9 @@ import java.util.List;
 public interface UserProjectService {
 
 
-    List<userSimpleInfoDTO> getUserSimpleInfoDTOListByPid(Long pid) throws UidNullException;
+    List<UserSimpleInfoDTO> getUserSimpleInfoDTOListByPid(Long pid) throws UidNullException;
 
-    List<UserSimpleInfoWithPrifileDTO> getUserSimpleInfoWithPrifileDTOListByPid(Long pid) throws UidNullException;
+//    List<UserSimpleInfoDTO> getUserSimpleInfoWithPrifileDTOListByPid(Long pid) throws UidNullException;
 
     UserProject addUserInProject(AddDelUserInProjectPostReq addDelUserInProjectPostReq, Projects project, Users user);
 

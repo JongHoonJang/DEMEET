@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(of = {"pipid","path"})
 public class ProfileImagePath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

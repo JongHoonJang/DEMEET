@@ -1,6 +1,7 @@
 package com.ssafy.common.auth;
 
 import com.ssafy.api.service.UsersService;
+import com.ssafy.common.customException.UserNullException;
 import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +19,14 @@ public class SsafyUserDetailService implements UserDetailsService{
 	UsersService usersService;
 	
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    		Users user = usersService.getUsersByUserEmail(email);
-    		if(user != null) {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException  {
+		Users user = null;
+		try {
+			user = usersService.getUsersByUserEmail(email);
+		} catch (UserNullException e) {
+			throw new RuntimeException(e);
+		}
+		if(user != null) {
     			SsafyUsersDetails userDetails = new SsafyUsersDetails(user);
     			return userDetails;
     		}
