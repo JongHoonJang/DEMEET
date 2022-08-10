@@ -57,21 +57,25 @@ export default {
 
 <style scoped>
 .my-btn {
-  height: 60px;
+  width:60px;
+  height: 64px;
+  padding:0px;
+
 }
 .input-text {
-    height: 60px;
+  height: 60px;
+  padding:0;
+  justify-content: stretch;
+  align-items: stretch;
 
-    flex: 1;
-    display: flex;
-    justify-content: stretch;
-    align-items: stretch;
 }
-.inputTextArea {
-
+#inputTextArea {
+  display: flex;
   position : relative;
-  transform : translateY(-100%);
-  justify-content: space-between;
+  height: 60px;
+  justify-content: stretch;
+  align-items: stretch;
 
 }
 </style>
+

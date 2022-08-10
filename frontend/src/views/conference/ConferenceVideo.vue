@@ -63,10 +63,5 @@ export default {
 </script>
 
 <style scoped>
-div.dump {
-  background-color: 0D131E;
-  width: 100vh;
-  height: 100vh;
-}
 
 </style>

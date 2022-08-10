@@ -66,7 +66,7 @@ export default {
   padding-right: 5px;
 }
 #chat {
-  background-color: rgb(255, 255, 255);
+
   margin: 5px;
   padding: 5px;
   border-radius: 15px;
@@ -75,7 +75,7 @@ export default {
   display: inline-block;
 }
 #mychat {
-  background-color: rgb(243, 227, 3);
+
   margin: 5px;
   padding: 5px;
   border-radius: 15px;
@@ -84,10 +84,12 @@ export default {
   display: inline-block;
 }
 #mychatbox {
-  text-align: right;
+  float: right;
 }
 #chatbox {
-  background-color: rgb(243, 227, 3);
+  background-color: #b4b4b4;
+  width: fit-content;
   text-align: left;
 }
 </style>
+

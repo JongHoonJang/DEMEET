@@ -58,7 +58,8 @@ export default {
 </script>
 
 <style scoped>
-div #sideBar {
+
+#sideBar {
   float: right;
 }
 
@@ -75,3 +76,4 @@ button.leave-meeting{
 }
 
 </style>
+
