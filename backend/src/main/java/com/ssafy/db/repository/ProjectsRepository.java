@@ -13,4 +13,6 @@ public interface ProjectsRepository extends JpaRepository<Projects, Long> {
     Optional<List<Projects>> findProjectsByOwnerIdAndActivation(Long ownerId, boolean activate);
 
     Optional<Projects> findProjectsByPidAndOwnerIdAndActivationIsTrue(Long pid, Long ownerId);
+
+    Optional<Projects> findProjectsBySessionId(String sessionId);
 }

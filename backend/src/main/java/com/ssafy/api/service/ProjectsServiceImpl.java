@@ -38,6 +38,8 @@ public class ProjectsServiceImpl implements ProjectsService {
     ProjectsRepositorySupport projectRepositorySupport;
 
 
+
+
     public ProjectSimpleInfoDTO makeProjectSimpleInfoDTO(Projects project) {
         ProjectSimpleInfoDTO simpleInfoDTO = new ProjectSimpleInfoDTO();
         simpleInfoDTO.setPid(project.getPid());
@@ -182,6 +184,13 @@ public class ProjectsServiceImpl implements ProjectsService {
         project.setPjtEndDate(localDateTime);
         projectRepository.save(project);
         return projectRepository.save(project);
+    }
+
+    @Override
+    public Projects getProjectBySessionId(String sessionId) throws ProjectNullException {
+        Projects project = projectRepository.findProjectsBySessionId(sessionId).orElseThrow(() -> new ProjectNullException("ProjectNullException"));
+
+        return project;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.ssafy.DTO.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
 import com.ssafy.DTO.userSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
+import com.ssafy.api.request.DrawingUploadReq;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.response.ProjectInfoRes;
@@ -203,5 +204,11 @@ public class ProjectsController {
             throw new RuntimeException(e);
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
+
+    // 드로잉 이미지 업로드
+    @PostMapping("/drawing")
+    public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @RequestBody DrawingUploadReq drawingUploadReq){
+        return null;
     }
 }
