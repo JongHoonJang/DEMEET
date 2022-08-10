@@ -1,20 +1,26 @@
 <template>
-  <canvas width="600" height="600" id="canvas" style="border: 1px solid #ccc"></canvas>
-  <button id="clear-canvas">clear</button>
-  <button id="drawing-mode">Enter drawing mode</button>
-  <label for="drawing-line-width">굵기: </label>
-  <span class="info">1</span>
-  <input type="range" value="1" min="1" max="20" id="drawing-line-width">
-  <label for="drawing-color">색깔: </label>
-  <input type="color" value="#000000" id="drawing-color">
-  <input type="text" id="circle-text">
-  <button id="circle"><span class="material-symbols-outlined">circle</span></button>
-  <button id="rect"><span class="material-symbols-outlined">check_box_outline_blank</span></button>
-  <button id="triangle"><span class="material-symbols-outlined">change_history</span></button>
-  <button id="itext">text</button>
-  <button id="delete"><span class="material-symbols-outlined">delete</span></button>
-  <button id="line">선그리기</button>
-  <button id="look"><span class="material-symbols-outlined">save</span></button>
+  <canvas width="640" height="480" id="canvas" style="border: 1px solid #ccc"></canvas>
+  <div class="item-box">
+    <div class="drawing-box">
+      <button id="clear-canvas">clear</button>
+      <button id="drawing-mode">Enter drawing mode</button>
+      <label for="drawing-line-width">굵기: </label>
+      <span class="info">1</span>
+      <input type="range" value="1" min="1" max="20" id="drawing-line-width">
+      <label for="drawing-color">색깔: </label>
+      <input type="color" value="#000000" id="drawing-color">
+    </div>
+    <div id="drawing-mode-options">
+      <input type="text" id="circle-text">
+      <button id="circle"><span class="material-symbols-outlined">circle</span></button>
+      <button id="rect"><span class="material-symbols-outlined">check_box_outline_blank</span></button>
+      <button id="triangle"><span class="material-symbols-outlined">change_history</span></button>
+      <button id="itext">text</button>
+      <button id="delete"><span class="material-symbols-outlined">delete</span></button>
+      <button id="line">선그리기</button>
+      <button id="look"><span class="material-symbols-outlined">save</span></button>
+    </div>
+  </div>
 
 </template>
 
@@ -31,14 +37,14 @@ export default {
       let $ = function(id){return document.getElementById(id)}
       // 캔버스 생성
       let canvas = new fabric.Canvas('canvas',{
-        backgroundColor: 'rgb(255,255,255)'
+        backgroundColor: 'rgb(250,250,250)'
       })
       fabric.Object.prototype.transparentCorners = true
 
       // 드로잉모드 on/off element
       const drawingModeEl = $('drawing-mode'),
             // 도구상자 숨김/보이기 => 추후에 적용
-            // drawingOptionsEl = $('drawing-mode-options'),
+            drawingOptionsEl = $('drawing-mode-options'),
             // 펜 색상 설정 element
             drawingColorEl = $('drawing-color'),
             // 펠 굵기 설정 element
@@ -63,17 +69,20 @@ export default {
             lookImage = $('look')
 
       // 캔버스 초기화
-      clearEl.onclick = function() { canvas.clear() }
+      clearEl.onclick = function() { 
+        canvas.clear() 
+        canvas.backgroundColor = 'rgb(250,250,250)'
+      }
       // 클릭할때마다 드로잉모드 true/false
       drawingModeEl.onclick = function() {
         canvas.isDrawingMode = !canvas.isDrawingMode
         if (canvas.isDrawingMode) {
           drawingModeEl.innerText = 'Cancel drawing mode'
-          //drawingOptionsEl.style.display = ''
+          drawingOptionsEl.style.display = 'none'
         }
         else {
           drawingModeEl.innerText = 'Enter drawing mode'
-          //drawingOptionsEl.style.display = 'none'
+          drawingOptionsEl.style.display = ''
         }
       }
       // 펜 굵기 설정
@@ -244,8 +253,22 @@ export default {
 
 </script>
 <style>
+
 #imageview svg{
   width: 300px;
   height: auto;
+}
+.item-box {
+  margin: 8px;
+  display: flex;
+  flex-direction : column;
+}
+.drawing-box{
+  display: flex;
+  justify-content: start;
+}
+#drawing-mode-options {
+  display: flex;
+  justify-content: start;
 }
 </style>

@@ -80,7 +80,11 @@ export default defineComponent({
     }
     const findData = (inputData) => {
       if (inputData.length != 0){
-        searchList.value = account.userList.filter(user => user.nickname.includes(inputData))
+        const result = account.userList.filter(user => user.nickname.includes(inputData))
+        result.push(...account.userList.filter(user => user.email.includes(inputData)))
+        const res = new Set(result)
+        const resData = [...res]
+        searchList.value = resData.slice(0,3)
       }
     }
     
@@ -106,7 +110,7 @@ export default defineComponent({
 .user-list {
   margin-top: 50px;
   width: 328px;
-  height: 234px;
+  height: 250px;
   background: #333333;
   display: flex;
   flex-direction: column;
