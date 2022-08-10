@@ -1,10 +1,13 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.service.ProjectsService;
 import com.ssafy.common.auth.SsafyUsersDetails;
+import com.ssafy.common.customException.ProjectNullException;
 import io.openvidu.java.client.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,10 @@ public class ConferenceController {
     // OpenVidu 서버와 통신하는 비밀들
     private String SECRET;
 
+    // 프로젝트 유무를 확인하기 위한 서비스
+    @Autowired
+    ProjectsService projectsService;
+
     public ConferenceController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
@@ -43,14 +50,21 @@ public class ConferenceController {
 
     @RequestMapping(value = "/get-token", method = RequestMethod.POST)
     public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam) throws ParseException {
-        // 로그인 유저 검증 -> 우리에 맞게 변경 필요할듯
-
         System.out.println("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
 
         JSONObject sessionJSON = (JSONObject) new JSONParser().parse(sessionsNameParam);
 
         // 연결할 비디오 콜
         String sessionName = (String) sessionJSON.get("sessionName");
+
+        // 프로젝트 목록에서 SessionName과 같은 값이 있는지 확인
+        try{
+            projectsService.getProjectBySessionId(sessionName);
+        }catch (ProjectNullException e){
+            e.getMessage();
+            e.printStackTrace();
+            return getErrorResponse(e);
+        }
 
         // 이 유저의 역할
         //OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;

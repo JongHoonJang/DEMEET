@@ -204,7 +204,7 @@ public class ProjectsController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    //image 파악
+    // 드로잉 이미지 업로드
     @PostMapping("/drawing")
     public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @RequestBody DrawingUploadReq drawingUploadReq){
         return null;
