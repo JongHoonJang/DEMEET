@@ -174,7 +174,7 @@ h3 {
   border: solid;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: start;
   flex-wrap: wrap;
 }
 

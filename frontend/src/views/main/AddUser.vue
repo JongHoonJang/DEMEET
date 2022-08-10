@@ -68,7 +68,6 @@ export default defineComponent({
       payload.value.uid = addUser.uid
       if (payload.value.uid !== -1){
         account.addUser(payload.value)
-        router.go({name: 'DetailView'})
       }
     }
     const remove = (addUser) => {

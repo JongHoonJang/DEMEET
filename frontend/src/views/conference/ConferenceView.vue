@@ -397,35 +397,44 @@ setup() {
 </script>
 
 <style scoped>
-main{
+main {
+	height: auto;
+}
+#conference-main{
   display: flex;
   margin: 0;
-  height: 100vh;
+  width: 100%;
+	justify-content: space-between;
 
-}
-
-section {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  background-color: rgb(13, 19, 30);
-}
-
-article {
-  height: 90%;
 }
 
 footer {
   background-color: rgb(21, 29, 42);
-  height: 10%;
+
+	position: fixed;
+
+	bottom: 0px;
+	width: 100%;
 }
 
-  aside{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 20%;
-    background-color: #fff;
-  }
+.chat-box {
+  height: fit-content;
+}
 
+.users-box {
+	height: fit-content;
+}
+
+#session {
+	height: 100%;
+}
+
+.dump{
+	display: flex;
+	justify-content:flex-start;
+	background-color: 0D131E;
+  width: auto;
+  height: auto;
+  overflow: auto;
+}
 </style>
