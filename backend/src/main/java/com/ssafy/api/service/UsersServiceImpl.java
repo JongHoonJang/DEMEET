@@ -106,7 +106,7 @@ public class UsersServiceImpl implements UsersService {
             usersSimpleInfoDTO.setUid(user.getUid());
             usersSimpleInfoDTO.setEmail(user.getEmail());
             usersSimpleInfoDTO.setNickname(user.getNickname());
-            usersSimpleInfoDTO.setProfileImagePath(user.getProfileImagePath().getPath() + "");
+            usersSimpleInfoDTO.setProfileImagePath(user.getProfileImagePath().getPath());
             userDTOList.add(usersSimpleInfoDTO);
         }
         return userDTOList;

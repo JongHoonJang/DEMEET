@@ -22,11 +22,7 @@ public class UserSimpleInfoDTO {
         this.uid = uid;
         this.email = email;
         this.nickname = nickname;
-        if (profileImagePath.equals("null")) {
-            this.profileImagePath = null;
-        } else {
-            this.profileImagePath = profileImagePath;
-        }
+        this.profileImagePath = profileImagePath;
     }
 
     public UserSimpleInfoDTO(NumberPath<Long> uid, StringPath email, StringPath nickname, StringPath path) {
