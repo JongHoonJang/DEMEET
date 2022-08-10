@@ -1,7 +1,6 @@
 package com.ssafy.api.response;
 
-import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
-import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,9 +11,9 @@ import java.util.List;
 @Setter
 public class UserListRes extends BaseResponseBody {
 
-    List<UserSimpleInfoWithPrifileDTO> userList;
+    List<UserSimpleInfoDTO> userList;
 
-    public static UserListRes of(Integer statusCode, String message, List<UserSimpleInfoWithPrifileDTO> userList) {
+    public static UserListRes of(Integer statusCode, String message, List<UserSimpleInfoDTO> userList) {
         UserListRes res = new UserListRes();
         res.setStatusCode(statusCode);
         res.setMessage(message);

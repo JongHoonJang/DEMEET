@@ -1,8 +1,10 @@
 package com.ssafy.api.request.openvidu;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class OVAllInOneReq {
     String sessionId = null;
     String uniqueSessionId = null;

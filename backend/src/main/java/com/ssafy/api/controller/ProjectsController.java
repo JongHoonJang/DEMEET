@@ -1,8 +1,7 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.DTO.ProjectSimpleInfoDTO;
-import com.ssafy.DTO.UserSimpleInfoWithPrifileDTO;
-import com.ssafy.DTO.userSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
+import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.api.request.DrawingUploadReq;
 import com.ssafy.api.request.ProjectPatchPostReq;
@@ -13,9 +12,9 @@ import com.ssafy.api.service.ProjectsService;
 import com.ssafy.api.service.UserProjectService;
 import com.ssafy.api.service.UsersService;
 import com.ssafy.common.auth.SsafyUsersDetails;
-import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
+import com.ssafy.common.customException.UserNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
@@ -26,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-import java.util.Map;
+
+import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
 /**
  * Demmet에 사용되는 프로젝트 관리 컨트롤러
@@ -47,59 +47,52 @@ public class ProjectsController {
     @PostMapping()
     public ResponseEntity<BaseResponseBody> createProject(@ApiIgnore Authentication authentication, @RequestBody ProjectsCreatePostReq projectsCreatePostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-        //프로젝트 생성에 필요한 정보들은 다음과같다.
-        //owner_id(토큰을 통해 얻어낸다.)
-//        Users user = usersService.getUsersByUserEmail(ssafyUsersDetails.getUsername());
-//        projectsCreatePostReq.setOwner_id(user.getUid());
-        projectsCreatePostReq.setOwner_id(ssafyUsersDetails.getUserUid());
-        Long pid = null;
+        log.info("프로젝트 생성");
         try {
-            pid = projectsService.createProject(projectsCreatePostReq);
+            projectsCreatePostReq.setOwner_id(ssafyUsersDetails.getUserUid());
+            Projects savedProject = projectsService.createProject(projectsCreatePostReq);
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to make project"));
         } catch (UidNullException e) {
+            log.error("프로젝트 생성중 맞지않는 uid발견.");
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         }
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to make project"));
     }
 
-    @PatchMapping("/deactivate")
-    public ResponseEntity<BaseResponseBody> deactivateProject(Authentication authentication, @RequestBody Map<String, Integer> request) {
-        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-        int pid = request.get("pid").intValue();
-        System.out.println(pid + "");
-        try {
-            Projects project = projectsService.deactivateProject(pid, ssafyUsersDetails.getUserUid());
-        } catch (ProjectNullException | NoAuthorizedException e) {
-            return ResponseEntity.status(422).body(BaseResponseBody.of(200, e.getMessage()));
-        }
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to deactivate " + pid + " project"));
-    }
+//    @PatchMapping("/deactivate")
+//    public ResponseEntity<BaseResponseBody> deactivateProject(Authentication authentication, @RequestBody Map<String, Integer> request) {
+//        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+//        log.info("프로젝트 비활성화");
+//        long pid = request.get("pid");
+//        try {
+//            Projects project = projectsService.deactivateProject(pid, ssafyUsersDetails.getUserUid());
+//        } catch (ProjectNullException | NoAuthorizedException e) {
+//            return ResponseEntity.status(422).body(BaseResponseBody.of(200, e.getMessage()));
+//        }
+//        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to deactivate " + pid + " project"));
+//    }
 
     @GetMapping("/{pid}")
     public ResponseEntity<BaseResponseBody> getProject(Authentication authentication, @PathVariable Long pid) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-        System.out.println("ProjectsController.getProject");
-        System.out.println("pid = " + pid);
         try {
-            // 우선 프로젝트를 먼저 가지고온다.
+            log.info("pid를 기반으로 특정 프로젝트 상세조회");
+            log.debug("pid = {}", pid);
+
+            log.info("pid를 기반으로 프로젝트 조회");
             Projects project = projectsService.getProject(pid);
-            System.out.println(project.toString());
+            log.debug("프로젝트 = {}", project.toString());
 
-            // 이후 pid로 userprojects테이블에서 해당 pid를 가진 유저들을 모조리 가지고온다.
-            List<userSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(pid);
+            log.info("userprojects테이블에서 pid를 가진 유저들을 모조리 가지고온다.");
+            List<UserSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(pid);
+            log.debug("userList = {}", userList.toString());
 
-            // 유저 세션Id 또한 추가해준다.
-
-            // 이제 이 모든걸 하나로 합쳐준다.
-            System.out.println("하나로 합쳐준다~");
+            log.info("모든 값을 받았으니 리턴해준다.");
             return ResponseEntity.status(200).body(ProjectInfoRes.of(200, "success to find project details", project, project.getOwnerId(), userList));
-
         } catch (ProjectNullException e) {
-            // pid로 프로젝트를 찾지 못한다면
+            log.error("pid로 프로젝트를 찾지 못함");
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
-
         } catch (UidNullException e) {
-            // db가 꼬일경우만 발생할듯함
-            // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
+            log.error("pid를 기반으로 userProject테이블에서 user를 찾지 못함");
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         }
     }
@@ -114,7 +107,7 @@ public class ProjectsController {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
             for (int i = 0; i < projectList.size(); i++) {
                 //
-                List<UserSimpleInfoWithPrifileDTO> userList = usersProjectService.getUserSimpleInfoWithPrifileDTOListByPid(projectList.get(i).getPid());
+                List<UserSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(projectList.get(i).getPid());
                 projectList.get(i).setMember(userList);
             }
             return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
@@ -135,7 +128,7 @@ public class ProjectsController {
         try {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getActivateProjectsList(uid);
             for (int i = 0; i < projectList.size(); i++) {
-                List<UserSimpleInfoWithPrifileDTO> userList = usersProjectService.getUserSimpleInfoWithPrifileDTOListByPid(projectList.get(i).getPid());
+                List<UserSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(projectList.get(i).getPid());
                 projectList.get(i).setMember(userList);
             }
             return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
@@ -187,6 +180,8 @@ public class ProjectsController {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         } catch (UidNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        } catch (UserNullException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -202,13 +197,15 @@ public class ProjectsController {
             throw new RuntimeException(e);
         } catch (UidNullException e) {
             throw new RuntimeException(e);
+        } catch (UserNullException e) {
+            throw new RuntimeException(e);
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
     // 드로잉 이미지 업로드
     @PostMapping("/drawing")
-    public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @RequestBody DrawingUploadReq drawingUploadReq){
+    public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @RequestBody DrawingUploadReq drawingUploadReq) {
         return null;
     }
 }
