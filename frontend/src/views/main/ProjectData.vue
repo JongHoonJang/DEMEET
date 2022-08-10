@@ -199,8 +199,8 @@ export default defineComponent({
 
     const leave = () => {
       if (confirm('정말 팀을 떠나시겠습니까?')){
-        account.removeUser({ pid:pjt.value.pid, uid:account.profile.uid })
         router.push({name:'MainView'})
+        account.removeUser({ pid:pjt.value.pid, uid:account.profile.uid })
       }
     }
     const back = () => {
@@ -262,7 +262,7 @@ export default defineComponent({
 .blue-btn {
   width: 92px;
   height: 36px;
-  background: blue;
+  background: #2097F7;
   border-radius: 5px;
   color: white;
   font: bold;
@@ -278,7 +278,7 @@ export default defineComponent({
   margin-left: 160px;
 }
 .back-btn:hover{
-  color: #2097F7;
+  background: #2097F7;
 }
 
 .red-btn {

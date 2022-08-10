@@ -226,8 +226,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          alert('팀으로 초대했습니다..')
-
+          router.go({name: 'DetailView'})
         })
         .catch(err => console.error(err.response))
     },
@@ -240,7 +239,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          alert('팀에서 제외시켰습니다.')
+          router.go({name:'MainView'})
         })
         .catch(err => console.error(err.response))
     },
