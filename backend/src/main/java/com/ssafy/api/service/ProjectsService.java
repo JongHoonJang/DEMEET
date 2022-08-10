@@ -10,6 +10,7 @@ import com.ssafy.common.customException.UidNullException;
 import com.ssafy.db.entity.Projects;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Projects 관련 빈즈니스 로직 처리를 위한 서비스 인터페이스 정의
@@ -23,6 +24,8 @@ public interface ProjectsService {
 
     List<ProjectSimpleInfoDTO> getActivateProjectsList(Long uid) throws ProjectNullException;
 
+    Optional<Projects> getProjectBySessionId(String sessionId) throws ProjectNullException;
+
     Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException;
 
     List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
@@ -30,8 +33,6 @@ public interface ProjectsService {
     List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException, UidNullException;
 
     Projects deactivateProject(long pid, Long userUid) throws ProjectNullException, NoAuthorizedException;
-
-    Projects getProjectBySessionId(String sessionId) throws ProjectNullException;
 
     List<Projects> getDeactivatedProjectsByUid(Long uid) throws ProjectNullException;
 
