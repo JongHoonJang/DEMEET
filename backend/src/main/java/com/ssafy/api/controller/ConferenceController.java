@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.service.ProjectsService;
 import com.ssafy.common.auth.SsafyUsersDetails;
 import com.ssafy.common.customException.ProjectNullException;
+import com.ssafy.db.entity.Projects;
 import io.openvidu.java.client.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +21,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
 @RestController
 @RequestMapping("api-sessions")
@@ -57,13 +60,14 @@ public class ConferenceController {
         String sessionName = (String) sessionJSON.get("sessionName");
         // 전체 프로젝트들리스트를 가져와서 그 안에 sessionName이 위 sessionName과 같지 않으면 토큰생성해주는걸 막아야할듯하다.
         // 프로젝트 목록에서 SessionName과 같은 값이 있는지 확인
-        try{
-            projectsService.getProjectBySessionId(sessionName);
-        }catch (ProjectNullException e){
-            e.getMessage();
-            e.printStackTrace();
-            return getErrorResponse(e);
+        try {
+            Projects project =  projectsService.getProjectBySessionId(sessionName).get();
+        } catch (ProjectNullException e) {
+            log.error("Project " + sessionName + "을 가지는 프로젝트를 찾을수없음");
+            return ResponseEntity.status(400).body(sessionJSON);
         }
+
+
 
         // 이 유저의 역할
         //OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;

@@ -231,10 +231,11 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
-    public Projects getProjectBySessionId(String sessionId) throws ProjectNullException {
+    public Optional<Projects> getProjectBySessionId(String sessionId) throws ProjectNullException {
         log.info("세션아이디를 기반으로 프로젝트 조회");
-        Projects project = projectRepository.findProjectsBySessionId(sessionId).orElseThrow(() -> new ProjectNullException("ProjectNullException"));
+        Optional<Projects> project = projectRepository.findProjectsBySessionId(sessionId);
         log.debug("project = {}", project.toString());
+        if (project == null) return Optional.empty();
         return project;
     }
 
