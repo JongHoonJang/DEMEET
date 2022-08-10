@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface UsersService {
 
-    boolean deleteUser(String username);
+    boolean deleteUser(Long uid);
 
     Users createUser(UsersRegisterPostReq usersRegisterInfo);
 
