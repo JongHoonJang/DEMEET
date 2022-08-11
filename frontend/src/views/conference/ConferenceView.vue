@@ -2,18 +2,15 @@
 
 <template>
 		<div id="join" v-if="!conferenceAction">
-			<div id="img-div"> <img class='bg-image' src="@/assets/DEMEET_logo.png" alt=""></div>
+			<a href="/">
+				<div id="img-div"> <img class='bg-image' src="@/assets/DEMEET_logo.png" alt="" ></div>
+			</a>
 			<div id="join-dialog" class="jumbotron vertical-center">
 				<h1>Join a video session</h1>
 				<div class="form-group">
-					<p>
-						<label>Participant</label>
-						<input v-model="myUserName" class="form-control" type="text" required>
-					</p>
-					<p>
-						<label>Session</label>
-						<input v-model="mySessionId" class="form-control" type="text" required>
-					</p>
+					<p>Participant : {{myUserName}}</p>	
+					<p>Session : {{account.project.pjtName}}</p>
+					
 					<p class="text-center">
 						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
 					</p>
@@ -29,8 +26,7 @@
 		</div> -->
   </nav>
   <main>
-    <section>
-      <article>
+		<div id="conference-main">
         <!-- 영상, 드로잉 등 -->
         <ConferenceVideo
 				v-if="!isDrawing"
@@ -60,33 +56,47 @@
     </section>
     <aside>
       <!-- 참자가 목록, 채팅 -->
-      <ConferenceUsers
-			v-if="userListStatus"
-      :publisher="publisher"
-      :subscribers="subscribers"
-			:users="users"
-      />
-      <transition name="slide" v-if="chattingStatus">
-        <div
-          id="chat-box"
-          v-if="chatting"
-          style="box: 5px 5px 5px"
-        >
-          <messageList
-            :msgs="msgs"
-            :myId="myId"
-            :fromId="fromId"
-          />
-          <messageForm
-            style="width:100%"
-            v-on:sendMsg="sendMsg"
-            :user-name="myUserName"
-          />
-        </div>
-      </transition>
-    </aside>
+				<ConferenceUsers
+				v-if="userListStatus"
+				:publisher="publisher"
+				:subscribers="subscribers"
+				:users="users"
+				/>
+				<div
+					id="chat-box"
+					v-if="chattingStatus"
+					style="box: 5px 5px 5px"
+				>
+					<messageList
+						:msgs="msgs"
+						:myId="myId"
+						:fromId="fromId"
+					/>
+					<messageForm
+						v-if="chatting"
+						style="width:100%"
+						v-on:sendMsg="sendMsg"
+						:user-name="myUserName"
+					/>
+				</div>
+			</div>	
+		</div>
   </main>
-	</div>
+  <footer>
+		<!-- 동작 버튼 등,  -->
+		<ConferenceFooter
+		@audio-on-off="audioOnOff"  
+		@video-on-off="videoOnOff"
+		@mic-on-off="micOnOff"
+		@share-screen="startShareScreen"
+		@share-drawing="dumpMethod"
+		@session-exit="leaveSession"
+		@user-list-on-off="userListOnOff"
+		@chatting-on-off="chattingOnOff"
+		/>
+	</footer>
+    
+</div>
 
 
 </template>
@@ -130,7 +140,8 @@ components: {
 setup() {
 	const account = useAccountStore()
 	const route = useRoute()  
-
+	account.fetchProfile()
+	const userData = ref(account.profile)
 	let OV = ref(undefined)
 	let session = ref(undefined)
 	let mainStreamManager= ref(undefined)
@@ -142,7 +153,7 @@ setup() {
 
 	const mySessionId = route.params.sessionId
 	// pinai 
-	const myUserName = account.profile.nickname
+	const myUserName = userData.value.nickname
 	const msgs = ref([])
 	const chatting = true
 	const fromId = ref("")
@@ -167,10 +178,12 @@ setup() {
 			// --- Specify the actions when events take place in the session ---
 			// On every new Stream received...
 			session.value.on('streamCreated', ({ stream }) => {
-				const subscriber = session.value.subscribe(stream)
-				subscribers.value.push(subscriber)
+				var subscriber = session.value.subscribe(stream)
 				users.value.push(subscriber)
 			})
+
+
+
 
 			// On every Stream destroyed...
 			session.value.on('streamDestroyed', ({ stream }) => {
@@ -335,7 +348,8 @@ setup() {
 
 	const sendMsg =(msg) => {
 	// Sender of the message (after 'session.connect')
-		this.session
+		console.log(msg)
+		session.value
 			.signal({
 				data: msg, // Any string (optional)
 				to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
@@ -529,6 +543,7 @@ setup() {
 	return {
 		OV,
 		session,
+		account,
 		mainStreamManager,
 		publisher,
 		subscribers,
@@ -617,5 +632,13 @@ footer {
   width: auto;
   height: auto;
   overflow: auto;
+}
+#join {
+	position:fixed;
+	bottom:50%;
+	right:50%;
+
+	justify-content: center;
+	align-items: center;
 }
 </style>
