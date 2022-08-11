@@ -16,7 +16,7 @@ export default {
     checkemail: email => HOST + ACCOUNTS + `${email}/`, //get
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch
-    profileimage_update: () => HOST + ACCOUNTS + 'profile/', //patch
+    profileimage_update: () => HOST + ACCOUNTS + 'profile/', //post, delete
   },
   projects: {
     projects_create_update: () => HOST + PROJECTS, //get, patch
