@@ -34,6 +34,7 @@ public class Projects {
 
     @Column(nullable = false)
     LocalDateTime totalMeetTime;
+
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
 
