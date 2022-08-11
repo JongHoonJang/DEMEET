@@ -30,10 +30,12 @@ public class WebhookController {
     @PostMapping()
     public ResponseEntity<BaseResponseBody> getEvents(@RequestBody OVAllInOneReq req) {
 
-        log.info("웹훅발생");
-        log.info(req.toString());
+        log.info("++++WEBHOOK DETECTED++++");
 
         String event = req.getEvent();
+        log.info("event type is {}", event);
+        log.info(req.toString());
+        log.info("++++++++++++++++++++++++");
         Conferences conference = null;
         switch (event) {
             case "sessionCreated":
