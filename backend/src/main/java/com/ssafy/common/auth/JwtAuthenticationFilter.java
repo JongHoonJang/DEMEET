@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UsersService usersService) {
         super(authenticationManager);
-        System.out.println("JwtAuthenticationFilter.JwtAuthenticationFilter");
+//        System.out.println("JwtAuthenticationFilter.JwtAuthenticationFilter");
         this.usersService = usersService;
     }
 
@@ -38,8 +38,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             throws ServletException, IOException {
         // Read the Authorization header, where the JWT Token should be
         String header = request.getHeader(JwtTokenUtil.HEADER_STRING);
-        System.out.println("request " + request.getRequestURI() + ": " + request.getHeader(JwtTokenUtil.HEADER_STRING) + "\nullable " + header);
-        System.out.println("doFilterInternal => header = " + header);
+//        System.out.println("request " + request.getRequestURI() + ": " + request.getHeader(JwtTokenUtil.HEADER_STRING) + "\nullable " + header);
+//        System.out.println("doFilterInternal => header = " + header);
 
         // If header does not contain BEARER or is null delegate to Spring impl and exit
         if (header == null || !header.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
@@ -63,11 +63,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Transactional(readOnly = true)
     public Authentication getAuthentication(HttpServletRequest request) throws Exception {
         String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
-        System.out.println("getAuthentication => token = " + token);
+//        System.out.println("getAuthentication => token = " + token);
 
         // 요청 헤더에 Authorization 키값에 jwt 토큰이 포함된 경우에만, 토큰 검증 및 인증 처리 로직 실행.
-        System.out.println("$%$%$%$%$%$%$%$%$%$filter 74");
-        System.out.println(token);
+//        System.out.println("$%$%$%$%$%$%$%$%$%$filter 74");
+//        System.out.println(token);
         if (token != null) {
             // parse the token and validate it (decode)
             JWTVerifier verifier = JwtTokenUtil.getVerifier();
