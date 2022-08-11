@@ -5,6 +5,7 @@
       type="text"
       placeholder="채팅을 입력하세요."
       v-model = "messageForm.message"
+      v-on:keyup.enter="submitForm"
     >
     <button
       class="my-btn"
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'MessageForm',
   data() {
@@ -38,15 +41,16 @@ export default {
     submitForm(event) {
 
       const msg = this.messageForm.message.trim();
-
+      console.log(this.userName)
       if (msg != "") {
-
+   
         event.preventDefault();
         // this.$emit("sendMsg", "[" + this.userName + "] : " + msg);
         var string = JSON.stringify({
           userName: this.userName,
           msg: msg
         });
+
         this.$emit("sendMsg", string);
       }
       this.messageForm.message = "";
