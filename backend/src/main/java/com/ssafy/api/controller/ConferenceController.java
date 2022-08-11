@@ -61,12 +61,11 @@ public class ConferenceController {
         // 전체 프로젝트들리스트를 가져와서 그 안에 sessionName이 위 sessionName과 같지 않으면 토큰생성해주는걸 막아야할듯하다.
         // 프로젝트 목록에서 SessionName과 같은 값이 있는지 확인
         try {
-            Projects project =  projectsService.getProjectBySessionId(sessionName).get();
+            Projects project = projectsService.getProjectBySessionId(sessionName).get();
         } catch (ProjectNullException e) {
-            log.error("Project " + sessionName + "을 가지는 프로젝트를 찾을수없음");
+            log.error("can not find project by pid");
             return ResponseEntity.status(400).body(sessionJSON);
         }
-
 
 
         // 이 유저의 역할
@@ -86,8 +85,9 @@ public class ConferenceController {
 
 
         if (this.mapSessions.get(sessionName) != null) {
+            log.info("session aleady exists");
             // 세션이 이미 있는 경우
-            System.out.println("Existing sessing " + sessionName);
+            log.info("Existing sessing " + sessionName);
             try {
                 // 아까 만든 connectionProperties로 새로운 연결 생성
                 String token = this.mapSessions.get(sessionName).createConnection(connectionProperties).getToken();
@@ -115,7 +115,7 @@ public class ConferenceController {
         }
 
         // 새 세션
-        System.out.println("New session " + sessionName);
+        log.info("New session = {}", sessionName);
         try {
             // 새로운 OpenVidu 세션
             Session session = this.openVidu.createSession();
@@ -158,20 +158,22 @@ public class ConferenceController {
                     // 마지막 유저가 나갔을 경우 세션 삭제
                     this.mapSessions.remove(sessionName);
                 }
+                log.info("success");
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 // 그 토큰이 유효하지 않을 때
-                System.out.println("Problem in ths app server: the TOKEN wasn't valid");
+                log.error("Problem in ths app server: the TOKEN wasn't valid");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
             // 세션이 존재하지 않을 경우
-            System.out.println("Problem in the app server: the SESSION does not exist");
+            log.error("Problem in the app server: the SESSION does not exist");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     private ResponseEntity<JSONObject> getErrorResponse(Exception e) {
+        log.error("Error = {}", e.toString());
         JSONObject json = new JSONObject();
         json.put("cause", e.getCause());
         json.put("error", e.getMessage());
