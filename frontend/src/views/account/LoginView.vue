@@ -48,6 +48,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 1024px){
+  .account-box{
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
 .main-logo {
       /* width: 5rem;
       height: 5rem; */
@@ -55,7 +62,7 @@ export default defineComponent({
   font-size: 4rem;
   background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
   -webkit-text-stroke: transparent;
-
+  margin: 0%;
   -webkit-background-clip: text;
   letter-spacing: -0.25rem;
 }
@@ -65,8 +72,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   position: relative;
-  background:
-  linear-gradient( to bottom,  rgba(255, 1, 214, 0.3), rgba(7, 219, 254, 0.3));
+  background: linear-gradient( to bottom,  rgba(255, 1, 214, 0.3), rgba(7, 219, 254, 0.3));
   width: 100%;
   height: 100vh;
 }
@@ -105,10 +111,6 @@ input::placeholder {color:white;}
     letter-spacing: -0.25rem;
     }
 
-.account-info {
-  width: 20vw;
-  height: 20vh;
-  }
   
 .input-prop {
   color: white;
@@ -128,7 +130,7 @@ input::placeholder {color:white;}
   -webkit-text-stroke: 0.125rem rgb(255, 255, 255);
   letter-spacing: -0.25rem;
   word-spacing: -0.75rem;
-  margin: 2rem;
+  margin: 1rem;
   
   font-family: 'Poppins';
   font-style: italic;
