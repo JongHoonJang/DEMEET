@@ -1,12 +1,38 @@
 <template>
-  <div v-if="user.member.profileImagePath!==null" class="user-icon" :style="`background-image: url(${user.member.profileImagePath});`">
-    <span v-if="project.project.projectOwner===project.profile.uid && project.project.activation" @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
-    <div v-if="project.project.projectOwner!==project.profile.uid || !project.project.activation" class="none-box"></div>
+  <div 
+  v-if="user.member.profileImagePath!==null" 
+  class="user-icon" 
+  :style="`background-image: url(${user.member.profileImagePath});`">
+    <span 
+    v-if="project.project.projectOwner===project.profile.uid && project.project.activation" 
+    @click="remove(user)" 
+    class="material-symbols-outlined" 
+    id="close"
+    >
+    close</span>
+    <div 
+    v-if="project.project.projectOwner!==project.profile.uid || !project.project.activation" 
+    class="none-box"
+    >
+    </div>
     <p class="username">{{ user.member.nickname }}</p>
   </div>
-  <div v-if="user.member.profileImagePath===null" class="user-icon">
-    <span v-if="project.project.projectOwner===project.profile.uid && project.project.activation" @click="remove(user)" class="material-symbols-outlined" id="close">close</span>
-    <div v-if="project.project.projectOwner!==project.profile.uid || !project.project.activation" class="none-box"></div>
+  <div 
+  v-if="user.member.profileImagePath===null" 
+  class="user-icon"
+  >
+    <span 
+    v-if="project.project.projectOwner===project.profile.uid && project.project.activation" 
+    @click="remove(user)" 
+    class="material-symbols-outlined" 
+    id="close"
+    >
+    close</span>
+    <div 
+    v-if="project.project.projectOwner!==project.profile.uid || !project.project.activation" 
+    class="none-box"
+    >
+    </div>
     <p class="username">{{ user.member.nickname }}</p>
   </div>
 </template>
