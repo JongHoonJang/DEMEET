@@ -47,6 +47,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 1024px){
+  nav input{
+		display: none;
+  }
+}
+@media (max-width: 768px){
+  nav div a {
+    display: none;
+  }
+  #account {
+    margin-right: 30px;
+  }
+
+}
+
 #account {
   font-size: 32px;
   color: white;
@@ -78,7 +93,7 @@ nav img {
 }
 
 nav input {
-  width: 525px;
+  width: 375px;
   height: 50px;
   margin-top: 16px;
   background: #111315;

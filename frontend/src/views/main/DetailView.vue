@@ -1,11 +1,8 @@
 <template>
 <div>
   <MainNav class="nav"/>
-    <div class="container">
-      <div>
-        <h1>저장된 이미지</h1>
-        <img src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
-      </div>
+    <div class="detail-container">
+      <ProjectImage />
       <div class="detail-box">
         <Suspense>
           <template #default>
@@ -26,12 +23,12 @@ import { useAccountStore } from "@/stores/account"
 import { useRoute } from 'vue-router'
 import MainNav from '@/views/main/MainNav'
 import ProjectData from '@/views/main/ProjectData'
-
+import ProjectImage from '@/views/main/ProjectImage.vue'
 export default defineComponent({
   components: {
     MainNav,
     ProjectData,
-
+    ProjectImage
   },
   setup() {
     const route = useRoute()  
@@ -51,9 +48,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 1024px){
+  .detail-container{
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 .nav {
   width:80%; 
 }
+
 #person {
   font-size: 60px;
   margin-left: 16px;
@@ -66,14 +71,14 @@ export default defineComponent({
   margin: 16px;
 }
 
-.container {
+.detail-container {
   display: flex;
   justify-content: space-around;
 }
 
 .detail-box{
-  width: 816px;
-  height: 852px;
+  width: 650px;
+  height: 800px;
   background: #111315;
   border-radius: 10px;
   display: flex;
@@ -95,8 +100,4 @@ h1 {
   color: white;
 }
 
-img {
-  width: 500px;
-  height: 300px;
-}
 </style>

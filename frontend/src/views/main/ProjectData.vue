@@ -177,7 +177,7 @@ export default defineComponent({
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
     await axios("http://localhost:8080/projects/" + 
-    // await axios("https://i7b309.p.ssafy.io/api/projects/" + 
+    // await axios("https://i7b309.p.ssafy.io/apiprojects/" + 
     project_pk.value, {
       method: "get",
       headers: account.authHeader
@@ -226,10 +226,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .host-box {
   background: #9E9E9E;
   border-radius: 10px;
-  width: 816px;
+  width: 650px;
   height: 92px;
   display: flex;
   align-items: flex-start;
@@ -268,7 +269,7 @@ export default defineComponent({
   border-radius: 5px;
   color: white;
   font: bold;
-  margin-left: 210px;
+  margin-left: 110px;
 }
 .back-btn {
   width: 92px;
@@ -277,7 +278,6 @@ export default defineComponent({
   border-radius: 5px;
   color: white;
   font: bold;
-  margin-left: 160px;
 }
 .back-btn:hover{
   background: #2097F7;
@@ -298,12 +298,13 @@ export default defineComponent({
   margin-right: 20px;
   display: flex;
   justify-content: start;
+  margin-left: 20%;
 }
 
 .time {
   text-align: start;
-  margin-left: 180px;
   color: #9E9E9E;
+  margin-left: 21%;
 }
 
 .text-style {
@@ -322,11 +323,14 @@ export default defineComponent({
   flex-direction: column;
 }
 
+.container .box {
+  margin-left: 20%
+}
+
 .box {
-  width: 500px;
+  width: 400px;
   height: 44px;
   background: #333333;
-  margin-left: 160px;
   color: #9E9E9E;
 }
 .name-input-box {
@@ -342,11 +346,11 @@ export default defineComponent({
 }
 .member-box{
   display: flex;
-  width: 500px;
+  width: 400px;
   height: 44px;
   background: #333333;
-  margin-left: 160px;
   color: #9E9E9E;
+  margin-left: 20%;
 }
 
 .data-box {
