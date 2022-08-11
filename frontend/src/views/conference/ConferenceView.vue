@@ -28,59 +28,43 @@
   <main>
 		<div id="conference-main">
         <!-- 영상, 드로잉 등 -->
-        <ConferenceVideo
+			<ConferenceVideo
 				v-if="!isDrawing"
 				:session = "session"
 				:mainStreamManager = "mainStreamManager"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
-				/>
-				<DrawingView 
+			/>
+			<DrawingView 
 				v-if="isDrawing"
-				/>
-      </article>
-      <footer>
-        <!-- 동작 버튼 등,  -->
-        <ConferenceFooter
-				:isSharing="isSharing"
-				@audio-on-off="audioOnOff"  
-				@video-on-off="videoOnOff"
-				@mic-on-off="micOnOff"
-				@share-screen="startShareScreen"
-				@share-drawing="shareDrawing"
-				@session-exit="leaveSession"
-				@user-list-on-off="userListOnOff"
-				@chatting-on-off="chattingOnOff"
-				/>
-      </footer>
-    </section>
-    <aside>
+			/>
+
       <!-- 참자가 목록, 채팅 -->
-				<ConferenceUsers
+			<ConferenceUsers
 				v-if="userListStatus"
 				:publisher="publisher"
 				:subscribers="subscribers"
 				:users="users"
-				/>
-				<div
-					id="chat-box"
-					v-if="chattingStatus"
-					style="box: 5px 5px 5px"
-				>
-					<messageList
-						:msgs="msgs"
-						:myId="myId"
-						:fromId="fromId"
-					/>
-					<messageForm
-						v-if="chatting"
-						style="width:100%"
-						v-on:sendMsg="sendMsg"
-						:user-name="myUserName"
-					/>
-				</div>
-			</div>	
-		</div>
+			/>
+			<div
+				id="chat-box"
+				v-if="chattingStatus"
+				style="box: 5px 5px 5px"
+			>
+			<messageList
+				:msgs="msgs"
+				:myId="myId"
+				:fromId="fromId"
+			/>
+			<messageForm
+				v-if="chatting"
+				style="width:100%"
+				v-on:sendMsg="sendMsg"
+				:user-name="myUserName"
+			/>
+			</div>
+		</div>	
+	
   </main>
   <footer>
 		<!-- 동작 버튼 등,  -->
