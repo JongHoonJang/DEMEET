@@ -16,8 +16,10 @@
       <span v-if="!videoValue" class="material-symbols-outlined">play_circle</span>
     </button>
 
-    <button type="button" @click="$emit('shareScreen')">화면공유??</button> 추후 개발
-    <!-- <button type="button" @click="$emit('shareDrawing')">드로잉</button>  -->
+    <button v-if="!isSharing" type="button" @click="$emit('shareScreen')">화면공유</button>
+    <button v-if="isSharing" type="button" >공유 중</button>
+    <button type="button" @click="$emit('shareDrawing')">드로잉</button> 
+    <!-- <button type="button" @click="$emit('shareDrawing')"><a href="http://127.0.0.1:8081/drawing" target="_blank">drawing</a></button>  -->
 
     <!-- 나가기 -->
     <button type="button" class="leave-meeting" @click="$emit('sessionExit')"><span class="material-symbols-outlined">
@@ -36,6 +38,17 @@ import {ref} from 'vue'
 export default {
   name: 'ConferenceFooter',
   components: {},
+
+  props: {
+		isSharing:{
+			type:Boolean,
+		},
+    isDrawing:{
+      type:Boolean,
+    }
+	},
+
+
   setup() {
     const audioValue = ref(true)
     const videoValue = ref(true)
