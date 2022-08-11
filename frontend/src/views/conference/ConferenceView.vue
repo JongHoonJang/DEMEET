@@ -324,7 +324,7 @@ setup() {
 
 	const sendMsg =(msg) => {
 	// Sender of the message (after 'session.connect')
-		console.log(msg)
+
 		session.value
 			.signal({
 				data: msg, // Any string (optional)
