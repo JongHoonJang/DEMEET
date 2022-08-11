@@ -251,30 +251,56 @@ export default defineComponent({
   margin-top: 16px;
   color: #9E9E9E;
 }
+#add:hover {
+  transform: scale(1.4);
+  color: #2097F7;
+}
 
 #content {
   margin-top: 16px;
   color: #9E9E9E;
 }
-
+#content:hover {
+  transform: scale(1.4);
+  color: #2097F7;
+}
 #edit {
   margin-top: 16px;
   color: #9E9E9E;
 }
-
+#edit:hover {
+  transform: scale(1.4);
+  color: #2097F7;
+}
 .blue-btn {
   width: 92px;
   height: 36px;
-  background: #2097F7;
+  /* background: #2097F7;
   border-radius: 5px;
   color: white;
-  font: bold;
-  margin-left: 110px;
+  font: bold;*/
+  margin-left: 110px; 
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
 }
+.blue-btn:hover {
+  transform: scale(1.2);
+}
+
+
 .back-btn {
   width: 92px;
   height: 36px;
-  background: #333333;
+  background: #2097F7;
   border-radius: 5px;
   color: white;
   font: bold;
@@ -286,11 +312,22 @@ export default defineComponent({
 .red-btn {
   width: 92px;
   height: 36px;
-  background: red;
-  border-radius: 5px;
-  color: white;
-  font: bold;
   margin-left: 16px;
+  background: radial-gradient(95% 60% at 50% 75%, #d60000 0%, #ff2020 100%);
+  border: 1px solid #fd5454;
+  box-shadow: 0px 8px 20px -8px #ff1111, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+
+.red-btn:hover {
+  transform: scale(1.2);
 }
 
 .btn-box {
@@ -334,13 +371,13 @@ export default defineComponent({
   color: #9E9E9E;
 }
 .name-input-box {
-  width: 492px;
+  width: 388px;
   height: 40px;
   background: #333333;
   color: white;
 }
 .desc-input-box{
-  width: 492px;
+  width: 388px;
   background: #333333;
   color: white;
 }
