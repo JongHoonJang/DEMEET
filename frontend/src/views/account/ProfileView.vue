@@ -8,7 +8,10 @@
       <div class='profile-id'>
         <div class='profile-image' @click="isInput=true">
           <input v-if="isInput" type="file" accept=".jpg,.png,.jpeg" class="ex_file" @change="fileUpload">
-          <button v-if="isInput" @click="cancel">취소</button>
+          <div class="image-btn" v-if="isInput">
+            <button @click="cancel">취소</button>
+            <button @click="profileDelete">삭제</button>
+          </div>
           <img 
           v-if="account.profile.profileImagePath && !isInput" 
           :src="`${ account.profile.profileImagePath }`" 
@@ -103,6 +106,11 @@ export default defineComponent({
         alert('이미지를 업로드해주세요.')
       }
     }
+    const profileDelete = () => {
+      if(confirm('프로필사진을 삭제하시겠습니까?')){
+        account.DeleteImage()
+      }
+    }
     const cancel = () => {
       router.go({name : 'ProfileView'})
     }
@@ -114,13 +122,29 @@ export default defineComponent({
       onUpdate,
       signout,
       fileUpload,
-      cancel
+      cancel,
+      profileDelete
     }
   },
 })
 </script>
 
 <style scoped>
+.image-btn {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+.image-btn button{
+  background: #2D68FE;
+  color: white;
+  border-radius: 5px;
+  width: 50px;
+  height: 24px;
+}
+.image-btn button:hover {
+  transform: scale(1.2);
+}
 .profile-view {
   width:80%; 
   margin:auto;

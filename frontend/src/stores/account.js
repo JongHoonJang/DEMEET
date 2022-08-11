@@ -161,6 +161,21 @@ export const useAccountStore = defineStore("account", {
       })
     },
 
+    // 유저 프로필 삭제
+    DeleteImage() {
+      axios({
+        url: api.accounts.profileimage_update(),
+        method: 'delete',
+        headers: this.authHeader
+      })
+       .then(() => {
+        router.go({name: 'ProfileView'})
+       })
+       .catch(err => {
+        console.error(err.response)
+      })
+    },
+
     //유저 목록조회
     fetchUserList() {
       axios({
