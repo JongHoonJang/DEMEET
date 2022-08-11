@@ -33,20 +33,25 @@
       <article>
         <!-- 영상, 드로잉 등 -->
         <ConferenceVideo
+				v-if="!isDrawing"
 				:session = "session"
 				:mainStreamManager = "mainStreamManager"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
 				/>
+				<DrawingView 
+				v-if="isDrawing"
+				/>
       </article>
       <footer>
         <!-- 동작 버튼 등,  -->
         <ConferenceFooter
+				:isSharing="isSharing"
 				@audio-on-off="audioOnOff"  
 				@video-on-off="videoOnOff"
 				@mic-on-off="micOnOff"
 				@share-screen="startShareScreen"
-				@share-drawing="dumpMethod"
+				@share-drawing="shareDrawing"
 				@session-exit="leaveSession"
 				@user-list-on-off="userListOnOff"
 				@chatting-on-off="chattingOnOff"
@@ -87,9 +92,11 @@
 </template>
 
 <script>
+// import { fabric } from 'fabric'
 import ConferenceVideo from './ConferenceVideo'
 import ConferenceUsers from './ConferenceUsers'
 import ConferenceFooter from './ConferenceFooter'
+import DrawingView from './DrawingView'
 
 import messageForm from './chat/messageForm.vue'
 import messageList from './chat/messageList.vue'
@@ -110,10 +117,12 @@ const OPENVIDU_SERVER_SECRET = "wlwhseodnjs123"
 
 export default {
 
+
 components: {
 	ConferenceVideo,
 	ConferenceUsers,
 	ConferenceFooter,
+	DrawingView,
 	messageForm,
 	messageList
 },
@@ -145,6 +154,8 @@ setup() {
 	const videoStatus = ref(true)
 	const userListStatus = ref(true)
 	const chattingStatus = ref(true)
+	const isSharing = ref(false)
+	const isDrawing = ref(false)
 	
 	const joinSession = () => {
 		// --- Get an OpenVidu object ---
@@ -370,6 +381,48 @@ setup() {
 		chattingStatus.value = !chattingStatus.value
 	}
 
+	const shareDrawing = () =>{
+		isDrawing.value = !isDrawing.value
+
+				secondPublisher.value = publisher.value
+		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
+		{ 
+			videoSource: "screen", 
+			resolution: "1280x720",
+			insertMode: "APPEND",
+			publishAudio: true,
+			publishVideo: true,
+			frameRate: 30,
+			mirror: false
+		})
+
+		newPublisher.once('accessAllowed', () => {
+			newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+				// 정지 누르면 다시 원상 복귀
+				session.value.unpublish(publisher.value).then(() => {
+				mainStreamManager.value = secondPublisher.value
+				publisher.value = secondPublisher.value
+				}).then(()=> {
+					// publish your stream
+					session.value.publish(publisher.value).then(()=>{
+						secondPublisher.value = undefined
+						isDrawing.value = !isDrawing.value
+					})
+				})
+			})
+
+		// Unpublishing the old publisher
+		session.value.unpublish(publisher.value).then(() => {
+			// Assigning the new publisher to our global variable 'publisher'
+			mainStreamManager.value = newPublisher
+			publisher.value = newPublisher}).then(() => {
+				// Publishing the new publisher
+				session.value.publish(publisher.value).then(() => {
+				})
+			})
+		})
+	}
+
 	const dumpMethod = () => {  // 작동 확인을 위한 함수
 		// alert('dumpMethod 작동 확인')
 	}
@@ -377,6 +430,7 @@ setup() {
 
 	// share screen 화면 공유 uservideo, users 전부 다 비동기 처리
 	const startShareScreen = () => {
+		isSharing.value = !isSharing.value
 		secondPublisher.value = publisher.value
 		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
 		{ 
@@ -399,6 +453,7 @@ setup() {
 					// publish your stream
 					session.value.publish(publisher.value).then(()=>{
 						secondPublisher.value = undefined
+						isSharing.value = !isSharing.value
 					})
 				})
 			})
@@ -414,6 +469,62 @@ setup() {
 			})
 		})
 	}
+
+	// const startShareDrawing = () => {
+	// 	// isDrawing.value = !isDrawing.value
+	// 	secondPublisher.value = publisher.value
+
+	// 	var FRAME_RATE = 10;
+
+	// 	OV.value.getUserMedia({
+	// 		audioSource: false,
+	// 		videoSource: undefined,
+	// 		resolution: '1280x720',
+	// 		frameRate: FRAME_RATE
+	// 	})
+	// 	.then(mediaStream => {
+
+	// 		var videoTrack = mediaStream.getVideoTracks()[0]
+	// 		console.log('====videoTrack====')
+	// 		console.log(videoTrack)
+	// 		var video = document.createElement('video')
+	// 		video.srcObject = new MediaStream([videoTrack])
+	// 		console.log('====video====')
+	// 		console.log(video.srcObject)
+
+	// 		var canvas = document.createElement('canvas')
+	// 		var ctx = canvas.getContext('2d')
+	// 		ctx.filter = 'grayscale(100%)'
+
+	// 		video.addEventListener('play', () => {
+	// 			var loop = () => {
+	// 				if (!video.paused && !video.ended) {
+	// 					ctx.drawImage(video, 0, 0, 300, 170)
+	// 					setTimeout(loop, 1000/ FRAME_RATE) // Drawing at 10 fps
+	// 					console.log("=+=+=+=+=+=+=++=+=+=+==")
+	// 				}
+	// 			};
+	// 			loop();
+	// 		});
+	// 		video.play();
+
+	// 		var grayVideoTrack = canvas.captureStream(FRAME_RATE).getVideoTracks()[2]
+	// 		var againPublisher = OV.value.initPublisher('DrawingView',
+	// 			{
+	// 				audioSource: false,
+	// 				videoSource: grayVideoTrack
+	// 			})
+	// 				session.value.unpublish(publisher.value).then(() => {
+	// 				mainStreamManager.value = againPublisher
+	// 				publisher.value = againPublisher
+	// 			}).then(() => {
+	// 				session.value.publish(publisher.value)
+	// 			})
+	// 			console.log("+-+-+-+-+--+-+-+-+-+-+-+-+-+-+-+-+-+-+-++")
+	// 			console.log(publisher)
+	// 			console.log(againPublisher)
+	// 	});
+	// }
 
 	return {
 		OV,
@@ -437,6 +548,8 @@ setup() {
 		userListStatus,
 		chattingStatus,
 		micStatus,
+		isSharing,
+		isDrawing,
 		// 기본 함수
 		dumpMethod,
 		joinSession,
@@ -455,6 +568,8 @@ setup() {
 		userListOnOff,
 		chattingOnOff,
 		micOnOff,
+		shareDrawing,
+		// startShareDrawing
 		
 	}
 },
