@@ -53,6 +53,13 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 1024px){
+  .img-container{
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 .button-container {
   margin-left: 28px;
 }

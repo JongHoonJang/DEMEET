@@ -15,6 +15,7 @@ export default {
 </script>
 
 <style>
+
 #close {
   text-align: end;
   float: right;
@@ -35,7 +36,7 @@ export default {
 }
 .modal-card {
   position: relative;
-  max-width: 50%;
+  width: 500px;
   margin: auto;
   margin-top: 30px;
   background-color: #111315;
