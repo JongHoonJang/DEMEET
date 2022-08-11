@@ -132,6 +132,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 996px){
+  .endproject{
+    justify-content: center;
+  }
+}
 @media (max-width: 768px){
   .profile-id {
     display: flex;
@@ -210,7 +215,6 @@ h3 {
   border: solid;
   display: flex;
   flex-direction: row;
-  justify-content: start;
   flex-wrap: wrap;
 }
 
