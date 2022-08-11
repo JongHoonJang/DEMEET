@@ -64,7 +64,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+@media (max-width: 1024px){
+  .account-box{
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
 .backdrop {
   display: flex;
   justify-content: center;
@@ -82,7 +87,7 @@ export default defineComponent({
   background-clip: content-box;
   display: flex;
   width: 60vw;
-  height: 60vh;
+  height: 80vh;
   flex-grow: 1;
   justify-content: space-evenly;
 }
@@ -103,10 +108,9 @@ export default defineComponent({
     -webkit-text-stroke: transparent;
     /* -webkit-background-clip: text; */
     letter-spacing: -0.25rem;
-    }
+}
 .main-logo {
-      /* width: 5rem;
-      height: 5rem; */
+  margin: 0%;
   color: rgba(26, 15, 31, 0.3);
   font-size: 4rem;
   background: linear-gradient(to right, rgba(255, 0, 214, 0.9), rgba(0, 224, 255, 0.9));
