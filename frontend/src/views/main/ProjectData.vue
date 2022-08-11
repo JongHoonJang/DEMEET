@@ -177,7 +177,7 @@ export default defineComponent({
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
     await axios("http://localhost:8080/projects/" + 
-    // await axios("https://i7b309.p.ssafy.io/api/projects/" + 
+    // await axios("https://i7b309.p.ssafy.io/apiprojects/" + 
     project_pk.value, {
       method: "get",
       headers: account.authHeader
