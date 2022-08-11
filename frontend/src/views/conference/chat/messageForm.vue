@@ -5,6 +5,7 @@
       type="text"
       placeholder="채팅을 입력하세요."
       v-model = "messageForm.message"
+      v-on:keyup.enter="submitForm"
     >
     <button
       class="my-btn"

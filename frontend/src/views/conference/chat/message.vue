@@ -1,7 +1,7 @@
 <template>
   <div id="chatbox">
     <div id="chat" v-if="!ismy">
-      <span id="msgs">[{{ sendname }}]:{{ chat }}</span>
+      <span id="msgs">{{ sendname }} : {{ chat }}</span>
     </div>
     </div>
   <div id="mychatbox">
