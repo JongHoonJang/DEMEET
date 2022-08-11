@@ -85,6 +85,8 @@ export default defineComponent({
     const profileImage = ''
     const account = useAccountStore()
     const name = ''
+
+
     const onUpdate = (data) => {
       if (data !== '') {
         account.changeName(data)
@@ -123,13 +125,24 @@ export default defineComponent({
       signout,
       fileUpload,
       cancel,
-      profileDelete
+      profileDelete,
     }
   },
 })
 </script>
 
 <style scoped>
+@media (max-width: 768px){
+  .profile-id {
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 .image-btn {
   display: flex;
   justify-content: space-around;
@@ -180,6 +193,7 @@ h3 {
   display: flex;
   border: solid;
   margin-bottom: 2rem;
+  padding: 24px;
 }
 .profile-detail {
   width: 100%;
@@ -193,8 +207,6 @@ h3 {
 }
 
 .endproject {
-  padding-top: 10rem;
-  padding-bottom: 2rem;
   border: solid;
   display: flex;
   flex-direction: row;
@@ -249,7 +261,6 @@ input {
 .change-password {
   display: flex;
   align-items: center;
-  margin-right: 30px;
 }
 
 .hidden {

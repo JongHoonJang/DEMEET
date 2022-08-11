@@ -62,7 +62,7 @@ export const useAccountStore = defineStore("account", {
 
     // 로그아웃
     logout() {
-      confirm('로그아웃 하기겠습니까?')
+      confirm('로그아웃 하시겠습니까?')
       this.removeToken()
       router.push({ name: 'LoginView'})
     },

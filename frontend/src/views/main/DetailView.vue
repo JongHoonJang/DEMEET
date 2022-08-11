@@ -48,9 +48,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 1024px){
+  .detail-container{
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 .nav {
   width:80%; 
 }
+
 #person {
   font-size: 60px;
   margin-left: 16px;
@@ -69,8 +77,8 @@ export default defineComponent({
 }
 
 .detail-box{
-  width: 816px;
-  height: 852px;
+  width: 650px;
+  height: 800px;
   background: #111315;
   border-radius: 10px;
   display: flex;
