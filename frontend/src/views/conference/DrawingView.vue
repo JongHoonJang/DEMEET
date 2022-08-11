@@ -219,8 +219,11 @@ export default {
         // 백엔드로 갈 데이터 형식
         const imageData = {
           pid: demeet.project.pid,
-          image: canvas.toSVG()
-        }
+          image: canvas.toDataURL({
+                  format: 'png',
+                  quality: 0.8
+                })
+          }
         demeet.saveImage(imageData)
         //console.log(canvas.toSVG())
         //새로운 캔버스에 저장된 데이터 띄우기
