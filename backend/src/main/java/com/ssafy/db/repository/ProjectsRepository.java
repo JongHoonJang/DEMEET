@@ -14,5 +14,5 @@ public interface ProjectsRepository extends JpaRepository<Projects, Long> {
 
     Optional<Projects> findProjectsByPidAndOwnerIdAndActivationIsTrue(Long pid, Long ownerId);
 
-    Optional<Projects> findProjectsBySessionId(String sessionId);
+    Optional<Projects> findProjectsByCustomSessionName(String customSessionName);
 }

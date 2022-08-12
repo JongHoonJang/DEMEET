@@ -30,7 +30,7 @@ public class ProjectInfoRes extends BaseResponseBody {
         System.out.println("pid완료");
         res.project.setProjectOwner(projectOwner);
         res.project.setMember(userList);
-        res.project.setSessionId(project.getSessionId());
+        res.project.setSessionId(project.getCustomSessionName());
         res.project.setPjtStartDate(project.getPjtStartDate());
         res.project.setPjtEndDate(project.getPjtEndDate());
         res.project.setPjtName(project.getPjtName());

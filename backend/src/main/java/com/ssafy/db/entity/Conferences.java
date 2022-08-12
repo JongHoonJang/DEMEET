@@ -19,12 +19,15 @@ public class Conferences {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long cid;
 
-    @Column(nullable = false)
-    String sessionName;
-    @Column(nullable = false)
-    String uniqueSessionName;
+    @ManyToOne
+    @JoinColumn(name = "pid")
+    Projects project;
 
     @Column(nullable = false)
+    String sessionName;
+
+    String uniqueSessionName;
+
     LocalDateTime confStartTime;
 
     LocalDateTime confEndTime;
