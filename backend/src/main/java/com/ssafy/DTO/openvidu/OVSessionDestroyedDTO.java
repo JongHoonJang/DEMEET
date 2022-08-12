@@ -1,9 +1,13 @@
 package com.ssafy.DTO.openvidu;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @EqualsAndHashCode(callSuper=false)
 public class OVSessionDestroyedDTO extends OVSessionCreatedDTO {
 //{sessionId=ses_KEY10EWVwb,

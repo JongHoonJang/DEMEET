@@ -18,6 +18,6 @@ public class ProjectInfoDTO {
     String pjtName;
     String pjtDesc;
     String sessionId;
-    LocalDateTime totalMeetTime;
+    Long totalMeetTime;
     boolean activation;
 }

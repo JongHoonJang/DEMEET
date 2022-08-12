@@ -148,14 +148,13 @@ public class ProjectsServiceImpl implements ProjectsService {
         log.debug("프로젝트 시작날짜 = {}", project.getPjtStartDate().toString());
 
         log.info("프로젝트 토탈시간 초기화");
-        localDateTime = LocalDateTime.of(0, 1, 1, 0, 0, 0, 0);
-        project.setTotalMeetTime(localDateTime);
+        project.setTotalMeetTime(0L);
         log.debug("프로젝트 토탈시간 = {}", project.getTotalMeetTime().toString());
 
         log.info("프로젝트의 세션ID 지정");
         String baseString = project.getPjtName() + project.getPjtStartDate().toString();
         String sessionId = Base64.getEncoder().encodeToString(baseString.getBytes());
-        project.setSessionId(sessionId);
+        project.setCustomSessionName(sessionId);
 
         log.info("프로젝트 저장");
         Projects savedProject = projectRepository.save(project);
@@ -231,9 +230,9 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
-    public Optional<Projects> getProjectBySessionId(String sessionId) throws ProjectNullException {
+    public Optional<Projects> getProjectByCustomSessionName(String sessionId) throws ProjectNullException {
         log.info("세션아이디를 기반으로 프로젝트 조회");
-        Optional<Projects> project = projectRepository.findProjectsBySessionId(sessionId);
+        Optional<Projects> project = projectRepository.findProjectsByCustomSessionName(sessionId);
         log.debug("project = {}", project.toString());
         if (project == null) return Optional.empty();
         return project;
