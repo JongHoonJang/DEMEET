@@ -64,8 +64,8 @@ export default defineComponent({
     const add = (addUser) => {
       projectData.value.memberList.push(addUser.uid)
     }
-    const remove = (addUser) => {
-      projectData.value.memberList.pop(addUser.uid)
+    const remove = (removeUser) => {
+      projectData.value.memberList.splice(projectData.value.memberList.findIndex(res => res===removeUser.uid),1)
     }
     const account = useAccountStore()
     const userData = ref(account.userList)
