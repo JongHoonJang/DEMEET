@@ -25,10 +25,9 @@ public class Conferences {
 
     @Column(nullable = false)
     String sessionName;
-    @Column(nullable = false)
+
     String uniqueSessionName;
 
-    @Column(nullable = false)
     LocalDateTime confStartTime;
 
     LocalDateTime confEndTime;

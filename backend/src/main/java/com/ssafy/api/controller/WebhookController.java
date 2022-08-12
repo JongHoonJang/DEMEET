@@ -4,7 +4,7 @@ import com.ssafy.DTO.openvidu.OVParticipantJoinedDTO;
 import com.ssafy.DTO.openvidu.OVParticipantLeftDTO;
 import com.ssafy.DTO.openvidu.OVSessionCreatedDTO;
 import com.ssafy.DTO.openvidu.OVSessionDestroyedDTO;
-import com.ssafy.api.request.openvidu.*;
+import com.ssafy.api.request.openvidu.OVAllInOneReq;
 import com.ssafy.api.service.WebhookService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Conferences;
@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  *
  */
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/openvidu_webhook")
 public class WebhookController {
+
+
+    private Map<String, OVSessionCreatedDTO> mapOvSesseionCreatedDTO = new ConcurrentHashMap<>();
 
     @Autowired
     WebhookService webhookService;
@@ -40,7 +46,9 @@ public class WebhookController {
         switch (event) {
             case "sessionCreated":
                 OVSessionCreatedDTO ovSessionCreatedDTO = makeSessionCreatedDTO(req);
-                conference = webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedDTO);
+//                conference = webhookService.makeConferenceWithOvSessionCreatedReq(ovSessionCreatedDTO);
+//               여기서는 그냥 mapOvSesseionCreatedDTO에 저장만 하고 나중에 참가자가 들어오면 그때 추가만 해주기로 한다.
+                mapOvSesseionCreatedDTO.put(ovSessionCreatedDTO.getSessionId(), ovSessionCreatedDTO);
                 break;
             case "sessionDestroyed":
                 OVSessionDestroyedDTO ovSessionDestroyedReq = makeSessionDestroyDTO(req);
@@ -48,6 +56,13 @@ public class WebhookController {
                 break;
             case "participantJoined":
                 OVParticipantJoinedDTO ovParticipantJoinedReq = makeParticipantJoinedDTO(req);
+                log.info("participantJoined");
+                log.info("check mapOvSesseionCreatedDTO by sessionId for add session info in conference");
+                if (mapOvSesseionCreatedDTO.get(ovParticipantJoinedReq.getSessionId()) != null) {
+                    log.info("add session info in conference");
+                    conference = webhookService.makeConferenceWithOvSessionCreatedReq(mapOvSesseionCreatedDTO.get(ovParticipantJoinedReq.getSessionId()));
+                    mapOvSesseionCreatedDTO.remove(ovParticipantJoinedReq.getSessionId());
+                }
                 break;
             case "participantLeft":
                 OVParticipantLeftDTO ovParticipantLeftDTO = makeParticipantLeftDTO(req);
@@ -67,7 +82,7 @@ public class WebhookController {
         ovSessionCreatedDTO.setEvent(ovAllInOneReq.getEvent());
         // 로컬은 상관없지만 서버와 한국시간은 다르기에 시간을 맞춰주기위해 시간을 더해줌
         ovSessionCreatedDTO.setTimestamp(ovAllInOneReq.getTimestamp() + 32400000);
-
+        log.debug("ovSessionCreatedDTO: " + ovSessionCreatedDTO.toString());
         return ovSessionCreatedDTO;
     }
 
@@ -81,7 +96,7 @@ public class WebhookController {
         ovSessionDestroyedDTO.setStartTime(ovAllInOneReq.getStartTime() + 32400000);
         ovSessionDestroyedDTO.setDuration(ovAllInOneReq.getDuration());
         ovSessionDestroyedDTO.setReason(ovAllInOneReq.getReason());
-
+        log.debug("ovSessionDestroyedDTO: " + ovSessionDestroyedDTO.toString());
         return ovSessionDestroyedDTO;
     }
 
@@ -99,6 +114,7 @@ public class WebhookController {
         ovParticipantJoinedDTO.setIp(ovAllInOneReq.getIp());
         ovParticipantJoinedDTO.setPlatform(ovAllInOneReq.getPlatform());
         ovParticipantJoinedDTO.setEvent(ovAllInOneReq.getEvent());
+        log.debug("ovParticipantJoinedDTO: " + ovParticipantJoinedDTO.toString());
 
         return ovParticipantJoinedDTO;
     }
@@ -119,6 +135,7 @@ public class WebhookController {
         ovParticipantLeftDTO.setEvent(ovAllInOneReq.getEvent());
         ovParticipantLeftDTO.setReason(ovAllInOneReq.getReason());
         ovParticipantLeftDTO.setDuration(ovAllInOneReq.getDuration());
+        log.debug("ovParticipantLeftDTO: " + ovParticipantLeftDTO.toString());
 
         return ovParticipantLeftDTO;
     }

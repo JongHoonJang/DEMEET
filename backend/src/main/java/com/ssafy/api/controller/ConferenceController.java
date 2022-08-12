@@ -3,7 +3,9 @@ package com.ssafy.api.controller;
 import com.ssafy.api.service.ProjectsService;
 import com.ssafy.common.auth.SsafyUsersDetails;
 import com.ssafy.common.customException.ProjectNullException;
+import com.ssafy.db.entity.Conferences;
 import com.ssafy.db.entity.Projects;
+import com.ssafy.db.repository.ConferencesRepository;
 import io.openvidu.java.client.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -43,6 +45,9 @@ public class ConferenceController {
     @Autowired
     ProjectsService projectsService;
 
+    @Autowired
+    ConferencesRepository conferencesRepository;
+
     public ConferenceController(@Value("${openvidu.secret}") String secret, @Value("${openvidu.url}") String openviduUrl) {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
@@ -67,8 +72,9 @@ public class ConferenceController {
         String sessionName = (String) sessionJSON.get("sessionName");
         // 전체 프로젝트들리스트를 가져와서 그 안에 customSessionName이 위 sessionName 같지 않으면 토큰생성해주는걸 막아야할듯하다.
         // 프로젝트 목록에서 sessionName과 같은 값이 있는지 확인
+        Projects project = null;
         try {
-            Projects project = projectsService.getProjectByCustomSessionName(sessionName).get();
+            project = projectsService.getProjectByCustomSessionName(sessionName).get();
         } catch (ProjectNullException e) {
             log.error("can not find project by pid");
             return ResponseEntity.status(400).body(sessionJSON);
@@ -135,6 +141,18 @@ public class ConferenceController {
             // 아까 만든 connectionProperties 기반으로 새 커넥션 생성
             String token = session.createConnection(connectionProperties).getToken();
 
+            // 세션의 형식
+            // wss://localhost:4443?sessionId=ses_BtomN6suMg&token=tok_YZNiEZTLgSdi2IGq
+            // 여기서 sessionId를 뽑아내 컨퍼런스를 먼저 저장해줘야할듯하다.
+            String customSessionName = token.substring(token.indexOf("ses_"), token.indexOf("&token="));
+            log.debug("customSessionName = {}", customSessionName);
+//            Conferences conferences = conferencesRepository.findConferencesBySessionName(customSessionName).get();
+            Conferences conferences = new Conferences();
+            conferences.setSessionName(customSessionName);
+            conferences.setProject(project);
+            System.out.println(conferences.toString());
+            conferencesRepository.save(conferences);
+
             // 세션과 토큰을 맵에 저장
             this.mapSessions.put(sessionName, session);
             this.mapSessionNamesTokens.put(sessionName, new ConcurrentHashMap<>());
@@ -143,7 +161,6 @@ public class ConferenceController {
             // 토큰과 함께 response 준비
             responseJson.put(0, token);
 
-            // 클라이언트에게 response 리턴
             return new ResponseEntity<>(responseJson, HttpStatus.OK);
 
         } catch (Exception e) {
