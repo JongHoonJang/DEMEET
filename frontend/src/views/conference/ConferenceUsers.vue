@@ -35,8 +35,6 @@ export default {
 
 	async function getConnectionData() {
 		const { connection } = await props.publisher.stream
-		console.log('ddddddddddd')
-		console.log(connection)
 		return  JSON.parse(connection.data.split('%')[0])
 		}
 
