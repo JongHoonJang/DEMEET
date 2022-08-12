@@ -10,6 +10,7 @@ export const useAccountStore = defineStore("account", {
     userList: [],
     project: {},
     projects: [],
+    endProjects: [],
     search: '',
     authError: null,
   }),
@@ -39,6 +40,7 @@ export const useAccountStore = defineStore("account", {
       })
         .then(res => {
           this.profile = res.data.user
+          this.endProjects = res.data.user.deActivateProjects
         })
     },
 
@@ -62,9 +64,10 @@ export const useAccountStore = defineStore("account", {
 
     // 로그아웃
     logout() {
-      confirm('로그아웃 하시겠습니까?')
-      this.removeToken()
-      router.push({ name: 'LoginView'})
+      if(confirm('로그아웃 하시겠습니까?')) {
+        this.removeToken()
+        router.push({ name: 'LoginView'})
+      }
     },
 
     // 비밀번호 수정

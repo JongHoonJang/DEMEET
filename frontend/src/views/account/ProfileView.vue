@@ -48,7 +48,7 @@
     </div>
     <div class='endproject'>
       <EndprojectList 
-      v-for="endProject in account.profile.deActivateProjects"
+      v-for="endProject in account.endProjects"
       :key="endProject.pid"
       :endProject="endProject"
       />

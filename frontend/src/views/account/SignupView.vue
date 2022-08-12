@@ -9,7 +9,8 @@
     <form @submit.prevent="account.signup(signdata)" class='account-info'>
       <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
       <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
-      <p><input v-model.trim="signdata.password" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model.trim="signdata.password" @input="limitTitle()" type="password" placeholder="Password" class="input-prop"></p>
+      <p class="pw-error" v-if="isPasswordError">최소 8자리이상 입력해주세요</p>
       <p><input v-model.trim="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
       <button class="signup-btn">Sign Up</button>
       <router-link class="back" :to="{ name: 'LoginView' }">back</router-link>
@@ -30,6 +31,7 @@ import { useAccountStore } from "@/stores/account"
 export default defineComponent({
 
   setup() {
+    const isPasswordError = ref(false)
     const signdata = ref({
       nickname: '',
       email: '',
@@ -50,14 +52,32 @@ export default defineComponent({
           }
         }
       }
+    }
+    const limitTitle = () => {
+      const newTitle = []
+      if(signdata.value.password.length > 8) {
+        signdata.value.password.split(' ').reduce((acc, cur) => {
+          if (1 < acc + cur.length <= 8) {
+            newTitle.push(cur)
+          }  
+          isPasswordError.value = false
+        }, 0)
+      }else if (signdata.value.password.length === 0){
+        isPasswordError.value = false
+      }else{
+        isPasswordError.value = true
+      }
 
     }
+
     const account = useAccountStore()
     return {
       account,
       signdata,
       password2,
-      sign
+      isPasswordError,
+      sign,
+      limitTitle
     }
   },
 })
@@ -69,6 +89,14 @@ export default defineComponent({
     flex-direction: column-reverse;
     align-items: center;
   }
+}
+
+.pw-error {
+  color: red;
+  font-size: 8px;
+  margin: 0%;
+  text-align: start;
+  margin-left:12px;
 }
 .backdrop {
   display: flex;
@@ -153,7 +181,7 @@ input::placeholder {color:white;}
   width: 80px;
   height: 30px;
   background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .back {
