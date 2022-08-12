@@ -71,13 +71,23 @@ export default defineComponent({
 
 .pass-cg-btn {
   margin: 40px;
-  width: 283px;
+  width: 260px;
   height: 40px;
-
-  background: #2097F7;
-  border-radius: 10px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
 }
-
+.pass-cg-btn:hover {
+  transform: scale(1.1);
+}
 input {
   box-sizing: border-box;
   width: 318px;

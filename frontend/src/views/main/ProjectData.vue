@@ -176,7 +176,7 @@ export default defineComponent({
     const account = useAccountStore()
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
-    await axios("http://localhost:8282/projects/" + 
+    await axios("http://localhost:8080/projects/" + 
     // await axios("https://i7b309.p.ssafy.io/apiprojects/" + 
     project_pk.value, {
       method: "get",
@@ -275,10 +275,6 @@ export default defineComponent({
 .blue-btn {
   width: 92px;
   height: 36px;
-  /* background: #2097F7;
-  border-radius: 5px;
-  color: white;
-  font: bold;*/
   margin-left: 110px; 
   background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
   border: 1px solid #54A1FD;

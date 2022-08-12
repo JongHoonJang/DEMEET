@@ -92,7 +92,9 @@ export default defineComponent({
   flex-direction: column;
   float: right;
 }
-
+.project-box:hover {
+  transform: scale(1.1);
+}
 .on {
   width: 28px;
   height: 20px;
