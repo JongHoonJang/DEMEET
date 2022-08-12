@@ -29,11 +29,11 @@
 		<div id="conference-main">
         <!-- 영상, 드로잉 등 -->
 			<ConferenceVideo
-				v-if="!isDrawing"
 				:session = "session"
 				:mainStreamManager = "mainStreamManager"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
+				:isDrawing="isDrawing"
 			/>
 			<DrawingView 
 				v-if="isDrawing"
@@ -73,7 +73,7 @@
 		@video-on-off="videoOnOff"
 		@mic-on-off="micOnOff"
 		@share-screen="startShareScreen"
-		@share-drawing="dumpMethod"
+		@share-drawing="startShareDrawing"
 		@session-exit="leaveSession"
 		@user-list-on-off="userListOnOff"
 		@chatting-on-off="chattingOnOff"
@@ -163,10 +163,9 @@ setup() {
 			// On every new Stream received...
 			session.value.on('streamCreated', ({ stream }) => {
 				var subscriber = session.value.subscribe(stream)
+				subscribers.value.push(subscriber)
 				users.value.push(subscriber)
 			})
-
-
 
 
 			// On every Stream destroyed...
@@ -202,7 +201,7 @@ setup() {
 						videoSource: undefined, // The source of video. If undefined default webcam
 						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
 						publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-						resolution: '640x480',  // The resolution of your video
+						resolution: '320x240',  // The resolution of your video
 						frameRate: 30,			// The frame rate of your video
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 						mirror: false       	// Whether to mirror your local video or not
@@ -468,61 +467,57 @@ setup() {
 		})
 	}
 
-	// const startShareDrawing = () => {
-	// 	// isDrawing.value = !isDrawing.value
-	// 	secondPublisher.value = publisher.value
+	const startShareDrawing = () => {
+		isDrawing.value = !isDrawing.value
+		secondPublisher.value = publisher.value
 
-	// 	var FRAME_RATE = 10;
+		var FRAME_RATE = 10
 
-	// 	OV.value.getUserMedia({
-	// 		audioSource: false,
-	// 		videoSource: undefined,
-	// 		resolution: '1280x720',
-	// 		frameRate: FRAME_RATE
-	// 	})
-	// 	.then(mediaStream => {
+		OV.value.getUserMedia({
+			audioSource: false,
+			videoSource: undefined,
+			resolution: '1280x720',
+			frameRate: FRAME_RATE
+		})
+		.then(mediaStream => {
 
-	// 		var videoTrack = mediaStream.getVideoTracks()[0]
-	// 		console.log('====videoTrack====')
-	// 		console.log(videoTrack)
-	// 		var video = document.createElement('video')
-	// 		video.srcObject = new MediaStream([videoTrack])
-	// 		console.log('====video====')
-	// 		console.log(video.srcObject)
+			var canvas = document.getElementById('canvas')  // canvas 잡은 거 확인
+			var stream = canvas.captureStream()
+			console.log(publisher.value)
+			// var ctx = canvas.getContext('2d')
+			// ctx.filter = 'grayscale(100%)'
 
-	// 		var canvas = document.createElement('canvas')
-	// 		var ctx = canvas.getContext('2d')
-	// 		ctx.filter = 'grayscale(100%)'
+			var videoTrack = mediaStream.getVideoTracks()[0]
+			var video = document.createElement('video')
+			video.srcObject = new MediaStream([videoTrack])
+			console.log(MediaStream)
 
-	// 		video.addEventListener('play', () => {
-	// 			var loop = () => {
-	// 				if (!video.paused && !video.ended) {
-	// 					ctx.drawImage(video, 0, 0, 300, 170)
-	// 					setTimeout(loop, 1000/ FRAME_RATE) // Drawing at 10 fps
-	// 					console.log("=+=+=+=+=+=+=++=+=+=+==")
-	// 				}
-	// 			};
-	// 			loop();
-	// 		});
-	// 		video.play();
 
-	// 		var grayVideoTrack = canvas.captureStream(FRAME_RATE).getVideoTracks()[2]
-	// 		var againPublisher = OV.value.initPublisher('DrawingView',
-	// 			{
-	// 				audioSource: false,
-	// 				videoSource: grayVideoTrack
-	// 			})
-	// 				session.value.unpublish(publisher.value).then(() => {
-	// 				mainStreamManager.value = againPublisher
-	// 				publisher.value = againPublisher
-	// 			}).then(() => {
-	// 				session.value.publish(publisher.value)
-	// 			})
-	// 			console.log("+-+-+-+-+--+-+-+-+-+-+-+-+-+-+-+-+-+-+-++")
-	// 			console.log(publisher)
-	// 			console.log(againPublisher)
-	// 	});
-	// }
+			video.addEventListener('play', () => {
+				var loop = () => {
+					if (!video.paused && !video.ended) {
+						// ctx.drawImage(video, 0, 0, 300, 170)
+						setTimeout(loop, 1000/ FRAME_RATE) // Drawing at 10 fps
+					}
+				}
+				loop()
+			})
+			video.play()
+			// var grayVideoTrack = canvas.captureStream(FRAME_RATE)
+			console.log(stream)  // 일단 웹액스
+			var againPublisher = OV.value.initPublisher('video.srcObject',
+				{
+					audioSource: true,
+					videoSource: stream.getVideoTracks()[0],
+				})
+					session.value.unpublish(publisher.value).then(() => {
+					mainStreamManager.value = againPublisher
+					publisher.value = againPublisher
+				}).then(() => {
+					session.value.publish(publisher.value)
+				})
+		})
+	}
 
 	return {
 		OV,
@@ -568,7 +563,7 @@ setup() {
 		chattingOnOff,
 		micOnOff,
 		shareDrawing,
-		// startShareDrawing
+		startShareDrawing
 		
 	}
 },
