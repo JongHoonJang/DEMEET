@@ -484,7 +484,7 @@ setup() {
 			resolution: '1280x720',
 			frameRate: FRAME_RATE
 		})
-		.then(mediaStream => {
+		.then(() => {
 
 			var canvas = document.getElementById('canvas')  // canvas 잡은 거 확인
 			var stream = canvas.captureStream()
@@ -492,9 +492,11 @@ setup() {
 			var ctx = canvas.getContext('2d')
 			// ctx.filter = 'grayscale(100%)'
 
-			var videoTrack = mediaStream.getVideoTracks()[0]
+			// var videoTrack = mediaStream.getVideoTracks()[0]
 			var video = document.getElementById('videoID')
-			video.srcObject = new MediaStream([videoTrack])
+
+			video.srcObject = canvas.captureStream()
+			// video.srcObject = new MediaStream([videoTrack])
 			console.log(MediaStream)
 
 

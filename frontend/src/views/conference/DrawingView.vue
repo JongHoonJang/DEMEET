@@ -39,7 +39,14 @@ export default {
         backgroundColor: 'rgb(250,250,250)'
       })
       fabric.Object.prototype.transparentCorners = true
-
+      let text = new fabric.IText('Start Drawing',{
+          left: 320,
+          top: 240,
+          fontSize: 30,
+          originX: 'center',
+          originY: 'center'
+        })
+      canvas.add(text)
       // 드로잉모드 on/off element
       const drawingModeEl = $('drawing-mode'),
             // 도구상자 숨김/보이기 => 추후에 적용

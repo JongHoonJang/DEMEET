@@ -296,13 +296,21 @@ export default defineComponent({
 .back-btn {
   width: 92px;
   height: 36px;
-  background: #2097F7;
-  border-radius: 5px;
+  background: radial-gradient(95% 60% at 50% 75%, #0060d6 0%, #000000 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
   color: white;
-  font: bold;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
 }
 .back-btn:hover{
-  background: #2097F7;
+  transform: scale(1.2);
+  color: #9E9E9E;
 }
 
 .red-btn {
