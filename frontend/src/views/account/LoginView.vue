@@ -154,6 +154,7 @@ input::placeholder {color:white;}
   width: 60px;
   height: 30px;
   background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
-  border-radius: 5px;
+  border-radius: 10px;
+  
 }
 </style>
