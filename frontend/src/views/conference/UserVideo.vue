@@ -1,6 +1,6 @@
 <template>
 <div v-if="streamManager">
-	<ov-video :streamManager="streamManager"/>
+	<ov-video :streamManager="streamManager" :isDrawing="isDrawing"/>
 	<div><p>{{ clientData.clientData }}</p></div>
 </div>
 </template>
@@ -23,6 +23,9 @@ export default {
 				return {}
 			}
 		},
+		isDrawing:{
+			type:Boolean
+		}
 	},
 
 	setup(props){
