@@ -19,6 +19,10 @@ public class Conferences {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long cid;
 
+    @ManyToOne
+    @JoinColumn(name = "pid")
+    Projects project;
+
     @Column(nullable = false)
     String sessionName;
     @Column(nullable = false)

@@ -24,7 +24,7 @@ public interface ProjectsService {
 
     List<ProjectSimpleInfoDTO> getActivateProjectsList(Long uid) throws ProjectNullException;
 
-    Optional<Projects> getProjectBySessionId(String sessionId) throws ProjectNullException;
+    Optional<Projects> getProjectByCustomSessionName(String sessionId) throws ProjectNullException;
 
     Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException;
 

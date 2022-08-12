@@ -53,15 +53,22 @@ public class ConferenceController {
     @RequestMapping(value = "/get-token", method = RequestMethod.POST)
     public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam) throws ParseException {
         System.out.println("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
+        /*
+        세션의 이름과 유니크세션은 오픈비두 서버에서 자체적으로 만들어주는듯하다
+        그래서 컨퍼런스 테이블에 프로젝트에 있는 세션아이디를 같이 저장해 준 후
+        특정 사용자가 해당 세션을 열려고할때 그 세션이 활성화되어있는지 아닌지 endTime을 체크하여 확인해주고
+        그 세션을 열 수 있도록 해야할것같다.
 
+         */
         JSONObject sessionJSON = (JSONObject) new JSONParser().parse(sessionsNameParam);
 
+        JSONObject responseJson = new JSONObject();
         // 연결할 비디오 콜
         String sessionName = (String) sessionJSON.get("sessionName");
-        // 전체 프로젝트들리스트를 가져와서 그 안에 sessionName이 위 sessionName과 같지 않으면 토큰생성해주는걸 막아야할듯하다.
-        // 프로젝트 목록에서 SessionName과 같은 값이 있는지 확인
+        // 전체 프로젝트들리스트를 가져와서 그 안에 customSessionName이 위 sessionName 같지 않으면 토큰생성해주는걸 막아야할듯하다.
+        // 프로젝트 목록에서 sessionName과 같은 값이 있는지 확인
         try {
-            Projects project = projectsService.getProjectBySessionId(sessionName).get();
+            Projects project = projectsService.getProjectByCustomSessionName(sessionName).get();
         } catch (ProjectNullException e) {
             log.error("can not find project by pid");
             return ResponseEntity.status(400).body(sessionJSON);
@@ -69,7 +76,14 @@ public class ConferenceController {
 
 
         // 이 유저의 역할
-        //OpenViduRole role = LoginController.users.get(httpSession.getAttribute("loggedUser")).role;
+        /*
+        역할은 총 3종류가있다.
+        MODERATOR, PUBLISHER, SUBSCRIBER
+        SUBSCRIBER는 다른사람의 영상을 볼수만있다.
+        PUBLISHER는 내 영상을 호출할수도있다
+        MODERATOR는 다른사람의 영상을 끊거나 세션을 종료시킬수도있다.
+        우리는 전부 같은 권한을 가질수있도록 PUBLISHER로 통일해야할듯하다.
+         */
         OpenViduRole role = OpenViduRole.PUBLISHER;
 
         // 유저가 컨퍼런스에 참여할 때, 다른 유저에게 넘겨줄 정보
@@ -81,12 +95,11 @@ public class ConferenceController {
         // 서버 데이터와 역할을 담은 connectionProperties 객체 빌드
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).data(serverData).role(role).build();
 
-        JSONObject responseJson = new JSONObject();
 
 
+        // 세션이 이미 있는 경우
         if (this.mapSessions.get(sessionName) != null) {
             log.info("session aleady exists");
-            // 세션이 이미 있는 경우
             log.info("Existing sessing " + sessionName);
             try {
                 // 아까 만든 connectionProperties로 새로운 연결 생성

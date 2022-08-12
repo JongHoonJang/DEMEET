@@ -4,7 +4,9 @@ import com.ssafy.DTO.openvidu.OVSessionCreatedDTO;
 import com.ssafy.DTO.openvidu.OVSessionDestroyedDTO;
 import com.ssafy.common.util.TypeConverter;
 import com.ssafy.db.entity.Conferences;
+import com.ssafy.db.entity.Projects;
 import com.ssafy.db.repository.ConferencesRepository;
+import com.ssafy.db.repository.ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class WebHookServiceImpl implements WebhookService {
 
     @Autowired
     ConferencesRepository conferencesRepository;
+
+    @Autowired
+    ProjectsRepository projectsRepository;
 
     @Autowired
     TypeConverter typeConverter;
@@ -50,11 +55,15 @@ public class WebHookServiceImpl implements WebhookService {
         Conferences conference = conferencesRepository.findConferencesByUniqueSessionName(ovSessionDestroyedDTO.getUniqueSessionId())
                 .orElseThrow(IllegalStateException::new);
         if (conference == null) {
-            log.debug("WebhookService.editConferenceWithOvSessionDestroyed: conference를 찾을수가없다.");
+            log.debug("can't find conference with unique session name " + ovSessionDestroyedDTO.getUniqueSessionId());
         }
         conference.setActivation(false);
+        // 종료시간 설정
         LocalDateTime endTime = typeConverter.LongToLocalDateTime(ovSessionDestroyedDTO.getTimestamp());
         conference.setConfEndTime(endTime);
+        Projects projects = conference.getProject();
+        projects.setTotalMeetTime(projects.getTotalMeetTime()+ovSessionDestroyedDTO.getDuration());
+        projectsRepository.save(projects);
         return conferencesRepository.save(conference);
     }
 }
