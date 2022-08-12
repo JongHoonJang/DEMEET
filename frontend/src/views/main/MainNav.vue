@@ -30,8 +30,10 @@ export default defineComponent({
       account.search = search.value
       if (account.search){
         account.projects = account.projects.filter(res => res.pjtName.includes(account.search))
+        account.endProjects = account.endProjects.filter(res => res.pjtName.includes(account.search))
       }else{
         account.fetchProjects()
+        account.fetchProfile()
       }
     }
     return {
@@ -76,6 +78,7 @@ export default defineComponent({
   margin-top: 12px;
   display: flex;
 }
+
 
 nav {
   height: 70px;
@@ -122,7 +125,4 @@ nav div a {
   font-size: 24px;
 }
 
-nav a.router-link-exact-active {
-  color: #2978c2;
-}
 </style>
