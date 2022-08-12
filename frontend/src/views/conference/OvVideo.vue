@@ -1,8 +1,10 @@
 <template>
-	<video autoplay/>
+	<video id="videoID" autoplay/>
 </template>
 
 <script>
+import {ref} from 'vue'
+
 export default {
 	name: 'OvVideo',
 
@@ -13,6 +15,14 @@ export default {
 				return {}
 			}
 		},
+		isDrawing:{
+			type:Boolean
+		}
+	},
+	
+	setup(props) {
+		const data = ref(props)
+		console.log(data.value.isDrawing)
 	},
 
 	mounted () {
