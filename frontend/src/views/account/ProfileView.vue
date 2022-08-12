@@ -230,12 +230,22 @@ input {
 
 .pwedit-btn {
   width: 148px;
-  height: 40px;
+  height: 50px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
   color: white;
-  background: #2D68FE;
-  border-radius: 5px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
 }
-
+.pwedit-btn:hover {
+  transform: scale(1.1);
+}
 #edit {
   color: white;
 }
