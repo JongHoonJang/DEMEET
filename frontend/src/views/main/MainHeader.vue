@@ -69,6 +69,14 @@ export default defineComponent({
   align-items: center;
 }
 
+.create-box:hover {
+  transform: scale(1.1);
+}
+.create-box:hover #add{
+  transform: scale(1.1);
+  color: #54A1FD;
+}
+
 .container {
   margin-left: 100px;
   display: flex;
