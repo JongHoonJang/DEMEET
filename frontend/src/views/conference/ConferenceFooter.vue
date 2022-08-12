@@ -1,14 +1,14 @@
 <template>
   <div>
+    <!-- 소리 -->
+    <!-- <button type="button" @click="$emit('micOnOff'), micIcon()">
+      <span v-if="micValue" class="material-symbols-outlined">volume_up</span>
+      <span v-if="!micValue" class="material-symbols-outlined">volume_off</span>
+    </button>   -->
     <!-- 마이크 음소거 -->
-    <button type="button" @click="$emit('micOnOff'), micIcon()">
-      <span v-if="micValue" class="material-symbols-outlined">mic</span>
-      <span v-if="!micValue" class="material-symbols-outlined">mic_off</span>
-    </button>  
-    <!-- 스피커 끄기 내가 다른 사람 소리 안 듣게 -->
     <button type="button" @click="$emit('audioOnOff'), audioIcon()">
-      <span v-if="audioValue" class="material-symbols-outlined">volume_up</span>
-      <span v-if="!audioValue" class="material-symbols-outlined">volume_off</span>
+      <span v-if="audioValue" class="material-symbols-outlined">mic</span>
+      <span v-if="!audioValue" class="material-symbols-outlined">mic_off</span>
     </button>  
     <!-- 내 영상 공유 중지 -->
     <button type="button" @click="$emit('videoOnOff'), videoIcon()">
