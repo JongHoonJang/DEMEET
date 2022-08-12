@@ -6,7 +6,7 @@
 				<user-video :stream-manager="mainStreamManager"/>
 			</div> -->
 			<div id="video-container" class="col-md-6">
-				<user-video :streamManager="publisher"/>
+				<user-video :streamManager="publisher" :isDrawing="isDrawing"/>
 				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" />
 			</div>
 		</div>
@@ -48,6 +48,9 @@ export default {
 				return []
 			}
 		},
+		isDrawing:{
+			type:Boolean
+		}
 	},
 
 	setup(){

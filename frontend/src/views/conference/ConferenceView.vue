@@ -168,6 +168,7 @@ setup() {
 			})
 
 
+
 			// On every Stream destroyed...
 			session.value.on('streamDestroyed', ({ stream }) => {
 				const index = subscribers.value.indexOf(stream.streamManager, 0)
@@ -459,7 +460,9 @@ setup() {
 		session.value.unpublish(publisher.value).then(() => {
 			// Assigning the new publisher to our global variable 'publisher'
 			mainStreamManager.value = newPublisher
-			publisher.value = newPublisher}).then(() => {
+			publisher.value = newPublisher
+			
+			}).then(() => {
 				// Publishing the new publisher
 				session.value.publish(publisher.value).then(() => {
 				})
@@ -470,12 +473,14 @@ setup() {
 	const startShareDrawing = () => {
 		isDrawing.value = !isDrawing.value
 		secondPublisher.value = publisher.value
+		console.log('========')
+		console.log(publisher.value)
 
 		var FRAME_RATE = 10
 
 		OV.value.getUserMedia({
 			audioSource: false,
-			videoSource: undefined,
+			videoSource: undefined, 
 			resolution: '1280x720',
 			frameRate: FRAME_RATE
 		})
@@ -484,11 +489,11 @@ setup() {
 			var canvas = document.getElementById('canvas')  // canvas 잡은 거 확인
 			var stream = canvas.captureStream()
 			console.log(publisher.value)
-			// var ctx = canvas.getContext('2d')
+			var ctx = canvas.getContext('2d')
 			// ctx.filter = 'grayscale(100%)'
 
 			var videoTrack = mediaStream.getVideoTracks()[0]
-			var video = document.createElement('video')
+			var video = document.getElementById('videoID')
 			video.srcObject = new MediaStream([videoTrack])
 			console.log(MediaStream)
 
@@ -496,7 +501,7 @@ setup() {
 			video.addEventListener('play', () => {
 				var loop = () => {
 					if (!video.paused && !video.ended) {
-						// ctx.drawImage(video, 0, 0, 300, 170)
+						ctx.drawImage(video, 0, 0, 300, 170)
 						setTimeout(loop, 1000/ FRAME_RATE) // Drawing at 10 fps
 					}
 				}
@@ -504,20 +509,25 @@ setup() {
 			})
 			video.play()
 			// var grayVideoTrack = canvas.captureStream(FRAME_RATE)
-			console.log(stream)  // 일단 웹액스
+			console.log(stream.getVideoTracks())  // 일단 웹액스
 			var againPublisher = OV.value.initPublisher('video.srcObject',
 				{
 					audioSource: true,
 					videoSource: stream.getVideoTracks()[0],
 				})
+				againPublisher.once('accessAllowed', () => {
 					session.value.unpublish(publisher.value).then(() => {
-					mainStreamManager.value = againPublisher
+					// mainStreamManager.value = againPublisher
 					publisher.value = againPublisher
+					console.log('========')
+					console.log(publisher.value)
 				}).then(() => {
-					session.value.publish(publisher.value)
+					session.value.publish(publisher.value).then(() => {})
+				})
 				})
 		})
 	}
+	
 
 	return {
 		OV,
