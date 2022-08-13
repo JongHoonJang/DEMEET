@@ -7,7 +7,7 @@
       </div>
       <div class='profile-id'>
         <div class='profile-image' @click="isInput=true">
-          <input v-if="isInput" type="file" accept=".jpg,.png,.jpeg" class="ex_file" @change="fileUpload">
+          <input v-if="isInput" type="file" accept=".jpg,.png" class="ex_file" @change="fileUpload">
           <div class="image-btn" v-if="isInput">
             <button @click="cancel">취소</button>
             <button @click="profileDelete">삭제</button>
