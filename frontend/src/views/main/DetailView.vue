@@ -73,7 +73,7 @@ export default defineComponent({
 
 .detail-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .detail-box{

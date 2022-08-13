@@ -9,7 +9,7 @@
     <form @submit.prevent="account.signup(signdata)" class='account-info'>
       <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
       <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
-      <p><input v-model.trim="signdata.password" @input="limitTitle()" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model.trim="signdata.password" @input="limitPassword()" type="password" placeholder="Password" class="input-prop"></p>
       <p class="pw-error" v-if="isPasswordError">최소 8자리이상 입력해주세요</p>
       <p><input v-model.trim="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
       <button class="signup-btn">Sign Up</button>
@@ -46,7 +46,7 @@ export default defineComponent({
           alert('email을 입력해 주세요.')
         }else{
           if (isPasswordError.value){
-            alert('비밀번호를 최소 8자리 이상 입력해주세요')
+            alert('비밀번호를 최소 8자리 이상 입력해주세요.')
           }else if (signdata.value.password === password2){
             account.signup(signdata)
           }else {
@@ -55,12 +55,12 @@ export default defineComponent({
         }
       }
     }
-    const limitTitle = () => {
-      const newTitle = []
+    const limitPassword = () => {
+      const newPassword = []
       if(signdata.value.password.length >= 8) {
         signdata.value.password.split(' ').reduce((acc, cur) => {
           if (1 < acc + cur.length < 8) {
-            newTitle.push(cur)
+            newPassword.push(cur)
           }  
           isPasswordError.value = false
         }, 0)
@@ -79,7 +79,7 @@ export default defineComponent({
       password2,
       isPasswordError,
       sign,
-      limitTitle
+      limitPassword
     }
   },
 })
