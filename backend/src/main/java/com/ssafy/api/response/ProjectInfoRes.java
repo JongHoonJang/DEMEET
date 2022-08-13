@@ -17,9 +17,7 @@ public class ProjectInfoRes extends BaseResponseBody {
 
     ProjectInfoDTO project = new ProjectInfoDTO();
 
-    public ProjectInfoRes(){
-        super();
-    }
+    public ProjectInfoRes(){super();}
     public static ProjectInfoRes of(Integer statusCode, String message, Projects project, Long projectOwner,  List<UserSimpleInfoDTO> userList){
         ProjectInfoRes res = new ProjectInfoRes();
 //         project = new ProjectInfoDTO();
