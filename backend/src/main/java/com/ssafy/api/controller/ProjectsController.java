@@ -8,14 +8,12 @@ import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.response.ProjectInfoRes;
 import com.ssafy.api.response.ProjectSimpleInfoRes;
-import com.ssafy.api.service.ProjectsService;
-import com.ssafy.api.service.UserProjectService;
-import com.ssafy.api.service.UsersService;
+import com.ssafy.api.service.*;
 import com.ssafy.common.auth.SsafyUsersDetails;
-import com.ssafy.common.customException.ProjectNullException;
-import com.ssafy.common.customException.UidNullException;
-import com.ssafy.common.customException.UserNullException;
+import com.ssafy.common.customException.*;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.Conferences;
+import com.ssafy.db.entity.DrawingImgPath;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.kurento.jsonrpc.client.JsonRpcClient.log;
@@ -42,7 +41,13 @@ public class ProjectsController {
     ProjectsService projectsService;
 
     @Autowired
+    ConferencesService conferencesService;
+
+    @Autowired
     UserProjectService usersProjectService;
+
+    @Autowired
+    AwsS3Service awsS3Service;
 
     @PostMapping()
     public ResponseEntity<BaseResponseBody> createProject(@ApiIgnore Authentication authentication, @RequestBody ProjectsCreatePostReq projectsCreatePostReq) {
@@ -205,7 +210,37 @@ public class ProjectsController {
 
     // 드로잉 이미지 업로드
     @PostMapping("/drawing")
-    public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @RequestBody DrawingUploadReq drawingUploadReq) {
-        return null;
+    public ResponseEntity<BaseResponseBody> uploadProjectDrawing(@ApiIgnore Authentication authentication, @ModelAttribute DrawingUploadReq drawingUploadReq) {
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        Long uid = ssafyUsersDetails.getUserUid();
+        String openviduSessionId = drawingUploadReq.getOpenviduSessionId();
+        log.info("enter uploadProjectDrawing in ProjectsController");
+        log.debug("openviduSessionId = {}", drawingUploadReq.getOpenviduSessionId());
+//        받은 openviduSessionId를 기반으로 이미지 저장할 예정이므로 다음과 같은 객체들을 가져온다.
+//        openviduSessionId를 가지고있는 conferences
+//        생성자의 Users
+        Conferences conference = null;
+        Users user = null;
+        String path = null;
+        DrawingImgPath drawingImgPath = null;
+        try {
+            conference = conferencesService.findConferencesBySessionNameAndActivation(openviduSessionId);
+            user = usersService.getUsersByUid(uid);
+            path = awsS3Service.putImage(drawingUploadReq.getMultipartFile(), conference.getProject().getPid(), "drawing");
+//            이제 db에 정보 넣기
+            drawingImgPath = awsS3Service.saveDrawingImagePath(path, conference, user, "drawing");
+            log.debug("saveDrawingImagePath = {}", drawingImgPath.toString());
+        } catch (ConferenceNullException e) {
+            throw new RuntimeException(e);
+        } catch (UserNullException e) {
+            throw new RuntimeException(e);
+        } catch (UidNullException e) {
+            throw new RuntimeException(e);
+        } catch (NotImageException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, path));
     }
 }

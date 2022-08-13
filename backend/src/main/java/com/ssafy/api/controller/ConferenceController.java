@@ -160,7 +160,7 @@ public class ConferenceController {
 
             // 토큰과 함께 response 준비
             responseJson.put(0, token);
-
+            log.info("정상적으로 리스폰스");
             return new ResponseEntity<>(responseJson, HttpStatus.OK);
 
         } catch (Exception e) {
