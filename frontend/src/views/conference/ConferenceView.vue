@@ -158,6 +158,7 @@ setup() {
 				var subscriber = session.value.subscribe(stream)
 				subscribers.value.push(subscriber)
 				users.value.push(subscriber)
+				getConnections(openviduSessionId)
 			})
 
 
