@@ -310,9 +310,9 @@ export const useAccountStore = defineStore("account", {
         data: imageData,
         headers: this.authHeader,
       })
-        .then(res => {
-          this.project = res.data
-          //router.go({ name: 'DetailView' })
+        .then(() => {
+          alert('저장되었습니다.')
+          
         })
         .catch(err => console.error(err.response))
     }
