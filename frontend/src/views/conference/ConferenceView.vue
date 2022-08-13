@@ -126,7 +126,8 @@ setup() {
 	let subscribers = ref([])
 	let conferenceAction = ref(false)
 	let users = ref([])
-
+	let tempToken = ref("")
+	var openviduSessionId = null
 	const mySessionId = route.params.sessionId
 	// pinai 
 	const myUserName = userData.value.nickname
@@ -254,6 +255,12 @@ setup() {
 				{sessionName : mySessionId},
 				(response) => {
 					let token = response // Get token from response
+					tempToken.value = token.substring(
+					token.indexOf("ses_"),
+					token.indexOf("&token")
+					);
+					openviduSessionId = tempToken;					
+					
 					callback(token) // Continue the join operation
 				}
 			)
@@ -305,6 +312,25 @@ setup() {
 				})
 		})
 	}
+
+	const getConnections = (sessionId) => {
+		return new Promise((resolve, reject) => {
+
+			axios
+			.get(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/`, {
+				params: {'SESSION_ID': sessionId},
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Basic ${btoa('OPENVIDUAPP:wlwhseodnjs123')}`,
+				}
+			},
+			)
+			.then(response => response.data)
+			.then(data =>  resolve(data.id))
+			.catch(error => reject(error.response))
+		
+		});
+	};
 
 	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
 	const createToken = (sessionId) => {
@@ -490,6 +516,7 @@ setup() {
 		conferenceAction,
 		users,
 		secondPublisher,
+		tempToken,
 		// 채팅 변수
 		msgs,
 		chatting,
@@ -511,6 +538,7 @@ setup() {
 		getToken,
 		startShareScreen,
 		// httpPostRequest,
+		getConnections,
 		createSession,
 		createToken,
 		// 채팅 함수
