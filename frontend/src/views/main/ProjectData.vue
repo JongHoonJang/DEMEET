@@ -176,9 +176,7 @@ export default defineComponent({
     const account = useAccountStore()
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
-    await axios("http://localhost:8080/projects/" + 
-    // await axios("https://i7b309.p.ssafy.io/apiprojects/" + 
-    project_pk.value, {
+    await axios(process.env.VUE_APP_API_URL + "projects/" + project_pk.value, {
       method: "get",
       headers: account.authHeader
     }).then(res => account.project = res.data.project)
@@ -191,7 +189,7 @@ export default defineComponent({
     })
     const host = ref(pjt.value.member.find(res => res.uid===pjt.value.projectOwner))
     const goConference = () => {
-      router.push({name:'ConferenceView', params: {sessionId: pjt.value.sessionId}})
+      router.push({name:'ConferenceView', params: {pid: project_pk.value ,sessionId: pjt.value.sessionId}})
     }
     const endProject = () => {
       projectData.value.deactivate = true

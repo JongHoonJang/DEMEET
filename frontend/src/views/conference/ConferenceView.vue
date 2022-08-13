@@ -1,23 +1,15 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
-		<div id="join" v-if="!conferenceAction">
-			<a href="/">
-				<div id="img-div"> <img class='bg-image' src="@/assets/DEMEET_logo.png" alt="" ></div>
-			</a>
-			<div id="join-dialog" class="jumbotron vertical-center">
-				<h1>Join a video session</h1>
-				<div class="form-group">
-					<p>Participant : {{myUserName}}</p>	
-					<p>Session : {{account.project.pjtName}}</p>
-					
-					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
-					</p>
-				</div>
-			</div>
-		</div>
-
+	<Suspense v-if="!conferenceAction" >
+		<template #default>
+			<StartConference 
+			/>
+		</template>
+		<template #fallback>
+			<h1>Loading...</h1>
+		</template>
+	</Suspense>
 	<div id="session" v-if="conferenceAction">
   <nav>
 		<!-- <div id="session-header">
@@ -91,7 +83,7 @@ import ConferenceVideo from './ConferenceVideo'
 import ConferenceUsers from './ConferenceUsers'
 import ConferenceFooter from './ConferenceFooter'
 import DrawingView from './DrawingView'
-
+import StartConference from './StartConference'
 import messageForm from './chat/messageForm.vue'
 import messageList from './chat/messageList.vue'
 import { useRoute } from 'vue-router'
@@ -116,6 +108,7 @@ components: {
 	ConferenceVideo,
 	ConferenceUsers,
 	ConferenceFooter,
+	StartConference,
 	DrawingView,
 	messageForm,
 	messageList
