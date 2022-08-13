@@ -314,6 +314,7 @@ export const useAccountStore = defineStore("account", {
 
     // 프로젝트 이미지 저장
     saveImage(imageData) {
+      console.log(imageData.multipartFile)
       const formSaveData = new FormData()
       formSaveData.append("openviduSessionId", imageData.openviduSessionId)
       formSaveData.append("multipartFile", imageData.multipartFile)

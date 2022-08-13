@@ -192,9 +192,26 @@ export default {
       }
       // 보기용 그림띄우는 법
       lookImage.onclick = () => {
+        const dataURLtoFile = (dataurl, fileName) => {
+  
+          var arr = dataurl.split(','),
+              mime = arr[0].match(/:(.*?);/)[1],
+              bstr = atob(arr[1]), 
+              n = bstr.length, 
+              u8arr = new Uint8Array(n)
+              
+          while(n--){
+              u8arr[n] = bstr.charCodeAt(n)
+          }
+          
+          return new File([u8arr], fileName, {type:mime})
+        }
+      
+      //Usage example:
+        let file = dataURLtoFile(canvas.toDataURL({format: 'png', quality: 0.8}),'image.png')
         const imageData = ref({
           openviduSessionId: sessionData.value.openviduSessionId,
-          multipartFile: canvas.toDataURL({format: 'png', quality: 0.8})
+          multipartFile: file
         })
         // 백엔드로 갈 데이터 형식
         if (confirm('저장하시겠습니까?')) {
