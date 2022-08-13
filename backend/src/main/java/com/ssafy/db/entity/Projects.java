@@ -33,7 +33,7 @@ public class Projects {
     // 프로젝트명 + 시작시간을 base64로 인코딩한값
     String customSessionName;
 
-    // 밀리세컨드단위로 변환된 값을 저장하기위해 Long타입으로 변경.
+    // 초단위로 변환된 값을 저장하기위해 Long타입으로 변경.
     @Column(nullable = false)
     Long totalMeetTime;
 

@@ -1,7 +1,8 @@
 package com.ssafy.api.service;
 
 import com.ssafy.common.customException.NotImageException;
-import com.ssafy.db.entity.ProfileImagePath;
+import com.ssafy.db.entity.Conferences;
+import com.ssafy.db.entity.DrawingImgPath;
 import com.ssafy.db.entity.Users;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,4 +28,6 @@ public interface AwsS3Service {
 
     // 파일 정보를 DB에 저장한다.
     Users saveImagePath(String path, long uid, String flag) throws NotImageException;
+
+    DrawingImgPath saveDrawingImagePath(String path, Conferences conference, Users user, String drawing);
 }

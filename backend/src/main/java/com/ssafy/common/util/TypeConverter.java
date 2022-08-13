@@ -38,4 +38,13 @@ public class TypeConverter {
         Long milliseconds = date.toInstant().toEpochMilli();
         return milliseconds;
     }
+
+    public String LongSecondsToStringTime(Long seconds){
+        String time = "";
+        int hour = (int) (seconds/3600);
+        int minute = (int) (seconds%3600/60);
+        int second = (int) (seconds%3600%60);
+        time = hour+":"+minute+":"+second;
+        return time;
+    }
 }
