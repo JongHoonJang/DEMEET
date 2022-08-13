@@ -10,7 +10,7 @@
 					<p>Session : {{demeet.project.pjtName}}</p>
 					
 					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
+						<button class="btn btn-lg btn-success" @click="$emit('joinSession')">Join!</button>
 					</p>
 				</div>
 			</div>
