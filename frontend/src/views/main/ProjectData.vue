@@ -336,7 +336,7 @@ export default defineComponent({
   margin-top: 30px;
   margin-right: 20px;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   margin-left: 20%;
 }
 

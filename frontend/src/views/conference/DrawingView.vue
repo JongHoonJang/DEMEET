@@ -298,12 +298,12 @@ export default {
 }
 .drawing-box{
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 8px;
 }
 #drawing-mode-options {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 #drawing-mode-options button {
   margin: 4px;

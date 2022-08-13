@@ -14,12 +14,7 @@
 	</Suspense>
 </div>
 	<div id="session" v-if="conferenceAction">
-  <nav>
-		<!-- <div id="session-header">
-				<h1 id="session-title">{{ mySessionId }}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
-		</div> -->
-  </nav>
+
   <main>
 		<div id="conference-main">
         <!-- 영상, 드로잉 등 -->
@@ -64,6 +59,7 @@
   <footer>
 		<!-- 동작 버튼 등,  -->
 		<ConferenceFooter
+		:isSharing="isSharing"
 		@audio-on-off="audioOnOff"  
 		@video-on-off="videoOnOff"
 		@mic-on-off="micOnOff"
