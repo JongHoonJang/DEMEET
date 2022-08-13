@@ -57,9 +57,9 @@ export default defineComponent({
     }
     const limitTitle = () => {
       const newTitle = []
-      if(signdata.value.password.length > 8) {
+      if(signdata.value.password.length >= 8) {
         signdata.value.password.split(' ').reduce((acc, cur) => {
-          if (1 < acc + cur.length <= 8) {
+          if (1 < acc + cur.length < 8) {
             newTitle.push(cur)
           }  
           isPasswordError.value = false
