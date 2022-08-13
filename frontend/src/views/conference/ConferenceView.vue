@@ -4,6 +4,7 @@
 	<Suspense v-if="!conferenceAction" >
 		<template #default>
 			<StartConference 
+			@joinSession="joinSession"
 			/>
 		</template>
 		<template #fallback>
