@@ -18,7 +18,10 @@
 
     <button v-if="!isSharing" type="button" @click="$emit('shareScreen')">화면공유</button>
     <button v-if="isSharing" type="button" >공유 중</button>
-    <button type="button" @click="$emit('shareDrawing')">드로잉</button> 
+    <button type="button" @click="$emit('shareDrawing'), drawIcon()">
+      <span v-if="drawValue" class="material-symbols-outlined">draw</span>
+      <span v-if="!drawValue" class="material-symbols-outlined">edit_off</span>
+    </button> 
     <!-- <button type="button" @click="$emit('shareDrawing')"><a href="http://127.0.0.1:8081/drawing" target="_blank">drawing</a></button>  -->
 
     <!-- 나가기 -->
@@ -53,6 +56,7 @@ export default {
     const audioValue = ref(true)
     const videoValue = ref(true)
     const micValue = ref(true)
+    const drawValue = ref(true)
 
     const audioIcon = () =>{
       audioValue.value = !audioValue.value
@@ -65,16 +69,22 @@ export default {
     const micIcon = () =>{
       micValue.value = !micValue.value
     }
-    
-    return {
-      audioValue,
-      videoValue,
-      micValue,
-      audioIcon,
-      videoIcon,
-      micIcon,
+
+    const drawIcon = () => {
+      drawValue.value = !drawValue.value
     }
-  },
+  
+  return {
+    audioValue,
+    videoValue,
+    micValue,
+    drawValue,
+    audioIcon,
+    videoIcon,
+    micIcon,
+    drawIcon,
+  }
+},
   create() {},
   mounted() {},
   unmounted() {},
