@@ -27,6 +27,7 @@
 			/>
 			<DrawingView 
 				v-if="isDrawing"
+				:openviduSessionId="openviduSessionId"
 			/>
 
       <!-- 참자가 목록, 채팅 -->
@@ -126,8 +127,7 @@ setup() {
 	let subscribers = ref([])
 	let conferenceAction = ref(false)
 	let users = ref([])
-	let tempToken = ref("")
-	var openviduSessionId = null
+	var openviduSessionId = ref(null)
 	const mySessionId = route.params.sessionId
 	// pinai 
 	const myUserName = userData.value.nickname
@@ -255,11 +255,11 @@ setup() {
 				{sessionName : mySessionId},
 				(response) => {
 					let token = response // Get token from response
-					tempToken.value = token.substring(
+					let tempToken = token.substring(
 					token.indexOf("ses_"),
 					token.indexOf("&token")
 					);
-					openviduSessionId = tempToken;					
+					openviduSessionId.value = tempToken;					
 					
 					callback(token) // Continue the join operation
 				}
@@ -516,7 +516,7 @@ setup() {
 		conferenceAction,
 		users,
 		secondPublisher,
-		tempToken,
+		openviduSessionId,
 		// 채팅 변수
 		msgs,
 		chatting,
