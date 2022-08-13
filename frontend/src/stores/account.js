@@ -314,10 +314,13 @@ export const useAccountStore = defineStore("account", {
 
     // 프로젝트 이미지 저장
     saveImage(imageData) {
+      const formData = new FormData()
+      formData.append("openviduSessionId", imageData.openviduSessionId)
+      formData.append("multipartFile", imageData.multipartFile)
       axios({
         url: api.projects.image_save(imageData.project_pk),
         method: 'post',
-        data: imageData,
+        data: formData,
         headers: this.authHeader,
       })
         .then(() => {
