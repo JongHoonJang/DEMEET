@@ -1,6 +1,7 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
+<div class="conferenve-container">
 	<Suspense v-if="!conferenceAction" >
 		<template #default>
 			<StartConference 
@@ -11,6 +12,7 @@
 			<h1>Loading...</h1>
 		</template>
 	</Suspense>
+</div>
 	<div id="session" v-if="conferenceAction">
   <nav>
 		<!-- <div id="session-header">
@@ -66,7 +68,7 @@
 		@video-on-off="videoOnOff"
 		@mic-on-off="micOnOff"
 		@share-screen="startShareScreen"
-		@share-drawing="startShareDrawing"
+		@share-drawing="shareDrawing"
 		@session-exit="leaveSession"
 		@user-list-on-off="userListOnOff"
 		@chatting-on-off="chattingOnOff"
@@ -373,46 +375,12 @@ setup() {
 		chattingStatus.value = !chattingStatus.value
 	}
 
-	const shareDrawing = () =>{
-		isDrawing.value = !isDrawing.value
-
-				secondPublisher.value = publisher.value
-		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
-		{ 
-			videoSource: "screen", 
-			resolution: "1280x720",
-			insertMode: "APPEND",
-			publishAudio: true,
-			publishVideo: true,
-			frameRate: 30,
-			mirror: false
-		})
-
-		newPublisher.once('accessAllowed', () => {
-			newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-				// 정지 누르면 다시 원상 복귀
-				session.value.unpublish(publisher.value).then(() => {
-				mainStreamManager.value = secondPublisher.value
-				publisher.value = secondPublisher.value
-				}).then(()=> {
-					// publish your stream
-					session.value.publish(publisher.value).then(()=>{
-						secondPublisher.value = undefined
-						isDrawing.value = !isDrawing.value
-					})
-				})
-			})
-
-		// Unpublishing the old publisher
-		session.value.unpublish(publisher.value).then(() => {
-			// Assigning the new publisher to our global variable 'publisher'
-			mainStreamManager.value = newPublisher
-			publisher.value = newPublisher}).then(() => {
-				// Publishing the new publisher
-				session.value.publish(publisher.value).then(() => {
-				})
-			})
-		})
+	const shareDrawing = () => {
+		if (isDrawing.value === false){
+			startShareDrawing()
+		}else{
+			closeShareDrawing()
+		}
 	}
 
 	const dumpMethod = () => {  // 작동 확인을 위한 함수
@@ -467,62 +435,51 @@ setup() {
 	const startShareDrawing = () => {
 		isDrawing.value = !isDrawing.value
 		secondPublisher.value = publisher.value
-		console.log('========')
-		console.log(publisher.value)
+	
 
-		var FRAME_RATE = 10
 
 		OV.value.getUserMedia({
 			audioSource: false,
 			videoSource: undefined, 
 			resolution: '1280x720',
-			frameRate: FRAME_RATE
+			frameRate: 30,
 		})
 		.then(() => {
-
 			var canvas = document.getElementById('canvas')  // canvas 잡은 거 확인
 			var stream = canvas.captureStream()
-			console.log(publisher.value)
-			var ctx = canvas.getContext('2d')
-			// ctx.filter = 'grayscale(100%)'
 
-			// var videoTrack = mediaStream.getVideoTracks()[0]
 			var video = document.getElementById('videoID')
-
 			video.srcObject = canvas.captureStream()
-			// video.srcObject = new MediaStream([videoTrack])
-			console.log(MediaStream)
 
-
-			video.addEventListener('play', () => {
-				var loop = () => {
-					if (!video.paused && !video.ended) {
-						ctx.drawImage(video, 0, 0, 300, 170)
-						setTimeout(loop, 1000/ FRAME_RATE) // Drawing at 10 fps
-					}
-				}
-				loop()
-			})
-			video.play()
 			// var grayVideoTrack = canvas.captureStream(FRAME_RATE)
-			console.log(stream.getVideoTracks())  // 일단 웹액스
-			var againPublisher = OV.value.initPublisher('video.srcObject',
+			var againPublisher = OV.value.initPublisher('ConferenceVideo',
 				{
 					audioSource: true,
 					videoSource: stream.getVideoTracks()[0],
+					resolution: '1280x720',
 				})
 				againPublisher.once('accessAllowed', () => {
 					session.value.unpublish(publisher.value).then(() => {
 					// mainStreamManager.value = againPublisher
 					publisher.value = againPublisher
-					console.log('========')
-					console.log(publisher.value)
 				}).then(() => {
 					session.value.publish(publisher.value).then(() => {})
 				})
-				})
+			})
 		})
 	}
+
+	const closeShareDrawing = () => {
+	
+	session.value.unpublish(publisher.value).then(() => {
+		publisher.value = secondPublisher.value
+		mainStreamManager.value = secondPublisher.value
+	}).then(()=>{
+		session.value.publish(publisher.value)
+		isDrawing.value = !isDrawing.value
+	})
+}
+	
 	
 
 	return {
@@ -569,8 +526,8 @@ setup() {
 		chattingOnOff,
 		micOnOff,
 		shareDrawing,
-		startShareDrawing
-		
+		startShareDrawing,
+		closeShareDrawing,
 	}
 },
 
@@ -618,8 +575,8 @@ footer {
   height: auto;
   overflow: auto;
 }
-#join {
-	position:fixed;
+
+.conferenve-container {
 	bottom:50%;
 	right:50%;
 
