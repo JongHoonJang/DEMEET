@@ -21,7 +21,7 @@ const routes = [
     component: DetailView
   },
   {
-    path: '/conference/:sessionId',
+    path: '/:pid/conference/:sessionId',
     name: 'ConferenceView',
     component: ConferenceView
   },
