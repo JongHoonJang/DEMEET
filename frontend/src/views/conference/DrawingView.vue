@@ -29,34 +29,18 @@ import { fabric } from 'fabric'
 import { useAccountStore } from "@/stores/account"
 import _ from 'lodash'
 export default {
-  props:['sessionId'],
+  props:['openviduSessionId'],
   setup(props) {
     const init = () => {
       const sessionData = ref(props)
-      const openviduSessionId = ref(sessionData.value.sessionId)
-      const imageData = ref({
-          openviduSessionId: openviduSessionId.value,
-          multipartFile: canvas.toDataURL({
-                  format: 'png',
-                  quality: 0.8
-                })
-          })
       const demeet = useAccountStore()
       // $ = id를 통해 적용할 태그를 설정
       let $ = function(id){return document.getElementById(id)}
       // 캔버스 생성
       let canvas = new fabric.Canvas('canvas',{
-        backgroundColor: 'rgb(250,250,250)'
+        backgroundColor: 'rgb(240,240,240)'
       })
       fabric.Object.prototype.transparentCorners = true
-      let text = new fabric.IText('Start Drawing',{
-          left: 320,
-          top: 240,
-          fontSize: 30,
-          originX: 'center',
-          originY: 'center'
-        })
-      canvas.add(text)
       // 드로잉모드 on/off element
       const drawingModeEl = $('drawing-mode'),
             // 도구상자 숨김/보이기 => 추후에 적용
@@ -208,6 +192,10 @@ export default {
       }
       // 보기용 그림띄우는 법
       lookImage.onclick = () => {
+        const imageData = ref({
+          openviduSessionId: sessionData.value.openviduSessionId,
+          multipartFile: canvas.toDataURL({format: 'png', quality: 0.8})
+        })
         // 백엔드로 갈 데이터 형식
         if (confirm('저장하시겠습니까?')) {
           demeet.saveImage(imageData.value)

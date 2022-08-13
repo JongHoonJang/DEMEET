@@ -11,6 +11,7 @@ export const useAccountStore = defineStore("account", {
     project: {},
     projects: [],
     endProjects: [],
+    imageList: [],
     search: '',
     authError: null,
   }),
@@ -280,10 +281,19 @@ export const useAccountStore = defineStore("account", {
         .catch(err => console.error(err.response))
     },
 
-
-
     // 프로젝트 이미지 리스트
-
+    fetchImage(project_pk) {
+      axios({
+        url: api.projects.image_save(project_pk),
+        method: 'get',
+        headers: this.authHeader,
+      })
+        .then(res => {
+          this.imageList = res.data.drawingPath
+          
+        })
+        .catch(err => console.error(err.response))
+    },
 
     // 프로젝트 이미지 삭제
     deleteImage(project_pk) {

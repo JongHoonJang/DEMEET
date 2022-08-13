@@ -2,7 +2,14 @@
 <div>
   <MainNav class="nav"/>
     <div class="detail-container">
-      <ProjectImage />
+      <Suspense>
+          <template #default>
+            <ProjectImage />
+          </template>
+          <template #fallback>
+            Product is loading...
+          </template>
+        </Suspense>
       <div class="detail-box">
         <Suspense>
           <template #default>
