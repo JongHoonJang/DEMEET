@@ -24,13 +24,23 @@
 </template>
 
 <script>
-import { onMounted } from 'vue'
+import { onMounted,ref } from 'vue'
 import { fabric } from 'fabric'
 import { useAccountStore } from "@/stores/account"
 import _ from 'lodash'
 export default {
-  setup() {
+  props:['sessionId'],
+  setup(props) {
     const init = () => {
+      const sessionData = ref(props)
+      const openviduSessionId = ref(sessionData.value.sessionId)
+      const imageData = ref({
+          openviduSessionId: openviduSessionId.value,
+          multipartFile: canvas.toDataURL({
+                  format: 'png',
+                  quality: 0.8
+                })
+          })
       const demeet = useAccountStore()
       // $ = id를 통해 적용할 태그를 설정
       let $ = function(id){return document.getElementById(id)}
@@ -116,15 +126,6 @@ export default {
           originX: 'center',
           originY: 'center'
         })
-
-        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-        //   left: 150,
-        //   top: 100,
-        //   fontSize: 30,
-        //   originX: 'center',
-        //   originY: 'center'
-        // })
-
         canvas.add(circle)
       }
       //사각형 텍스트 박스
@@ -140,14 +141,6 @@ export default {
           originY: 'center'
         })
 
-        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-        //   left: 150,
-        //   top: 100,
-        //   fontSize: 30,
-        //   originX: 'center',
-        //   originY: 'center'
-        // })
-
         canvas.add(rect)
       }
       // 삼각형 텍스트 박스
@@ -162,15 +155,6 @@ export default {
           originX: 'center',
           originY: 'center'
         })
-
-        // let text = new fabric.IText(`${inputdata.value}` || 'textbox',{
-        //   left: 150,
-        //   top: 100,
-        //   fontSize: 30,
-        //   originX: 'center',
-        //   originY: 'center'
-        // })
-
         canvas.add(triangle)
       }
 
@@ -196,6 +180,7 @@ export default {
       let x1, y1
       drawingLineEl.onclick = () => {
         isLine = !isLine
+        
         if (isLine) {
           drawingLineEl.innerText = '중지'
           canvas.selection=false
@@ -224,20 +209,9 @@ export default {
       // 보기용 그림띄우는 법
       lookImage.onclick = () => {
         // 백엔드로 갈 데이터 형식
-        const imageData = {
-          pid: demeet.project.pid,
-          image: canvas.toDataURL({
-                  format: 'png',
-                  quality: 0.8
-                })
-          }
-        demeet.saveImage(imageData)
-        //console.log(canvas.toSVG())
-        //새로운 캔버스에 저장된 데이터 띄우기
-        // canvasView.loadJoURL(JSON.stringify(canvas))
-        // document.getElementById('imageview').innerHTML=canvas.toSVG()
-        // 단일 객체 선택 불가
-        // fabric.Object.prototype.selectable = false
+        if (confirm('저장하시겠습니까?')) {
+          demeet.saveImage(imageData.value)
+        }
       }
 
 
