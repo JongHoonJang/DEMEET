@@ -279,7 +279,7 @@ input {
 
 .hidden {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .signout {
   color: black;
