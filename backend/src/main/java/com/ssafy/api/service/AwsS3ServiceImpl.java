@@ -3,8 +3,10 @@ package com.ssafy.api.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.ssafy.common.customException.NotImageException;
-import com.ssafy.db.entity.ProfileImagePath;
+import com.ssafy.db.entity.Conferences;
+import com.ssafy.db.entity.DrawingImgPath;
 import com.ssafy.db.entity.Users;
+import com.ssafy.db.repository.DrawingImagePathRepository;
 import com.ssafy.db.repository.ProfileImagePathRepository;
 import com.ssafy.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
     @Autowired
     private ProfileImagePathRepository profileImagePathRepository;
+
+    @Autowired
+    private DrawingImagePathRepository drawingImagePathRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -116,5 +121,14 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         Users users = usersRepository.getOne(uid);
         users.getProfileImagePath().setPath(path);
         return usersRepository.save(users);
+    }
+
+    @Override
+    public DrawingImgPath saveDrawingImagePath(String path, Conferences conference, Users user, String drawing) {
+        DrawingImgPath drawingImgPath = new DrawingImgPath();
+        drawingImgPath.setPath(path);
+        drawingImgPath.setConference(conference);
+        drawingImgPath.setUser(user);
+        return drawingImagePathRepository.save(drawingImgPath);
     }
 }
