@@ -42,6 +42,7 @@ export default defineComponent({
     const project_pk = ref(route.params.pid)
     const projectData = useAccountStore()
     projectData.fetchProject(project_pk.value)
+    projectData.fetchProfile()
     return {
       projectData,
       project_pk,
