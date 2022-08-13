@@ -1,5 +1,5 @@
 <template>
-	<video id="videoID" autoplay/>
+	<video id="videoID" autoplay></video>
 </template>
 
 <script>
