@@ -241,7 +241,7 @@ public class UsersController {
             path = awsS3Service.putImage(imageUploadReq.getMultipartFile(), uid, "profile");
             // 성공시 db에 정보 넣기
             System.out.println(path);
-            Users users = awsS3Service.saveImagePath(path, uid, "profile");
+            Users users = awsS3Service.saveProfileImagePath(path, uid, "profile");
             users.toString();
         } catch (IOException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
@@ -261,7 +261,7 @@ public class UsersController {
             awsS3Service.DeleteImage(uid, "profile");
             // DB에서 삭제
             // uid를 기반으로 pipid를 찾는다 -> 1:1 대응이라 가능
-            awsS3Service.saveImagePath(null, uid, "profile");
+            awsS3Service.saveProfileImagePath(null, uid, "profile");
         } catch (NotImageException e1) {
             e1.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseResponseBody.of(HttpStatus.NOT_ACCEPTABLE.value(), "the File is NOT image"));

@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
@@ -71,9 +73,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
             throw new NotImageException("method must be profile or drawing");
         }
         String folderName = getFolderName(imgid, flag);
-        ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderName);
-        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
-        ListIterator<S3ObjectSummary> listIterator = listObjectsV2Result.getObjectSummaries().listIterator();
+        ListIterator<S3ObjectSummary> listIterator = getS3Object(folderName);
 
         while (listIterator.hasNext()){
             S3ObjectSummary objectSummary = listIterator.next();
@@ -114,7 +114,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     }
 
     @Override
-    public Users saveImagePath(String path, long uid, String flag) throws NotImageException {
+    public Users saveProfileImagePath(String path, long uid, String flag) throws NotImageException {
         if(!flag.equals("profile") && !flag.equals("drawing")){
             throw new NotImageException("method must be profile or drawing");
         }
@@ -130,5 +130,12 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         drawingImgPath.setConference(conference);
         drawingImgPath.setUser(user);
         return drawingImagePathRepository.save(drawingImgPath);
+    }
+
+    @Override
+    public ListIterator<S3ObjectSummary> getS3Object(String folderPath) {
+        ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderPath);
+        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
+        return listObjectsV2Result.getObjectSummaries().listIterator();
     }
 }

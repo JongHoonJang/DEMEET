@@ -1,11 +1,14 @@
 package com.ssafy.api.controller;
 
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
 import com.ssafy.api.request.DrawingUploadReq;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
+import com.ssafy.api.response.DrawingPathRes;
 import com.ssafy.api.response.ProjectInfoRes;
 import com.ssafy.api.response.ProjectSimpleInfoRes;
 import com.ssafy.api.service.*;
@@ -22,8 +25,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
@@ -242,5 +249,33 @@ public class ProjectsController {
             throw new RuntimeException(e);
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, path));
+    }
+
+    // 프로젝트 이미지 전체 가져오기
+    @GetMapping("/drawing/{pid}")
+    public ResponseEntity<DrawingPathRes> getProjectImages(@ApiIgnore Authentication authentication, @PathVariable long pid){
+        try{
+            // file path image
+            HashMap<Long, String> pathList = new HashMap<>();
+            // pid를 통해서 cid 목록 불러오기
+            Projects projects = projectsService.getProject(pid);
+            List<Conferences> conferencesList = projects.getConferencesList();
+            for (Conferences c : conferencesList) {
+                List<DrawingImgPath> drawingImgPathList = c.getDrawingImgPathList();
+                for (DrawingImgPath d : drawingImgPathList) {
+                    pathList.put(d.getDipid(), d.getPath());
+                }
+            }
+
+            return ResponseEntity.status(200).body(DrawingPathRes.of(200, "getting Image List Success", pathList));
+
+
+
+        } catch (ProjectNullException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 }
