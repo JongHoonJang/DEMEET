@@ -2,13 +2,20 @@
 <div class="img-container">
   <h1>저장된 이미지</h1>
   <div class="window" v-if="isData">
-    <div 
+    <!-- <div 
     class="container"
     v-for="image in demeet.imageList"
     :key="image.dipid"
     :image="image"
-    >
-      <img @dblclick="downloadDelete" :src="`${image.path}`" alt="">
+    > -->
+    <div @click="downloadDelete(image)" class="container">
+      <!-- <img @dblclick="downloadDelete" :src="`${image.url}`" alt=""> -->
+      <img src="@/assets/DEMEET.jpg" alt="">
+    </div>
+    <div class="image-btn">
+      <a type="button" href="" v-if="isImage">다운로드</a>
+      <a type="button" v-if="isImage">삭제</a>
+      <a type="button" v-if="isImage" @click="isImage=false">취소</a>
     </div>
   </div>
   <div class="window" v-if="!isData">
@@ -22,7 +29,7 @@
       </div>
     </div>
   </div>
-  <div class="button-container">
+  <div class="button-container" v-if="isData">
     <button class="prev">previous</button>
     <button class="next">next</button>
   </div>
@@ -36,25 +43,23 @@ import { useRoute } from 'vue-router'
 import axios from "axios"
 export default {
   async setup() {
-    const isData = ref(false)
-    const demeet = useAccountStore()
-    const route = useRoute()  
-    const project_pk = ref(route.params.pid)
+    const isData = ref(false),
+          demeet = useAccountStore(),
+          route = useRoute()  ,
+          project_pk = ref(route.params.pid),
+          isImage = ref(false),
+          isDownload = ref(false),
+          isDelete = ref(false)
+  
     await axios({
         url: process.env.VUE_APP_API_URL + "projects/drawing/" + project_pk.value,
         method: 'get',
         headers: demeet.authHeader,
       })
         .then(res => {
-          demeet.imageList = res.data.drawingPath})
+          demeet.imageList = res.data.drawingPathList})
 
-    // if (demeet.imageList==={}) {
-    //   isData.value = false
-    // }else {
-    //   isData.value = true
-    // }
-
-    function sliderOn () {
+    const sliderOn = () => {
     const slides = document.querySelector('.slides'); // 슬라이드뼈대 감지
     const item = slides.getElementsByClassName('slide_item') // 슬라이드 아이템 획득
     const firstEle = item[0] // 첫번째 슬라이드 아이템
@@ -76,11 +81,11 @@ export default {
     }
       
     }
-    function init () {
+    
+    const init = () => {
       const container = document.querySelector(".container")
       const prevBtn = document.querySelector(".prev")
       const nextBtn = document.querySelector(".next");
-
       (function addEvent(){
         prevBtn.addEventListener('click', translateContainer.bind(this, 1))
         nextBtn.addEventListener('click', translateContainer.bind(this, -1))
@@ -97,19 +102,47 @@ export default {
       function reorganizeEl(selectedBtn) {
         container.removeAttribute('style'); (selectedBtn === 'prev') ? container.insertBefore(container.lastElementChild, container.firstElementChild): container.appendChild(container.firstElementChild)
       }
+    }
+    const num = 0
+    // if (demeet.imageList.length === 0) {
+    //   isData.value = false
+    // }else {
+    //   isData.value = true
+    // }    
+    const carousel = ref(null)
+    if (num === 1) {
+      carousel.value = sliderOn
+      isData.value = false
+    }else {
+      carousel.value = init
+      isData.value = true
     }    
+    const downloadDelete = (setImageData) => {
+      isImage.value = true
+      if (isDownload.value) {
+        const imageSaver = document.getElementById('lnkDownload');
+        imageSaver.addEventListener('click', DownloadImage, false);
+
+        const DownloadImage = (urlData) => {
+          this.href = urlData
+          this.download = 'project.png'
+        }
+        isImage.value = false
+      }else if (isDelete.value) {
+        demeet.deleteImage({dipid: setImageData.dipid})
+        isImage.value = false
+      }
+    }
     return {
       demeet,
       isData,
-      init,
-
-      sliderOn,
-
+      isImage,
+      carousel,
+      downloadDelete
     }
   },
   mounted() {
-    this.init()
-    this.sliderOn()
+    this.carousel()
   }
 }
 </script>
@@ -121,6 +154,9 @@ export default {
     flex-direction: column;
     align-items: center;
   }
+}
+.image-btn a {
+  color: white;
 }
 .button-container {
   margin-left: 28px;
@@ -147,6 +183,7 @@ h1 {
   width: 500px;
   height: 300px;
   margin-left: 28px;
+  margin-bottom: 50px;
 }
 
 .container img {
