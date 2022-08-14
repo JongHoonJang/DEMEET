@@ -12,8 +12,8 @@
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" id="lnkDownload" href="">다운로드</a></button>
-    <button><a type="button" >삭제</a></button>
+    <button><a type="button" @click="isDownload=true" id="lnkDownload" href="" download="project.png">다운로드</a></button>
+    <button><a type="button" @click="isDelete=true">삭제</a></button>
     <button><a type="button" @click="isImage=false">취소</a></button>
   </div>
   <div class="window" v-if="!isData">
@@ -112,23 +112,31 @@ export default {
     const downloadDelete = (setImageData) => {
       isImage.value = true
       if (isDownload.value) {
-        var image = new Image()
-        image.crossOrigin = "anonymous"
-        image.src = setImageData.url
-        var fileName = image.src.split("/").pop()
-        image.onload = function() {
-        var canvas = document.createElement('canvas')
-        canvas.width = this.width
-        canvas.height = this.height
-        canvas.getContext('2d').drawImage(this, 0, 0)
-        var link = document.createElement('a')
-        link.href = canvas.toDataURL()
-        link.download = fileName
-        link.click()
-        }
+        var imageSaver = document.getElementById('lnkDownload');
+        imageSaver.addEventListener('click', function() {this.href = setImageData.url}, false);
+
+      //   const saveImage = () => {
+      //       this.href = canvas.toDataURL({format: 'png', quality: 0.8 })
+      // }
+        // var image = new Image()
+        // image.crossOrigin = "anonymous"
+        // image.src = setImageData.url
+        // var fileName = image.src.split("/").pop()
+        // image.onload = function() {
+        // var canvas = document.createElement('canvas')
+        // canvas.width = this.width
+        // canvas.height = this.height
+        // canvas.getContext('2d').drawImage(this, 0, 0)
+        // var link = document.createElement('a')
+        // link.href = canvas.toDataURL()
+        // link.download = fileName
+        // link.click()
+        // }
+        isDownload.value = false
         isImage.value = false
       }else if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})
+        isDelete.value = false
         isImage.value = false
       }
     }
