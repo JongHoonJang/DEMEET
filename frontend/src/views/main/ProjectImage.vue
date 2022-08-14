@@ -113,12 +113,15 @@ export default {
       isImage.value = true
       if (isDownload.value) {
         const imageSaver = document.getElementById('lnkDownload');
-        imageSaver.addEventListener('click', DownloadImage, false);
-
-        const DownloadImage = () => {
-          this.href = setImageData.url
+        imageSaver.addEventListener('click',function() {
+          this.href = setImageData.url,
           this.download = 'project.png'
-        }
+        }, false)
+
+        // function DownloadImage() {
+        //   this.href = setImageData.url
+        //   this.download = 'project.png'
+        // }
         isImage.value = false
       }else if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})
