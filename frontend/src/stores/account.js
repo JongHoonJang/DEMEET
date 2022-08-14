@@ -202,7 +202,6 @@ export const useAccountStore = defineStore("account", {
         url: api.accounts.find_password(),
         method: 'patch',
         data: userData,
-        headers: this.authHeader,
       })
         .then(() => {
           alert('메일을 확인하세요!')
