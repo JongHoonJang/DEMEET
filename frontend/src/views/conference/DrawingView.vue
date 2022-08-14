@@ -16,9 +16,8 @@
       <button id="rect"><span class="material-symbols-outlined">check_box_outline_blank</span></button>
       <button id="triangle"><span class="material-symbols-outlined">change_history</span></button>
       <button id="delete"><span class="material-symbols-outlined">delete</span></button>
-      <button id="line">직선</button>
-      <button id="look"><span class="material-symbols-outlined">save</span></button>
     </div>
+      <button id="save"><span class="material-symbols-outlined">save</span></button>
   </div>
 
 </template>
@@ -61,10 +60,8 @@ export default {
             ITextEl = $('itext'),
             // 삭제 버튼
             deleteEl = $('delete'),
-            // 선그리기
-            drawingLineEl = $('line'),
             //보기모드 및 백엔드로 보낼 데이터
-            lookImage = $('look')
+            saveImage = $('save')
 
       // 캔버스 초기화
       clearEl.onclick = function() { 
@@ -159,39 +156,8 @@ export default {
         canvas.add(text)
       }
 
-      // 직선 그리기
-      let isLine = false
-      let x1, y1
-      drawingLineEl.onclick = () => {
-        isLine = !isLine
-        
-        if (isLine) {
-          drawingLineEl.innerText = '중지'
-          canvas.selection=false
-          canvas.getObjects('selectable', false)
-          // 마우스 눌렀을 때 좌표 값 저장
-          canvas.on('mouse:down', function(options) {
-            x1 = options.e.clientX
-            y1 = options.e.clientY
-          })
-          // 마우스 눌렀다가 땠을때 좌표 값 통해 선 그리기
-          canvas.on('mouse:up', function(options) {
-            let line = new fabric.Line([x1,y1,options.e.clientX,options.e.clientY],{ stroke: 'black' })
-            canvas.add(line)
-          })
-        }
-        else {
-          canvas.getObjects('selectable', true)
-          // 선그리기 종료
-          drawingLineEl.innerText = '직선'
-          // 마우스 함수 off
-          canvas.off('mouse:down')
-          canvas.off('mouse:up')
-          canvas.selection=true
-        }
-      }
       // 보기용 그림띄우는 법
-      lookImage.onclick = () => {
+      saveImage.onclick = () => {
         const dataURLtoFile = (dataurl, fileName) => {
   
           var arr = dataurl.split(','),
@@ -204,7 +170,7 @@ export default {
               u8arr[n] = bstr.charCodeAt(n)
           }
           
-          return new File([u8arr], fileName, {type:mime})
+          return new Blob([u8arr], fileName, {type:mime})
         }
       
       //Usage example:
@@ -218,20 +184,6 @@ export default {
           demeet.saveImage(imageData.value)
         }
       }
-
-
-      // var imageSaver = document.getElementById('lnkDownload');
-      // imageSaver.addEventListener('click', saveImage, false);
-
-      // function saveImage() {
-      //     let imageName = prompt( '파일명 입력', '' )
-      //     this.href = canvas.toDataURL({
-      //         format: 'png',
-      //         quality: 0.8
-      //     });
-      //     this.download = `${imageName}.png`
-      // }
-
     }
     onMounted(() => {
       init()
