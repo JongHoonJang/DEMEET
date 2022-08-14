@@ -6,7 +6,7 @@
         <div style='display:flex; justify-content:center;'>
         <h1 class='sign-head'>Sign Up</h1>
     </div>
-    <form @submit.prevent="account.signup(signdata)" class='account-info'>
+    <form @submit.prevent="sign(signdata)" class='account-info'>
       <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
       <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
       <p><input v-model.trim="signdata.password" @input="limitPassword()" type="password" placeholder="Password" class="input-prop"></p>
@@ -38,16 +38,28 @@ export default defineComponent({
       password: '',
     })
     const password2 = ''
-    const sign = () => {
-      if(signdata.value.nickname === '') {
+    function checkEmail (emailData) {
+      for (const email of ['@naver.com','@gmail.com','@daum.net','@hanmail.net','@nate.com','@yahoo.com']){
+        const res = ref(undefined)
+        res.value = emailData.includes(email)
+        if (res.value) {
+          return false
+        }
+      }
+      return true
+    }
+    const sign = (signdata) => {
+      if(signdata.nickname === '') {
         alert('닉네임을 입력해 주세요.')
       }else {
-        if (signdata.value.email === '') {
+        if (signdata.email === '') {
           alert('email을 입력해 주세요.')
+        }else if (checkEmail(signdata.email)) {  
+          alert('이메일을 정확하게 입력해주세요')
         }else{
           if (isPasswordError.value){
             alert('비밀번호를 최소 8자리 이상 입력해주세요.')
-          }else if (signdata.value.password === password2){
+          }else if (signdata.password === password2){
             account.signup(signdata)
           }else {
             alert('비밀번호가 일치하지 않습니다.')
