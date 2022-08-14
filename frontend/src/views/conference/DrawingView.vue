@@ -170,7 +170,7 @@ export default {
               u8arr[n] = bstr.charCodeAt(n)
           }
           
-          return new Blob([u8arr], fileName, {type:mime})
+          return new File([u8arr], fileName, {type:mime})
         }
       
       //Usage example:

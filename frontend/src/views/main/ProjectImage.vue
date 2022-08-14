@@ -112,11 +112,20 @@ export default {
     const downloadDelete = (setImageData) => {
       isImage.value = true
       if (isDownload.value) {
-        const imageSaver = document.getElementById('lnkDownload');
-        imageSaver.addEventListener('click',function() {
-          this.href = setImageData.url,
-          this.download = 'project.png'
-        }, false)
+        var image = new Image()
+        image.crossOrigin = "anonymous"
+        image.src = setImageData.url
+        var fileName = image.src.split("/").pop()
+        image.onload = function() {
+        var canvas = document.createElement('canvas')
+        canvas.width = this.width
+        canvas.height = this.height
+        canvas.getContext('2d').drawImage(this, 0, 0)
+        var link = document.createElement('a')
+        link.href = canvas.toDataURL()
+        link.download = fileName
+        link.click()
+        }
         isImage.value = false
       }else if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})
