@@ -115,7 +115,7 @@ import { useAccountStore } from "@/stores/account"
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-const OPENVIDU_SERVER_URL = "https://" + 'i7b309.p.ssafy.io' + ":4443"
+const OPENVIDU_SERVER_URL = process.env.VUE_APP_OPENVIDU_SERVER_URL
 const OPENVIDU_SERVER_SECRET = "wlwhseodnjs123"
 
 export default {
@@ -199,6 +199,8 @@ setup() {
 				const tmp = msgs.value.slice()
 				tmp.push(event.data)
 				msgs.value = tmp
+
+				getConnections(openviduSessionId.value)
 			})
 			// --- Connect to the session with a valid user token ---
 
@@ -350,7 +352,7 @@ setup() {
 			},
 			)
 			.then(response => response.data)
-			.then(data =>  resolve(data.id))
+			.then(data =>   resolve(data.content[0].connections.content))
 			.catch(error => reject(error.response))
 		
 		});
