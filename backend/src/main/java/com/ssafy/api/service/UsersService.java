@@ -27,4 +27,6 @@ public interface UsersService {
     Boolean changeUserNickname(Long uid, String newNickname);
 
     Users getUsersByUid(Long ownerId) throws UidNullException, UserNullException;
+
+    String makeTempPassword();
 }
