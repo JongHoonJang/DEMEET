@@ -1,5 +1,5 @@
 <template>
-		<video ref="vidoeRoot" autoplay/>
+		<video id="mainVideoID" ref="vidoeRoot" autoplay/>
 </template>
 
 <script>
@@ -28,3 +28,9 @@ export default {
 	},
 };
 </script>
+<style scoped>
+	#mainVideoID {
+		width: 50VW;
+		margin-top: 10vh;
+	}
+</style>
