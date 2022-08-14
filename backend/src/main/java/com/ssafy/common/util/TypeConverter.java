@@ -44,7 +44,7 @@ public class TypeConverter {
         int hour = (int) (seconds/3600);
         int minute = (int) (seconds%3600/60);
         int second = (int) (seconds%3600%60);
-        time = hour+":"+minute+":"+second;
+        time = hour+"시간 "+minute+"분 "+second+"초";
         return time;
     }
 }
