@@ -117,11 +117,6 @@ export default {
           this.href = setImageData.url,
           this.download = 'project.png'
         }, false)
-
-        // function DownloadImage() {
-        //   this.href = setImageData.url
-        //   this.download = 'project.png'
-        // }
         isImage.value = false
       }else if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})

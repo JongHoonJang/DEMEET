@@ -37,7 +37,7 @@ export default defineComponent({
       email: '',
       password: '',
     })
-    const password2 = ''
+    const password2 = ref('')
     function checkEmail (emailData) {
       for (const email of ['@naver.com','@gmail.com','@daum.net','@hanmail.net','@nate.com','@yahoo.com']){
         const res = ref(undefined)
@@ -59,7 +59,7 @@ export default defineComponent({
         }else{
           if (isPasswordError.value){
             alert('비밀번호를 최소 8자리 이상 입력해주세요.')
-          }else if (signdata.password === password2){
+          }else if (signdata.password === password2.value){
             account.signup(signdata)
           }else {
             alert('비밀번호가 일치하지 않습니다.')
