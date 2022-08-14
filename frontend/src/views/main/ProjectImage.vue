@@ -112,8 +112,10 @@ export default {
     const downloadDelete = (setImageData) => {
       isImage.value = true
       if (isDownload.value) {
-        var imageSaver = document.getElementById('lnkDownload');
-        imageSaver.addEventListener('click', function() {this.href = setImageData.url}, false);
+        var imageSaver = document.getElementById('lnkDownload')
+        var canvas = document.createElement('canvas')
+        canvas.getContext('2d').drawImage(setImageData.url, 0, 0)
+        imageSaver.addEventListener('click', function() {this.href = canvas.toDataURL()}, false);
 
       //   const saveImage = () => {
       //       this.href = canvas.toDataURL({format: 'png', quality: 0.8 })
@@ -127,7 +129,7 @@ export default {
         // canvas.width = this.width
         // canvas.height = this.height
         // canvas.getContext('2d').drawImage(this, 0, 0)
-        // var link = document.createElement('a')
+        // var link = document.getElementById('lnkDownload')
         // link.href = canvas.toDataURL()
         // link.download = fileName
         // link.click()
