@@ -2,17 +2,17 @@
 <div class="img-container">
   <h1>저장된 이미지</h1>
   <div class="window" v-if="isData">
-    <div 
-    class="container"
-    v-for="image in demeet.imageList"
-    :key="image.dipid"
-    :image="image"
-    >
-      <img @dblclick="downloadDelete(image)" :src="`${image.url}`" alt="">
+    <div class="container">
+      <img v-for="image in demeet.imageList"
+      :key="image.dipid"
+      :image="image"
+      @dblclick="downloadDelete(image)" 
+      :src="`${image.url}`" 
+      alt="">
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" href="">다운로드</a></button>
+    <button><a type="button" id="lnkDownload" href="">다운로드</a></button>
     <button><a type="button" >삭제</a></button>
     <button><a type="button" @click="isImage=false">취소</a></button>
   </div>
