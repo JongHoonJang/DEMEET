@@ -24,8 +24,6 @@ public class WebHookServiceImpl implements WebhookService {
     @Autowired
     ProjectsRepository projectsRepository;
 
-    @Autowired
-    TypeConverter typeConverter;
 
     @Override
     public Conferences makeConferenceWithOvSessionCreatedReq(OVSessionCreatedDTO ovSessionCreatedDTO) {
@@ -38,7 +36,7 @@ public class WebHookServiceImpl implements WebhookService {
         conference.setUniqueSessionName(ovSessionCreatedDTO.getUniqueSessionId());
         // 세션 시작시간
         log.debug("timestamp : " + ovSessionCreatedDTO.getSessionId());
-        LocalDateTime localDateTime = typeConverter.LongToLocalDateTime(ovSessionCreatedDTO.getTimestamp());
+        LocalDateTime localDateTime = TypeConverter.LongToLocalDateTime(ovSessionCreatedDTO.getTimestamp());
         log.debug(localDateTime.toString());
         conference.setConfStartTime(localDateTime);
         // 세션 활성화여부 체크
@@ -62,7 +60,7 @@ public class WebHookServiceImpl implements WebhookService {
         }
         conference.setActivation(false);
         // 종료시간 설정
-        LocalDateTime endTime = typeConverter.LongToLocalDateTime(ovSessionDestroyedDTO.getTimestamp());
+        LocalDateTime endTime = TypeConverter.LongToLocalDateTime(ovSessionDestroyedDTO.getTimestamp());
         conference.setConfEndTime(endTime);
         Projects projects = conference.getProject();
         log.debug("project = {} ", projects.toString());
