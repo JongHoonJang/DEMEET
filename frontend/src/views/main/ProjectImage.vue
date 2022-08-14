@@ -115,8 +115,8 @@ export default {
         const imageSaver = document.getElementById('lnkDownload');
         imageSaver.addEventListener('click', DownloadImage, false);
 
-        const DownloadImage = (urlData) => {
-          this.href = urlData
+        const DownloadImage = () => {
+          this.href = setImageData.url
           this.download = 'project.png'
         }
         isImage.value = false
