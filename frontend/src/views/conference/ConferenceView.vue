@@ -24,43 +24,50 @@
 				:publisher ="publisher"
 				:subscribers = "subscribers"
 				:isDrawing="isDrawing"
+				:secondPublisher="secondPublisher"
 				@main-video-change="updateMainVideoStreamManager"
 			/>
+		<div>
 
-		<div id="main-video">
-			<MainVideo 
-			:streamManager="mainStreamManager" 
-			/>
-		</div>
 			
 			<DrawingView 
-				v-if="isDrawing"
-				:openviduSessionId="openviduSessionId"
-			/>
+					v-if="isDrawing"
+					:openviduSessionId="openviduSessionId"
+				/>
+
+			<div v-else id="main-video">
+				<MainVideo 
+				:streamManager="mainStreamManager" 
+				/>
+			</div>
+			
+		</div>
 
       <!-- 참자가 목록, 채팅 -->
-			<ConferenceUsers
-				v-if="userListStatus"
-				:publisher="publisher"
-				:subscribers="subscribers"
-				:users="users"
-			/>
-			<div
-				id="chat-box"
-				v-if="chattingStatus"
-				style="box: 5px 5px 5px"
-			>
-			<messageList
-				:msgs="msgs"
-				:myId="myId"
-				:fromId="fromId"
-			/>
-			<messageForm
-				v-if="chatting"
-				style="width:100%"
-				v-on:sendMsg="sendMsg"
-				:user-name="myUserName"
-			/>
+			<div id="right-sidebar">
+				<ConferenceUsers
+					v-if="userListStatus"
+					:publisher="publisher"
+					:subscribers="subscribers"
+					:users="users"
+				/>
+				<div
+					id="chat-box"
+					v-if="chattingStatus"
+					style="box: 5px 5px 5px"
+				>
+				<messageList
+					:msgs="msgs"
+					:myId="myId"
+					:fromId="fromId"
+				/>
+				<messageForm
+					v-if="chatting"
+					style="width:100%"
+					v-on:sendMsg="sendMsg"
+					:user-name="myUserName"
+				/>
+				</div>
 			</div>
 		</div>	
 	
@@ -207,7 +214,7 @@ setup() {
 						videoSource: undefined, // The source of video. If undefined default webcam
 						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
 						publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-						resolution: '240x160',  // The resolution of your video
+						resolution: '640x480',  // The resolution of your video
 						frameRate: 30,			// The frame rate of your video
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 						mirror: false       	// Whether to mirror your local video or not
@@ -215,6 +222,7 @@ setup() {
 
 					mainStreamManager.value  = ppublisher
 					publisher.value = ppublisher
+					secondPublisher.value = ppublisher
 
 					// publish your stream
 					session.value.publish(publisher.value)
@@ -429,11 +437,10 @@ setup() {
 	// share screen 화면 공유 uservideo, users 전부 다 비동기 처리
 	const startShareScreen = () => {
 		isSharing.value = !isSharing.value
-		secondPublisher.value = publisher.value
 		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
 		{ 
 			videoSource: "screen", 
-			resolution: "240x160",
+			resolution: "640x480",
 			insertMode: "APPEND",
 			publishAudio: true,
 			publishVideo: true,
@@ -450,7 +457,6 @@ setup() {
 				}).then(()=> {
 					// publish your stream
 					session.value.publish(publisher.value).then(()=>{
-						secondPublisher.value = undefined
 						isSharing.value = !isSharing.value
 					})
 				})
@@ -472,14 +478,11 @@ setup() {
 
 	const startShareDrawing = () => {
 		isDrawing.value = !isDrawing.value
-		secondPublisher.value = publisher.value
-	
-
 
 		OV.value.getUserMedia({
 			audioSource: false,
 			videoSource: undefined, 
-			resolution: '240x160',
+			resolution: '640x480',
 			frameRate: 30,
 		})
 		.then(() => {
@@ -494,7 +497,7 @@ setup() {
 				{
 					audioSource: true,
 					videoSource: video.srcObject.getVideoTracks()[0],
-					resolution: '240x160',
+					resolution: '640x480',
 				})
 				againPublisher.once('accessAllowed', () => {
 					session.value.unpublish(publisher.value).then(() => {
@@ -588,7 +591,7 @@ main {
 
 footer {
   background-color: rgb(21, 29, 42);
-
+	display: block;
 	position: fixed;
 
 	bottom: 0px;
@@ -611,7 +614,7 @@ footer {
 	display: flex;
 	justify-content:flex-start;
 	background-color: 0D131E;
-  width: auto;
+  width: 200px;
   height: auto;
   overflow: auto;
 }
@@ -622,5 +625,9 @@ footer {
 
 	justify-content: center;
 	align-items: center;
+}
+
+#right-sidebar {
+	height: 30vh;
 }
 </style>

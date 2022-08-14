@@ -30,3 +30,12 @@ export default {
 	},
 };
 </script>
+<style scoped>
+
+#videoID {
+	height: 160px;
+	width: 240px;
+	margin: 1rem 1rem 0 1rem;
+}
+
+</style>>

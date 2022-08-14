@@ -1,7 +1,7 @@
 <template>
 <div v-if="streamManager">
 	<main-ov-video :streamManager="streamManager" :isDrawing="isDrawing"/>
-	<div><p>{{ clientData.clientData }}</p></div>
+	<div id="mainVideoFrame"><p>{{ clientData.clientData }}</p></div>
 </div>
 </template>
 
