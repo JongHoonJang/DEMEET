@@ -289,7 +289,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(res => {
-          this.imageList = res.data.drawingPath
+          this.imageList = res.data.drawingPathList
           
         })
         .catch(err => console.error(err.response))
