@@ -7,6 +7,7 @@ import com.ssafy.db.entity.Users;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -20,7 +21,7 @@ public class UsersMyInfoRes extends BaseResponseBody {
         res.user.setUid(user.getUid());
         res.user.setEmail(user.getEmail());
         res.user.setNickname(user.getNickname());
-        res.user.setRegdate(user.getRegDate());
+        res.user.setRegdate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(user.getRegDate()));
         res.user.setProfileImagePath(user.getProfileImagePath().getPath());
         res.user.setDeActivateProjects(deActivateProjects);
         return res;
