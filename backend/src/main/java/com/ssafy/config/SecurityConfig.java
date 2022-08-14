@@ -6,6 +6,7 @@ import com.ssafy.common.auth.SsafyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -60,8 +61,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), usersService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
                 .authorizeRequests()
-                .antMatchers("/users","/users/password/forget","/users/login").permitAll()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-    	        	    .anyRequest().authenticated()
+                .antMatchers("/users/**").permitAll()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
+                .antMatchers("/users/me").authenticated()
+                .antMatchers("/users/password").authenticated()
+                .antMatchers("/users/nickname").authenticated()
+                .antMatchers("/users/profile").authenticated()
+                .antMatchers(HttpMethod.GET,"/users").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/users").authenticated()
+                .anyRequest().authenticated()
                 .and().cors();
     }
 }
