@@ -16,13 +16,14 @@ export default {
     checkemail: email => HOST + ACCOUNTS + `${email}/`, //get
     nickname_update: () => HOST + ACCOUNTS + 'nickname/', //patch
     password_update: () => HOST + ACCOUNTS + 'password/', //patch
-    profileimage_update: () => HOST + ACCOUNTS + 'profile/', //post, delete
+    profileimage_update_delete: () => HOST + ACCOUNTS + 'profile/', //post, delete
   },
   projects: {
     projects_create_update: () => HOST + PROJECTS, //get, patch
     projects_list: () => HOST + PROJECTS + 'activate/joined/',
     project_detail: pid => HOST + PROJECTS + `${pid}/`, //get, patch
-    image_list_delete: pid => HOST + PROJECTS + DRAWING + `${pid}/`, // get, delete
+    image_list: pid => HOST + PROJECTS + DRAWING + `${pid}/`, // get
+    image_delete: dipid => HOST + PROJECTS + `${dipid}/images/`, //delete
     image_save: () => HOST + PROJECTS + DRAWING, //post
     add_delete_user: () => HOST + PROJECTS + 'user/', //post, delete
   },

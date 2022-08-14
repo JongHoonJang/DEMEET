@@ -110,7 +110,7 @@ export default defineComponent({
     }
     const profileDelete = () => {
       if(confirm('프로필사진을 삭제하시겠습니까?')){
-        account.DeleteImage()
+        account.profileDeleteImage()
       }
     }
     const cancel = () => {
