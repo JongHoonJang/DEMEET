@@ -151,7 +151,7 @@ export const useAccountStore = defineStore("account", {
       const formData = new FormData()
       formData.append("multipartFile", image)
       axios({
-        url: api.accounts.profileimage_update(),
+        url: api.accounts.profileimage_update_delete(),
         method: 'post',
         data: formData,
         headers: this.authHeader
@@ -166,9 +166,9 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 유저 프로필 삭제
-    DeleteImage() {
+    profileDeleteImage() {
       axios({
-        url: api.accounts.profileimage_update(),
+        url: api.accounts.profileimage_update_delete(),
         method: 'delete',
         headers: this.authHeader
       })
@@ -284,7 +284,7 @@ export const useAccountStore = defineStore("account", {
     // 프로젝트 이미지 리스트
     fetchImage(project_pk) {
       axios({
-        url: api.projects.image_save(project_pk),
+        url: api.projects.image_list(project_pk),
         method: 'get',
         headers: this.authHeader,
       })
@@ -296,10 +296,10 @@ export const useAccountStore = defineStore("account", {
     },
 
     // 프로젝트 이미지 삭제
-    deleteImage(project_pk) {
+    deleteImage(dipid) {
       if (confirm('정말 삭제하시겠습니까?')) {
         axios({
-          url: api.projects.image_list_delete(project_pk),
+          url: api.projects.image_delete(dipid),
           method: 'delete',
           data: {},
           headers: this.authHeader,
