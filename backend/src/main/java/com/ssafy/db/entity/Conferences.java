@@ -35,7 +35,7 @@ public class Conferences {
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
 
-    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="conference", cascade = CascadeType.ALL)
     List<DrawingImgPath> drawingImgPathList = new ArrayList<DrawingImgPath>();
 
 }
