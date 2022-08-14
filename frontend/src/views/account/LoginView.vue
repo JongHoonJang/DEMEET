@@ -8,9 +8,13 @@
     <form @submit.prevent="login(credentials)" class='account-info'>
       <p><input v-model.trim="credentials.email" type="email" placeholder="Email" class="input-prop"></p>
       <p><input v-model.trim="credentials.password" type="password" placeholder="password" class="input-prop"></p>
-      <button class="login-btn">Sign In</button>
-      <router-link class="createuser" :to="{ name: 'SignupView' }">회원가입</router-link>
-      <router-link class="createuser" :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
+      <div class="btn-box">
+        <button class="login-btn">Sign In</button>
+        <div class="createuser">
+          <router-link :to="{ name: 'SignupView' }">회원가입</router-link>
+          <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
+        </div>
+      </div>
     </form>
       </div>
       <div class='account-right'>
@@ -55,7 +59,10 @@ export default defineComponent({
     align-items: center;
   }
 }
-
+.btn-box {
+  display: flex;
+  justify-content: space-between;
+}
 .main-logo {
       /* width: 5rem;
       height: 5rem; */
@@ -142,12 +149,14 @@ input::placeholder {color:white;}
 }
 
 .createuser {
+  margin-top: 4px;
+}
+.createuser a {
   color: white;
   text-decoration: none;
-  margin-left: 100px;
+  margin-left: 8px;
 }
-
-.createuser:hover {
+.createuser a:hover {
   color: rgba(255, 1, 214, 1);
 }
 

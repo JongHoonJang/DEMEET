@@ -113,14 +113,14 @@ export default {
       isImage.value = true
       if (isDownload.value) {
         var imageSaver = document.getElementById('lnkDownload')
-        var canvas = document.createElement('canvas')
-        var image = new Image()
-        image.crossOrigin = "anonymous"
-        image.src = setImageData.url
-        canvas.getContext('2d').drawImage(image, 0, 0)
-        canvas.width = 500
-        canvas.height = 300
-        imageSaver.addEventListener('click', function() {this.href = canvas.toDataURL({format: 'png', quality: 0.8 })}, false);
+        imageSaver.setAttribute('href',setImageData.url)
+        // var canvas = document.createElement('canvas')
+        // var image = new Image()
+        // image.crossOrigin = "anonymous"
+        // image.src = setImageData.url
+        // canvas.getContext('2d').drawImage(image, 0, 0)
+        // canvas.width = 500
+        // canvas.height = 300
 
       //   const saveImage = () => {
       //       this.href = canvas.toDataURL({format: 'png', quality: 0.8 })
