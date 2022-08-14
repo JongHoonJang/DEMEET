@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @Setter
+@ToString
 @ApiModel("UsersRegisterPostReq")
 public class UsersRegisterPostReq {
     @ApiModelProperty(name = "유저 email", example = "ssafy@ssafy.com")

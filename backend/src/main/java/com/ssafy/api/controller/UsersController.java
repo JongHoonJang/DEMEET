@@ -8,10 +8,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
-import com.ssafy.api.request.ImageUploadReq;
-import com.ssafy.api.request.UserPwChangePostReq;
-import com.ssafy.api.request.UsersLoginPostReq;
-import com.ssafy.api.request.UsersRegisterPostReq;
+import com.ssafy.api.request.*;
 import com.ssafy.api.response.UserListRes;
 import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.response.UsersMyInfoRes;
@@ -25,9 +22,11 @@ import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
 import com.ssafy.common.customException.UserNullException;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.EmailUtil;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,14 +36,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
+@Slf4j
 @RestController
 @Validated
 @RequestMapping("/users")
@@ -54,7 +54,11 @@ public class UsersController {
     UsersService usersService;
 
     @Autowired
+    EmailUtil emailUtil;
+
+    @Autowired
     ProjectsService projectsService;
+
     @Autowired
     UserProjectService userProjectService;
     @Autowired
@@ -124,6 +128,41 @@ public class UsersController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(422, "not found"));
         } catch (UidNullException e) {
             return ResponseEntity.status(400).body(BaseResponseBody.of(422, "invalid uid"));
+        }
+    }
+    @PatchMapping("/password/forget")
+    public ResponseEntity<BaseResponseBody> changeForgotPassword(@RequestBody UserForgetPasswordReq userForgetPasswordReq){
+        log.info("Change forgot password");
+        Users user = null;
+        try {
+            user = usersService.getUsersByUserEmail(userForgetPasswordReq.getEmail());
+            if(!user.getNickname().equals(userForgetPasswordReq.getNickname())){
+                log.error("nickname is incorrect");
+                return ResponseEntity.status(426).body(BaseResponseBody.of(426, "nickname is incorrect"));
+            }
+            log.info("email and nickname matches");
+            // 임시 비밀번호 생성
+            log.info("make tempPassword");
+            String tempPassword = usersService.makeTempPassword();
+            log.info("save tempPassword");
+            boolean changePassword = usersService.changeUserPassword(user.getUid(), tempPassword);
+
+            if(changePassword){
+                log.info("password change success");
+                log.info("send tempPassword to user's email");
+                emailUtil.sendEmail(user.getEmail(),user.getEmail(),tempPassword);
+                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "password change success"));
+            }else{
+                log.error("server error");
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "server error during change user password"));
+            }
+
+        } catch (UserNullException e) {
+            log.error("can't find user");
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "can't find user"));
+        } catch (MessagingException e) {
+            log.error("can't send Email");
+            return ResponseEntity.status(422).body(BaseResponseBody.of(502, "can't send Email"));
         }
     }
 
