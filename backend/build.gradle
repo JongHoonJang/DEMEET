@@ -142,7 +142,8 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
+//  이메일 서버
+    implementation ('org.springframework.boot:spring-boot-starter-mail')
     implementation('commons-io:commons-io:2.6')
     implementation("org.apache.commons:commons-collections4:4.4")
     implementation("org.apache.commons:commons-lang3:3.9")
