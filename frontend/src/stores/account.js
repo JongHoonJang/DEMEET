@@ -195,6 +195,25 @@ export const useAccountStore = defineStore("account", {
         })
       
     },
+
+    // 비밀번호 찾기
+    findPassword(userData) {
+      axios({
+        url: api.accounts.find_password(),
+        method: 'patch',
+        data: userData,
+        headers: this.authHeader,
+      })
+        .then(() => {
+          alert('메일을 확인하세요!')
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      
+    },
+    
+    
 //////////////////////////////////////////////////////////////project
     // 프로젝트 상세 조회
     fetchProject(project_pk) {
