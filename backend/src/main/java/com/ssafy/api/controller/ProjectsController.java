@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.ssafy.DTO.project.DrawingPathDTO;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
@@ -256,26 +257,25 @@ public class ProjectsController {
     public ResponseEntity<DrawingPathRes> getProjectImages(@ApiIgnore Authentication authentication, @PathVariable long pid){
         try{
             // file path image
-            HashMap<Long, String> pathList = new HashMap<>();
+            List<DrawingPathDTO> drawingPathList = new ArrayList<>();
             // pid를 통해서 cid 목록 불러오기
             Projects projects = projectsService.getProject(pid);
             List<Conferences> conferencesList = projects.getConferencesList();
             for (Conferences c : conferencesList) {
                 List<DrawingImgPath> drawingImgPathList = c.getDrawingImgPathList();
                 for (DrawingImgPath d : drawingImgPathList) {
-                    pathList.put(d.getDipid(), d.getPath());
+                    DrawingPathDTO drawingPath = new DrawingPathDTO();
+                    drawingPath.setDipid(d.getDipid());
+                    drawingPath.setUrl(d.getPath());
+                    drawingPathList.add(drawingPath);
                 }
             }
 
-            return ResponseEntity.status(200).body(DrawingPathRes.of(200, "getting Image List Success", pathList));
-
-
-
+            return ResponseEntity.status(200).body(DrawingPathRes.of(200, "getting Image List Success", drawingPathList));
         } catch (ProjectNullException e) {
             e.printStackTrace();
+            return ResponseEntity.status(400).body(DrawingPathRes.of(400, "There is No Project", null));
         }
-
-
-        return null;
     }
+    // @DeleteMapping("/drawing/{pipid}")
 }
