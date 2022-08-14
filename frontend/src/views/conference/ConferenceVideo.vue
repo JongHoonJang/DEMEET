@@ -7,7 +7,7 @@
 			</div> -->
 			<div id="video-container" class="col-md-6">
 				<!-- 내얼굴 -->
-				<user-video :streamManager="publisher" :isDrawing="isDrawing" @click="$emit('mainVideoChange', publisher)"/>   
+				<user-video v-if="publisher==secondPublisher" :streamManager="publisher" :isDrawing="isDrawing" @click="$emit('mainVideoChange', publisher)"/>   
 				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub"  @click="$emit('mainVideoChange', sub)"/>
 			</div>
 		</div>
@@ -43,6 +43,12 @@ export default {
 				return []
 			}
 		},
+		secondPublisher:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		},
 		isDrawing:{
 			type:Boolean
 		}
@@ -63,7 +69,7 @@ export default {
 <style scoped>
 div.dump {
   background-color: 0D131E;
-  width: 100vh;
+  width: 20vw;
   height: 100vh;
 }
 
