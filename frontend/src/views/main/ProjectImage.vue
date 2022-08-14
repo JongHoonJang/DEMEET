@@ -114,15 +114,17 @@ export default {
       if (isDownload.value) {
         var imageSaver = document.getElementById('lnkDownload')
         var canvas = document.createElement('canvas')
-        canvas.getContext('2d').drawImage(setImageData.url, 0, 0)
-        imageSaver.addEventListener('click', function() {this.href = canvas.toDataURL()}, false);
+        var image = new Image()
+        image.crossOrigin = "anonymous"
+        image.src = setImageData.url
+        canvas.getContext('2d').drawImage(image, 0, 0)
+        canvas.width = 500
+        canvas.height = 300
+        imageSaver.addEventListener('click', function() {this.href = canvas.toDataURL({format: 'png', quality: 0.8 })}, false);
 
       //   const saveImage = () => {
       //       this.href = canvas.toDataURL({format: 'png', quality: 0.8 })
       // }
-        // var image = new Image()
-        // image.crossOrigin = "anonymous"
-        // image.src = setImageData.url
         // var fileName = image.src.split("/").pop()
         // image.onload = function() {
         // var canvas = document.createElement('canvas')
