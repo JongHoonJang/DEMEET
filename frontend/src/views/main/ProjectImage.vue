@@ -8,15 +8,15 @@
     :key="image.dipid"
     :image="image"
     > -->
-    <div @click="downloadDelete(image)" class="container">
+    <div class="container">
       <!-- <img @dblclick="downloadDelete" :src="`${image.url}`" alt=""> -->
-      <img src="@/assets/DEMEET.jpg" alt="">
+      <img @dblclick="downloadDelete(image)" src="@/assets/DEMEET.jpg" alt="">
     </div>
-    <div class="image-btn">
-      <a type="button" href="" v-if="isImage">다운로드</a>
-      <a type="button" v-if="isImage">삭제</a>
-      <a type="button" v-if="isImage" @click="isImage=false">취소</a>
-    </div>
+  </div>
+  <div class="image-btn" v-if="isImage">
+    <button><a type="button" href="">다운로드</a></button>
+    <button><a type="button" >삭제</a></button>
+    <button><a type="button" @click="isImage=false">취소</a></button>
   </div>
   <div class="window" v-if="!isData">
     <div class="content">
@@ -103,14 +103,8 @@ export default {
         container.removeAttribute('style'); (selectedBtn === 'prev') ? container.insertBefore(container.lastElementChild, container.firstElementChild): container.appendChild(container.firstElementChild)
       }
     }
-    const num = 0
-    // if (demeet.imageList.length === 0) {
-    //   isData.value = false
-    // }else {
-    //   isData.value = true
-    // }    
     const carousel = ref(null)
-    if (num === 1) {
+    if (demeet.imageList.length === 0) {
       carousel.value = sliderOn
       isData.value = false
     }else {
@@ -155,9 +149,7 @@ export default {
     align-items: center;
   }
 }
-.image-btn a {
-  color: white;
-}
+
 .button-container {
   margin-left: 28px;
 }
