@@ -10,7 +10,7 @@ const CONFERENCE = 'api-sessions/'
 
 export default {
   accounts: {
-    signup_userlist_signout: () => HOST + ACCOUNTS, //get, post delete
+    signup_userlist_signout: () => HOST + ACCOUNTS, //get, post, delete
     login: () => HOST + ACCOUNTS + 'login/', //post
     currentUserInfo: () => HOST + ACCOUNTS + 'me/' , // get
     checkemail: email => HOST + ACCOUNTS + `${email}/`, //get
