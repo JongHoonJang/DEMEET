@@ -4,7 +4,6 @@ import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,11 +12,11 @@ public class ProjectInfoDTO {
     Long pid;
     Long projectOwner;
     List<UserSimpleInfoDTO> member;
-    LocalDateTime pjtStartDate;
-    LocalDateTime pjtEndDate;
+    String pjtStartDate;
+    String pjtEndDate;
     String pjtName;
     String pjtDesc;
     String sessionId;
-    Long totalMeetTime;
+    String totalMeetTime;
     boolean activation;
 }

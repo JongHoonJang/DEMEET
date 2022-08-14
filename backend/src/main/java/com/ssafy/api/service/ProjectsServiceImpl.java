@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.kurento.jsonrpc.client.JsonRpcClient.log;
@@ -57,8 +58,8 @@ public class ProjectsServiceImpl implements ProjectsService {
         ProjectDeactivateSimpleInfoDTO simpleInfoDTO = new ProjectDeactivateSimpleInfoDTO();
         simpleInfoDTO.setPid(project.getPid());
         simpleInfoDTO.setPjtName(project.getPjtName());
-        simpleInfoDTO.setPjtStartDate(project.getPjtStartDate());
-        simpleInfoDTO.setPjtEndDate(project.getPjtEndDate());
+        simpleInfoDTO.setPjtStartDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtStartDate()));
+        simpleInfoDTO.setPjtEndDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtEndDate()));
         List<Long> userList = userProjectService.getUserUidListByPid(project.getPid());
         simpleInfoDTO.setMember(userList);
         return simpleInfoDTO;

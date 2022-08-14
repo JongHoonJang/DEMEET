@@ -21,7 +21,7 @@ public class TypeConverter {
      * @param  milliseconds
      * @return date
      */
-    public LocalDateTime LongToLocalDateTime(Long milliseconds) {
+    public static LocalDateTime LongToLocalDateTime(Long milliseconds) {
         log.info("LongToLocalDateTime start");
         log.debug("milliseconds: " + milliseconds);
 //        LocalDateTime date =LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
@@ -31,7 +31,7 @@ public class TypeConverter {
         return date;
     }
 
-    public Long LocalDateTimeToLong(LocalDateTime localDateTime){
+    public static Long LocalDateTimeToLong(LocalDateTime localDateTime){
         log.info("LocalDateTimeToLong start");
         log.debug("localDateTime ={}", localDateTime.toString());
         ZonedDateTime date = localDateTime.atZone(ZoneId.of("Asia/Seoul"));
@@ -39,7 +39,7 @@ public class TypeConverter {
         return milliseconds;
     }
 
-    public String LongSecondsToStringTime(Long seconds){
+    public static String LongSecondsToStringTime(Long seconds){
         String time = "";
         int hour = (int) (seconds/3600);
         int minute = (int) (seconds%3600/60);

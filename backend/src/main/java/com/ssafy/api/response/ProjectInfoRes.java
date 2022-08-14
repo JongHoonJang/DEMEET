@@ -4,15 +4,18 @@ package com.ssafy.api.response;
 import com.ssafy.DTO.project.ProjectInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.TypeConverter;
 import com.ssafy.db.entity.Projects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class ProjectInfoRes extends BaseResponseBody {
+
 
 
     ProjectInfoDTO project = new ProjectInfoDTO();
@@ -29,11 +32,19 @@ public class ProjectInfoRes extends BaseResponseBody {
         res.project.setProjectOwner(projectOwner);
         res.project.setMember(userList);
         res.project.setSessionId(project.getCustomSessionName());
-        res.project.setPjtStartDate(project.getPjtStartDate());
-        res.project.setPjtEndDate(project.getPjtEndDate());
+        res.project.setPjtStartDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtStartDate()));
+        System.out.println(project.getPjtEndDate());
+        if(project.getPjtEndDate() != null){
+            res.project.setPjtEndDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtEndDate()));
+        }
+        else{
+            res.project.setPjtEndDate(null);
+        }
         res.project.setPjtName(project.getPjtName());
         res.project.setPjtDesc(project.getPjtDesc());
-        res.project.setTotalMeetTime(project.getTotalMeetTime());
+        System.out.println(project.getTotalMeetTime());
+        TypeConverter typeConverter;
+        res.project.setTotalMeetTime(TypeConverter.LongSecondsToStringTime(project.getTotalMeetTime()));
         res.project.setActivation(project.isActivation());
         return res;
     }
