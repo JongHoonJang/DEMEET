@@ -19,12 +19,20 @@
 		<div id="conference-main">
         <!-- 영상, 드로잉 등 -->
 			<ConferenceVideo
+				id="sideVideo"
 				:session = "session"
-				:mainStreamManager = "mainStreamManager"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
 				:isDrawing="isDrawing"
+				@main-video-change="updateMainVideoStreamManager"
 			/>
+
+		<div id="main-video">
+			<MainVideo 
+			:streamManager="mainStreamManager" 
+			/>
+		</div>
+			
 			<DrawingView 
 				v-if="isDrawing"
 			/>
@@ -79,6 +87,8 @@
 <script>
 // import { fabric } from 'fabric'
 import ConferenceVideo from './ConferenceVideo'
+// import ConferenceMainVideo from './ConferenceMainVideo'
+import MainVideo from './mainVideo/MainVideo'
 import ConferenceUsers from './ConferenceUsers'
 import ConferenceFooter from './ConferenceFooter'
 import DrawingView from './DrawingView'
@@ -105,6 +115,8 @@ export default {
 
 components: {
 	ConferenceVideo,
+	MainVideo,
+	// ConferenceMainVideo,
 	ConferenceUsers,
 	ConferenceFooter,
 	StartConference,
@@ -154,7 +166,7 @@ setup() {
 			// --- Specify the actions when events take place in the session ---
 			// On every new Stream received...
 			session.value.on('streamCreated', ({ stream }) => {
-				var subscriber = session.value.subscribe(stream)
+				const subscriber = session.value.subscribe(stream)
 				subscribers.value.push(subscriber)
 				users.value.push(subscriber)
 			})
@@ -194,13 +206,13 @@ setup() {
 						videoSource: undefined, // The source of video. If undefined default webcam
 						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
 						publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-						resolution: '320x240',  // The resolution of your video
+						resolution: '240x160',  // The resolution of your video
 						frameRate: 30,			// The frame rate of your video
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
 						mirror: false       	// Whether to mirror your local video or not
 					})
 
-					mainStreamManager  = ppublisher
+					mainStreamManager.value  = ppublisher
 					publisher.value = ppublisher
 
 					// publish your stream
@@ -231,8 +243,12 @@ setup() {
 		}
 
 		const updateMainVideoStreamManager = (stream) => {
+			console.log('봐 ! updateMainVideoStreamManager 이 실행되잖아 ')
+			console.log(mainStreamManager.value)
 			if (mainStreamManager.value  === stream) return
 			mainStreamManager.value  = stream
+			console.log('메인스트리머가 위에서 아래로 바뀜')
+			console.log(mainStreamManager.value)
 		}
 
 			/**
@@ -391,7 +407,7 @@ setup() {
 		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
 		{ 
 			videoSource: "screen", 
-			resolution: "1280x720",
+			resolution: "240x160",
 			insertMode: "APPEND",
 			publishAudio: true,
 			publishVideo: true,
@@ -437,12 +453,12 @@ setup() {
 		OV.value.getUserMedia({
 			audioSource: false,
 			videoSource: undefined, 
-			resolution: '1280x720',
+			resolution: '240x160',
 			frameRate: 30,
 		})
 		.then(() => {
 			var canvas = document.getElementById('canvas')  // canvas 잡은 거 확인
-			var stream = canvas.captureStream()
+			// var stream = canvas.captureStream()
 
 			var video = document.getElementById('videoID')
 			video.srcObject = canvas.captureStream()
@@ -451,8 +467,8 @@ setup() {
 			var againPublisher = OV.value.initPublisher('ConferenceVideo',
 				{
 					audioSource: true,
-					videoSource: stream.getVideoTracks()[0],
-					resolution: '1280x720',
+					videoSource: video.srcObject.getVideoTracks()[0],
+					resolution: '240x160',
 				})
 				againPublisher.once('accessAllowed', () => {
 					session.value.unpublish(publisher.value).then(() => {
@@ -469,7 +485,7 @@ setup() {
 	
 	session.value.unpublish(publisher.value).then(() => {
 		publisher.value = secondPublisher.value
-		mainStreamManager.value = secondPublisher.value
+		// mainStreamManager.value = secondPublisher.value
 	}).then(()=>{
 		session.value.publish(publisher.value)
 		isDrawing.value = !isDrawing.value

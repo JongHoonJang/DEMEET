@@ -10,15 +10,17 @@
       <span v-if="audioValue" class="material-symbols-outlined">mic</span>
       <span v-if="!audioValue" class="material-symbols-outlined">mic_off</span>
     </button>  
+    
     <!-- 내 얼굴 영상 공유 중지 -->
     <button type="button" @click="$emit('videoOnOff'), videoIcon()">
       <span v-if="videoValue" class="material-symbols-outlined">stop_circle</span>
       <span v-if="!videoValue" class="material-symbols-outlined">play_circle</span>
     </button>
+    
     <!-- 컴퓨터 화면 공유 -->
     <button v-if="!isSharing" type="button" @click="$emit('shareScreen')"><span class="material-symbols-outlined">screen_share</span></button>
     <button v-if="isSharing" type="button" ><span class="material-symbols-outlined">stop_screen_share</span></button>
-    {{ isSharing }}
+
     <!-- 드로잉 버튼 -->
     <button type="button" @click="$emit('shareDrawing'), drawIcon()">
       <span v-if="drawValue" class="material-symbols-outlined">draw</span>
@@ -27,12 +29,18 @@
     <!-- <button type="button" @click="$emit('shareDrawing')"><a href="http://127.0.0.1:8081/drawing" target="_blank">drawing</a></button>  -->
 
     <!-- 나가기 -->
-    <button type="button" class="leave-meeting" @click="$emit('sessionExit')"><span class="material-symbols-outlined">
-logout
-</span></button>
+    <button type="button" class="leave-meeting" @click="$emit('sessionExit')"><span class="material-symbols-outlined">logout</span></button>
+  
+  <!-- 사이바 요소 , 유저 리스트 onoff, 채팅창 onoff-->
   <div id="sideBar">
-    <button type="button" @click="$emit('userListOnOff')">유저목록</button>  
-    <button type="button" @click="$emit('chattingOnOff')">채팅창</button>  
+    <button type="button" @click="$emit('userListOnOff'), valueOnOff(usersValue)">
+      <span v-if="usersValue" class="material-symbols-outlined">group</span>
+      <span  v-if="!usersValue" class="material-symbols-outlined">group_off</span>
+    </button>  
+    <button type="button" @click="$emit('chattingOnOff'), valueOnOff(chatValue)">
+      <span v-if="chatValue" class="material-symbols-outlined">speaker_notes</span>
+      <span  v-if="!chatValue" class="material-symbols-outlined">speaker_notes_off</span>
+    </button>  
   </div>
   </div>
 </template>
@@ -59,6 +67,8 @@ export default {
     const videoValue = ref(true)
     const micValue = ref(true)
     const drawValue = ref(true)
+    const chatValue = ref(true)
+    const usersValue = ref(true)
 
     const audioIcon = () =>{
       audioValue.value = !audioValue.value
@@ -75,16 +85,29 @@ export default {
     const drawIcon = () => {
       drawValue.value = !drawValue.value
     }
+
+    const chatIcon = () => {
+      chatValue.value = !chatValue.value
+    }
+
+    const usersIcon = () => {
+      usersValue.value = !usersValue.value
+    }
+
   
   return {
     audioValue,
     videoValue,
     micValue,
     drawValue,
+    chatValue,
+    usersValue,
     audioIcon,
     videoIcon,
     micIcon,
     drawIcon,
+    chatIcon,
+    usersIcon,
   }
 },
   create() {},
