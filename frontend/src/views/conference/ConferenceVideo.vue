@@ -6,8 +6,9 @@
 				<user-video :stream-manager="mainStreamManager"/>
 			</div> -->
 			<div id="video-container" class="col-md-6">
-				<user-video :streamManager="publisher" :isDrawing="isDrawing"/>
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" />
+				<!-- 내얼굴 -->
+				<user-video :streamManager="publisher" :isDrawing="isDrawing" @click="$emit('mainVideoChange', publisher)"/>   
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub"  @click="$emit('mainVideoChange', sub)"/>
 			</div>
 		</div>
   </div>
@@ -21,16 +22,10 @@ import UserVideo from './UserVideo'
 export default {
   
   name: 'ConferenceVideo',
-  components: {    UserVideo},
+  components: {UserVideo},
 	
 	props:{ 
 		session:{
-			type:Object,
-			default: () => {
-				return {}
-			}
-		},
-		mainStreamManager:{
 			type:Object,
 			default: () => {
 				return {}
