@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" @click="isDownload=true" id="lnkDownload" href="" download="project.png">다운로드</a></button>
+    <button><a type="button" @click="isDownload=true" id="lnkDownload" href="" download="filename">다운로드</a></button>
     <button><a type="button" @click="isDelete=true">삭제</a></button>
     <button><a type="button" @click="isImage=false">취소</a></button>
   </div>
@@ -109,33 +109,20 @@ export default {
       carousel.value = init
       isData.value = true
     }    
+    function createHTMLDocument() {
+      var blob = new Blob(
+        ['<!doctype html>','<html><head><title>Blob Example</title><body>',document.getElementById('clnkDownloadode').value,'</body></html>'],
+        {type:'text/html'}
+      );
+      var url = URL.createObjectURL(blob);
+      var link = document.getElementById('link');
+          
+      link.setAttribute('href', url);
+    }
     const downloadDelete = (setImageData) => {
       isImage.value = true
       if (isDownload.value) {
-        var imageSaver = document.getElementById('lnkDownload')
-        imageSaver.setAttribute('href',setImageData.url)
-        // var canvas = document.createElement('canvas')
-        // var image = new Image()
-        // image.crossOrigin = "anonymous"
-        // image.src = setImageData.url
-        // canvas.getContext('2d').drawImage(image, 0, 0)
-        // canvas.width = 500
-        // canvas.height = 300
-
-      //   const saveImage = () => {
-      //       this.href = canvas.toDataURL({format: 'png', quality: 0.8 })
-      // }
-        // var fileName = image.src.split("/").pop()
-        // image.onload = function() {
-        // var canvas = document.createElement('canvas')
-        // canvas.width = this.width
-        // canvas.height = this.height
-        // canvas.getContext('2d').drawImage(this, 0, 0)
-        // var link = document.getElementById('lnkDownload')
-        // link.href = canvas.toDataURL()
-        // link.download = fileName
-        // link.click()
-        // }
+        createHTMLDocument(setImageData.url)
         isDownload.value = false
         isImage.value = false
       }else if (isDelete.value) {
