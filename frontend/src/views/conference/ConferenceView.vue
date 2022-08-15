@@ -425,15 +425,14 @@ setup() {
 	}
 
 	const shareScreen = () => {
-		if (isDrawing.value === true && isSharing.value === false){
-			closeShareDrawing().then(()=>{
-				startShareDrawing()
-			})
-		}else if(isDrawing.value === false && isSharing.value === false){
+		if(isDrawing.value === false && isSharing.value === false){
 			startShareScreen()
 		}else if(isDrawing.value === false && isSharing.value === true){
 			closeShareScreen()
-		}
+		}else if (isDrawing.value === true && isSharing.value === false){
+			// changeDrawingScreen()
+			closeShareDrawing()
+    }
 	}
 
 	// share screen 화면 공유 uservideo, users 전부 다 비동기 처리
@@ -479,7 +478,7 @@ setup() {
 	}
 
 	const closeShareScreen = () => {
-		return session.value.unpublish(publisher.value).then(() => {
+		session.value.unpublish(publisher.value).then(() => {
 			mainStreamManager.value = secondPublisher.value
 				publisher.value = secondPublisher.value
 				}).then(()=> {
@@ -490,16 +489,58 @@ setup() {
 		})
 	}
 
-	const shareDrawing = () => {
-		if (isSharing.value === true && isDrawing.value === false){
-			closeShareScreen().then(()=>{
-				startShareDrawing()
+	const changeDrawingScreen = () => {  // 드로잉 공유하는 중에 바로 화면 공유 클릭시
+		var newPublisher = OV.value.initPublisher('ConferenceVideo', // 공유용 퍼블릭 생성
+		{ 
+			videoSource: "screen", 
+			resolution: "640x480",
+			insertMode: "APPEND",
+			publishAudio: true,
+			publishVideo: true,
+			frameRate: 30,
+			mirror: false
+		})
+
+		newPublisher.once('accessAllowed', () => {
+		isSharing.value = !isSharing.value
+		isDrawing.value = false
+		console.log(isDrawing)
+		newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
+			// 정지 누르면 다시 원상 복귀
+			session.value.unpublish(publisher.value).then(() => {
+			mainStreamManager.value = secondPublisher.value
+			publisher.value = secondPublisher.value
+			}).then(()=> {
+				// publish your stream
+				session.value.publish(publisher.value).then(()=>{
+					isSharing.value = !isSharing.value
+				})
 			})
-		}else if(isSharing.value === false && isDrawing.value === false){
+		})
+
+	// Unpublishing the old publisher
+	session.value.unpublish(publisher.value).then(() => {
+		
+		// Assigning the new publisher to our global variable 'publisher'
+		mainStreamManager.value = newPublisher
+		publisher.value = newPublisher
+			}).then(() => {
+				// Publishing the new publisher
+				session.value.publish(publisher.value).then(() => {
+					isDrawing.value = !isDrawing.value
+				})
+			})
+		})
+	}
+
+	const shareDrawing = () => {
+		if(isSharing.value === false && isDrawing.value === false){
 			startShareDrawing()
 		}else if(isSharing.value === false && isDrawing.value === true){
 			closeShareDrawing()
-		}
+		}else if (isSharing.value === true && isDrawing.value === false){
+			closeShareScreen()
+    }
 	}
 
 	const startShareDrawing = () => {
@@ -537,7 +578,7 @@ setup() {
 	}
 
 	const closeShareDrawing = () => {
-		return	session.value.unpublish(publisher.value).then(() => {
+		session.value.unpublish(publisher.value).then(() => {
 		publisher.value = secondPublisher.value
 		// mainStreamManager.value = secondPublisher.value
 	}).then(()=>{
@@ -598,6 +639,7 @@ setup() {
 		shareDrawing,
 		startShareDrawing,
 		closeShareDrawing,
+		changeDrawingScreen
 	}
 },
 
@@ -607,6 +649,7 @@ setup() {
 <style scoped>
 
 #container {
+	flex: 1;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -631,6 +674,10 @@ footer {
 	height: auto;
 }
 
+#chat-box {
+  height: fit-content;
+}
+
 
 .right-container {
 	flex-direction: column
@@ -646,8 +693,11 @@ footer {
 
 .right-container {
 	flex-direction: column;
+	}
 }
-}
+
+
+
 
 /* main {
 	height: auto;
