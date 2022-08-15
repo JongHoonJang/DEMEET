@@ -319,11 +319,10 @@ export const useAccountStore = defineStore("account", {
         axios({
           url: api.projects.image_delete(dipid),
           method: 'delete',
-          data: {},
           headers: this.authHeader,
         })
-          .then(res => {
-            this.project = res.data
+          .then(() => {
+            console.log(dipid)
             //router.go({ name: 'DetailView' })
           })
           .catch(err => console.error(err.response))
@@ -344,7 +343,7 @@ export const useAccountStore = defineStore("account", {
       })
         .then(() => {
           alert('저장되었습니다.')
-          
+
         })
         .catch(err => console.error(err.response))
     }
