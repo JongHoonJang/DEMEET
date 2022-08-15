@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectJoinedActivateSimpleInfoDTO;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
@@ -28,7 +29,7 @@ public interface ProjectsService {
 
     Projects patchProjectInfo(ProjectPatchPostReq projectPatchPostReq, Long uid) throws ProjectNullException, NullPointerException;
 
-    List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
+    List<ProjectJoinedActivateSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException;
 
     List<ProjectDeactivateSimpleInfoDTO> getDeActivateProjectsByUid(Long uid) throws ProjectNullException, UidNullException;
 
