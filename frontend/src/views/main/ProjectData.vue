@@ -140,6 +140,11 @@
       >
       팀나가기</button>
     </div>
+    <button
+    v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
+    class="blue-btn"
+    @click="deleteProject"
+    >프로젝트 삭제</button>
   </div>
 </template>
 
@@ -202,6 +207,9 @@ export default defineComponent({
         router.push({name:'ProfileView'})
       }
     }
+    const deleteProject = () => {
+      account.deleteProject(pjt.value.pid)
+    }
     
     return {
       host,
@@ -212,6 +220,7 @@ export default defineComponent({
       endProject,
       goConference,
       leave,
+      deleteProject
     }
   }
 })
