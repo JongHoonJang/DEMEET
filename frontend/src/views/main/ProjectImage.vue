@@ -45,6 +45,7 @@ export default {
           route = useRoute()  ,
           project_pk = ref(route.params.pid),
           isImage = ref(false),
+          isDelete = ref(false),
           selectImage = ref(null)
 
     await axios({
