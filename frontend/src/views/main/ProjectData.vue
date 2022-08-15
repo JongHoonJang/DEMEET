@@ -139,12 +139,21 @@
       @click="leave"
       >
       팀나가기</button>
+      <button
+      v-if="pjt.projectOwner === account.profile.uid && !pjt.activation" 
+      class="delete-btn"
+      @click="deleteProject"
+      >
+      프로젝트 삭제</button>
     </div>
+  </div>
+  <div class="delete-flex">
     <button
     v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
-    class="blue-btn"
+    class="delete-btn"
     @click="deleteProject"
-    >프로젝트 삭제</button>
+    >
+    프로젝트 삭제</button>
   </div>
 </template>
 
@@ -208,7 +217,9 @@ export default defineComponent({
       }
     }
     const deleteProject = () => {
-      account.deleteProject(pjt.value.pid)
+      if(confirm("정말 삭제하시겠습니까?")){
+        account.deleteProject(pjt.value.pid)
+      }
     }
     
     return {
@@ -335,6 +346,27 @@ export default defineComponent({
   transform: scale(1.2);
 }
 
+.delete-btn {
+  width: 130px;
+  height: 36px;
+  margin-left: 16px;
+  background: radial-gradient(95% 60% at 50% 75%, #d60000 0%, #ff2020 100%);
+  border: 1px solid #fd5454;
+  box-shadow: 0px 8px 20px -8px #ff1111, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+}
+
 .btn-box {
   margin-top: 30px;
   margin-right: 20px;
@@ -432,5 +464,10 @@ export default defineComponent({
 
 .host-data{
   margin-left: 200px;
+}
+
+.delete-flex {
+  margin-left: 270px;
+  margin-top: 30px;
 }
 </style>

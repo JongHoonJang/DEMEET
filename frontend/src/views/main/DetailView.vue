@@ -86,7 +86,7 @@ export default defineComponent({
 
 .detail-box{
   width: 650px;
-  height: 800px;
+  height: 840px;
   background: #111315;
   border-radius: 10px;
   display: flex;
