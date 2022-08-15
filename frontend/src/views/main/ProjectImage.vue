@@ -107,6 +107,7 @@ export default {
       isData.value = true
     }    
     const downloadDelete = (setImageData) => {
+      isImage.value = true
       if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})
         isDelete.value = false
@@ -170,6 +171,10 @@ h1 {
   -webkit-tap-highlight-color: rgba(255,255,255,0);
   margin: 20px;
 }
+.image-btn button:hover {
+  transform: scale(1.2);
+}
+
 .window {
   overflow: hidden;  /*check out container's movement : command + */
   border: 4px solid; 
@@ -202,7 +207,7 @@ button {
 }
 
 button:hover {
-  background-color: #E3B854;
+  transform: scale(1.2);
 }
 
 .content{ /*컨텐츠 넓이지정*/
