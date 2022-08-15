@@ -9,11 +9,11 @@
       <span style="font-size: 20px">Members</span>
       <span class="member">{{ member.length }}</span>
     </div>
-    <div class="box" v-if="!demeet.sessionActivate">
+    <div class="box" v-if="!demeet.project.sessionActivate">
       <span class="material-symbols-outlined" id="cancel">cancel_presentation</span>
       <div class="off">OFF</div>
     </div>
-    <div class="box" v-if="demeet.sessionActivate">
+    <div class="box" v-if="demeet.project.sessionActivate">
       <span class="material-symbols-outlined" id="video">video_chat</span>
       <div class="on">ON</div>
     </div>
