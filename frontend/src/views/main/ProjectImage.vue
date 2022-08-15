@@ -155,6 +155,9 @@ h1 {
   margin-left: 28px;
   color: white;
 }
+.image-btn {
+  margin-left: 28px;
+}
 .image-btn button {
   height: 30px;
   width: 80px;
@@ -181,7 +184,7 @@ h1 {
   width: 500px;
   height: 300px;
   margin-left: 28px;
-  margin-bottom: 50px;
+
 }
 
 .container img {
