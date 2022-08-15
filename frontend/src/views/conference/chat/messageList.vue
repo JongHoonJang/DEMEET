@@ -60,6 +60,7 @@ props: {
 <style scoped>
 .container {
   height: 500px;
+  width: 233px;
   background: #b4b4b4;
   overflow: scroll;
   border-radius: 10px 10px 0px 0px;
