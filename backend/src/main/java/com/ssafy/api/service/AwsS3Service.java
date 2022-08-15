@@ -37,4 +37,7 @@ public interface AwsS3Service {
 
     // S3Object 리스트를 불러온다.
     ListIterator<S3ObjectSummary> getS3Object(String folderPath);
+
+    // 특정 dipid 삭제
+    void deleteDrawingPath(long dipid) throws NotImageException;
 }

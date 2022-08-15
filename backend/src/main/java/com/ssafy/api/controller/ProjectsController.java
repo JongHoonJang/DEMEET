@@ -270,5 +270,16 @@ public class ProjectsController {
             return ResponseEntity.status(400).body(DrawingPathRes.of(400, "There is No Project", null));
         }
     }
-    // @DeleteMapping("/drawing/{pipid}")
+
+    @DeleteMapping("/drawing/{dipid}")
+    public ResponseEntity<BaseResponseBody> deleteProjectImage(@ApiIgnore Authentication authentication, @PathVariable long dipid){
+        try{
+            // pipid 위치에 있는 테이블 값 제거
+            awsS3Service.deleteDrawingPath(dipid);
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "drawing delete success"));
+        }catch (NotImageException e){
+            e.printStackTrace();
+            return ResponseEntity.status(400).body(BaseResponseBody.of(200, "there is no image"));
+        }
+    }
 }
