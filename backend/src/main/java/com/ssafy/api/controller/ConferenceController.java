@@ -57,7 +57,7 @@ public class ConferenceController {
 
     @RequestMapping(value = "/get-token", method = RequestMethod.POST)
     public ResponseEntity<JSONObject> getToken(@ApiIgnore Authentication authentication, @RequestBody String sessionsNameParam) throws ParseException {
-        System.out.println("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
+        log.info("getting a token from OpenVidu Server | {sessionName} = " + sessionsNameParam);
         /*
         세션의 이름과 유니크세션은 오픈비두 서버에서 자체적으로 만들어주는듯하다
         그래서 컨퍼런스 테이블에 프로젝트에 있는 세션아이디를 같이 저장해 준 후
@@ -150,7 +150,6 @@ public class ConferenceController {
             Conferences conferences = new Conferences();
             conferences.setSessionName(customSessionName);
             conferences.setProject(project);
-            System.out.println(conferences.toString());
             conferencesRepository.save(conferences);
 
             // 세션과 토큰을 맵에 저장
@@ -172,7 +171,7 @@ public class ConferenceController {
     @RequestMapping(value = "/remove-user", method = RequestMethod.POST)
     public ResponseEntity<JSONObject> removeUser(@ApiIgnore Authentication authentication, @RequestBody String sessionNameToken) throws Exception {
         // 로그인 유저 검증 -> 우리에 맞게 변경 필요할듯
-        System.out.println("Removing user | {sessionName, token}= " + sessionNameToken);
+        log.info("Removing user | {sessionName, token}= " + sessionNameToken);
 
         // BODY에서 파라미터 가져옴
         JSONObject sessionNameTokenJSON = (JSONObject) new JSONParser().parse(sessionNameToken);

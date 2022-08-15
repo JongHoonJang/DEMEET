@@ -1,7 +1,6 @@
 package com.ssafy.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-//import com.ssafy.DTO.QuserSimpleInfoDTO;
 import com.ssafy.db.entity.QUsers;
 import com.ssafy.db.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,9 @@ public class UsersRepositorySupport {
     public Boolean checkEmailDuplicate(String email) {
         String checkEmail = jpaQueryFactory.select(qNewUsers.email).from(qNewUsers).where(qNewUsers.email.eq(email)).fetchOne();
         boolean check = email.equals(checkEmail);
-        System.out.println("email = " + email);
-        System.out.println("check email = " + checkEmail);
-        System.out.println("같니? => " + check + "");
+//        log.info("email = " + email);
+//        log.info(("check email = " , checkEmail);
+//        log.info(("같니? => " + check + "");
         if (checkEmail == null) {
             return false;
         }
