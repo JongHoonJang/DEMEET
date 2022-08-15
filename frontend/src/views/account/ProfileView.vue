@@ -154,11 +154,19 @@ export default defineComponent({
   margin: 10px;
 }
 .image-btn button{
-  background: #2D68FE;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
   color: white;
-  border-radius: 5px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
   width: 50px;
-  height: 24px;
+  height: 30px;
 }
 .image-btn button:hover {
   transform: scale(1.2);
