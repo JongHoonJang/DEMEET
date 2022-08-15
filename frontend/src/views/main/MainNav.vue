@@ -7,10 +7,10 @@
       <input v-model.trim="search" @input="setData" type="text" placeholder="Search">
     </div>
     <div class="list-box">
-      <div class="list-box">
+      <a href="/profile/me" class="list-box">
         <span class="material-symbols-outlined" id="account">account_box</span>
-        <a href="/profile/me">{{ account.profile.nickname }}님</a>
-      </div>
+        <a>{{ account.profile.nickname }}님</a>
+      </a>
       <div class="list-box" @click="account.logout">
         <span class="material-symbols-outlined" id="logout">logout</span>
         <a href="">Logout</a>

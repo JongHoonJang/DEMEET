@@ -64,18 +64,11 @@
         close</span>
       </div>
     </div>
-    <div v-if="!isEditDetail" class="box">
+    <div v-if="!isEditDetail" class="pjt-detail-box">
       <p class="text-style">{{ pjt.pjtDesc || 'pjt-detail' }}</p>
     </div>
     <div v-if="isEditDetail">
-      <textarea class="desc-input-box" v-model="projectData.desc" name="" id="" cols="30" rows="10"></textarea>
-    </div>
-    <div v-if="pjt.activation" class="pjt-list">
-      <p>초대코드</p>
-      <span class="material-symbols-outlined" id="content">content_copy</span>
-    </div>
-    <div v-if="pjt.activation" class="box">
-      <p class="text-style">https://www.demeet.com/meet/1</p>
+      <textarea class="desc-input-box" v-model="projectData.desc" maxlength="200" name="" id="" cols="30" rows="10"></textarea>
     </div>
     <div class="time">
       <p>누적 미팅시간</p>
@@ -209,6 +202,7 @@ export default defineComponent({
         router.push({name:'ProfileView'})
       }
     }
+    
     return {
       host,
       pjt,
@@ -349,6 +343,8 @@ export default defineComponent({
 .text-style {
   text-align: start;
   margin: 12px;
+  overflow: hidden;
+  word-break:break-all;
 }
 
 .pjt-list {
@@ -363,12 +359,20 @@ export default defineComponent({
 }
 
 .container .box {
-  margin-left: 20%
+  margin-left: 20%;
 }
 
 .box {
   width: 400px;
   height: 44px;
+  background: #333333;
+  color: #9E9E9E;
+}
+
+.pjt-detail-box {
+  margin-left: 20%;
+  width: 400px;
+  height: 120px;
   background: #333333;
   color: #9E9E9E;
 }
