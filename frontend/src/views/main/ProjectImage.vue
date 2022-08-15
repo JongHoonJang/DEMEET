@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" @click="isDelete=true">delete</a></button>
+    <button><a type="button" @click="deleteImage">delete</a></button>
     <button><a type="button" @click="isImage=false">cancel</a></button>
   </div>
   <div class="window" v-if="!isData">
@@ -45,8 +45,8 @@ export default {
           route = useRoute()  ,
           project_pk = ref(route.params.pid),
           isImage = ref(false),
-          isDelete = ref(false)
-  
+          selectImage = ref(null)
+
     await axios({
         url: process.env.VUE_APP_API_URL + "projects/drawing/" + project_pk.value,
         method: 'get',
@@ -108,14 +108,11 @@ export default {
     }    
     const downloadDelete = (setImageData) => {
       isImage.value = true
-      console.log(isDelete.value)
-      console.log(setImageData.dipid)
-      if (isDelete.value) {
-        console.log(isDelete.value)
-        demeet.deleteImage({dipid: setImageData.dipid})
-        isDelete.value = false
-        isImage.value = false
-      }
+      selectImage.value = setImageData.dipid
+    }
+    const deleteImage = () => {
+      demeet.deleteImage(selectImage.value)
+      isImage.value = false
     }
     return {
       demeet,
@@ -123,7 +120,8 @@ export default {
       isImage,
       carousel,
       isDelete,
-      downloadDelete
+      downloadDelete,
+      deleteImage
     }
   },
   mounted() {
