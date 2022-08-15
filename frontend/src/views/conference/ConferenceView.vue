@@ -16,10 +16,10 @@
 	<div id="session" v-if="conferenceAction">
 
   <main>
-		<div id="conference-main">
-        <!-- 영상, 드로잉 등 -->
+		<div id="container">
+        <!-- 왼쪽 비디오들-->
 			<ConferenceVideo
-				id="sideVideo"
+				id="item"
 				:session = "session"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
@@ -27,25 +27,23 @@
 				:secondPublisher="secondPublisher"
 				@main-video-change="updateMainVideoStreamManager"
 			/>
-		<div>
-
-			
+			<!-- 중앙 화면 -->
+		<div id="item">
 			<DrawingView 
 					v-if="isDrawing"
 					:openviduSessionId="openviduSessionId"
 				/>
-
 			<div v-else id="main-video">
 				<MainVideo 
 				:streamManager="mainStreamManager" 
 				/>
 			</div>
-			
 		</div>
 
-      <!-- 참자가 목록, 채팅 -->
-			<div id="right-sidebar">
+      <!-- 오른쪽 참자가 목록, 채팅 -->
+			<div id="item" class="right-container">
 				<ConferenceUsers
+					class="right-item"
 					v-if="userListStatus"
 					:publisher="publisher"
 					:subscribers="subscribers"
@@ -53,6 +51,7 @@
 				/>
 				<div
 					id="chat-box"
+					class="right-item"
 					v-if="chattingStatus"
 					style="box: 5px 5px 5px"
 				>
@@ -79,7 +78,7 @@
 		@audio-on-off="audioOnOff"  
 		@video-on-off="videoOnOff"
 		@mic-on-off="micOnOff"
-		@share-screen="startShareScreen"
+		@share-screen="shareScreen"
 		@share-drawing="shareDrawing"
 		@session-exit="leaveSession"
 		@user-list-on-off="userListOnOff"
@@ -252,12 +251,9 @@ setup() {
 		}
 
 		const updateMainVideoStreamManager = (stream) => {
-			console.log('봐 ! updateMainVideoStreamManager 이 실행되잖아 ')
 			console.log(mainStreamManager.value)
 			if (mainStreamManager.value  === stream) return
 			mainStreamManager.value  = stream
-			console.log('메인스트리머가 위에서 아래로 바뀜')
-			console.log(mainStreamManager.value)
 		}
 
 			/**
@@ -421,22 +417,25 @@ setup() {
 		chattingStatus.value = !chattingStatus.value
 	}
 
-	const shareDrawing = () => {
-		if (isDrawing.value === false){
-			startShareDrawing()
-		}else{
-			closeShareDrawing()
-		}
-	}
 
 	const dumpMethod = () => {  // 작동 확인을 위한 함수
 		// alert('dumpMethod 작동 확인')
 	}
 
+	const shareScreen = () => {
+		if (isDrawing.value === true && isSharing.value === false){
+			closeShareDrawing().then(()=>{
+				startShareDrawing()
+			})
+		}else if(isDrawing.value === false && isSharing.value === false){
+			startShareScreen()
+		}else if(isDrawing.value === false && isSharing.value === true){
+			closeShareScreen()
+		}
+	}
 
 	// share screen 화면 공유 uservideo, users 전부 다 비동기 처리
 	const startShareScreen = () => {
-		isSharing.value = !isSharing.value
 		var newPublisher = OV.value.initPublisher('ConferenceVideo', 
 		{ 
 			videoSource: "screen", 
@@ -449,6 +448,7 @@ setup() {
 		})
 
 		newPublisher.once('accessAllowed', () => {
+			isSharing.value = !isSharing.value
 			newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
 				// 정지 누르면 다시 원상 복귀
 				session.value.unpublish(publisher.value).then(() => {
@@ -476,9 +476,33 @@ setup() {
 		})
 	}
 
-	const startShareDrawing = () => {
-		isDrawing.value = !isDrawing.value
+	const closeShareScreen = () => {
+		return session.value.unpublish(publisher.value).then(() => {
+			mainStreamManager.value = secondPublisher.value
+				publisher.value = secondPublisher.value
+				}).then(()=> {
+				// publish your stream
+				session.value.publish(publisher.value).then(()=>{
+					isSharing.value = !isSharing.value
+			})
+		})
+	}
 
+	const shareDrawing = () => {
+		if (isSharing.value === true && isDrawing.value === false){
+			closeShareScreen().then(()=>{
+				startShareDrawing()
+			})
+		}else if(isSharing.value === false && isDrawing.value === false){
+			startShareDrawing()
+		}else if(isSharing.value === false && isDrawing.value === true){
+			closeShareDrawing()
+		}
+	}
+
+	const startShareDrawing = () => {
+		
+		isDrawing.value = !isDrawing.value
 		OV.value.getUserMedia({
 			audioSource: false,
 			videoSource: undefined, 
@@ -511,8 +535,7 @@ setup() {
 	}
 
 	const closeShareDrawing = () => {
-	
-	session.value.unpublish(publisher.value).then(() => {
+		return	session.value.unpublish(publisher.value).then(() => {
 		publisher.value = secondPublisher.value
 		// mainStreamManager.value = secondPublisher.value
 	}).then(()=>{
@@ -555,7 +578,6 @@ setup() {
 		leaveSession,
 		updateMainVideoStreamManager,
 		getToken,
-		startShareScreen,
 		// httpPostRequest,
 		getConnections,
 		createSession,
@@ -568,6 +590,9 @@ setup() {
 		userListOnOff,
 		chattingOnOff,
 		micOnOff,
+		shareScreen,
+		startShareScreen,
+		closeShareScreen,
 		shareDrawing,
 		startShareDrawing,
 		closeShareDrawing,
@@ -578,7 +603,51 @@ setup() {
 </script>
 
 <style scoped>
+
+#container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+#item {
+	/* width: 100px; */
+	flex-basis: 250x;
+}
+
 main {
+	height: 90vh;
+}
+
+footer {
+  background-color: rgb(21, 29, 42);
+	display: block;
+	position: fixed;
+	bottom: 0px;
+	width: 100vw;
+	height: auto;
+}
+
+
+.right-container {
+	flex-direction: column
+}
+
+@media all and (max-width: 1024px){
+	#container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: stretch;
+}
+
+.right-container {
+	flex-direction: column;
+}
+}
+
+/* main {
 	height: auto;
 }
 #conference-main{
@@ -629,5 +698,5 @@ footer {
 
 #right-sidebar {
 	height: 30vh;
-}
+} */
 </style>
