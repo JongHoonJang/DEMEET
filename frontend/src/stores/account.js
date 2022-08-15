@@ -217,7 +217,7 @@ export const useAccountStore = defineStore("account", {
     // 프로젝트 상세 조회
     fetchProject(project_pk) {
       axios({
-        url: api.projects.project_detail(project_pk),
+        url: api.projects.project_detail_delete(project_pk),
         method: 'get',
         headers: this.authHeader,
       }) 
@@ -295,6 +295,18 @@ export const useAccountStore = defineStore("account", {
           }else {
             router.go({name:'DetailView', parmas: {project_pk: projectData.pid}})
           }
+        })
+        .catch(err => console.error(err.response))
+    },
+    // 프로젝트 삭제
+    deleteProject(project_pk) {
+      axios({
+        url: api.projects.project_detail_delete(project_pk),
+        method: 'delete',
+        headers: this.authHeader,
+      })
+        .then(() => {
+          router.go({name:'MainView'})
         })
         .catch(err => console.error(err.response))
     },

@@ -19,7 +19,7 @@ export default {
   projects: {
     projects_create_update: () => HOST + PROJECTS, //get, patch
     projects_list: () => HOST + PROJECTS + 'activate/joined/',
-    project_detail: pid => HOST + PROJECTS + `${pid}/`, //get, patch
+    project_detail_delete: pid => HOST + PROJECTS + `${pid}/`, //get, delete
     image_list: pid => HOST + PROJECTS + DRAWING + `${pid}/`, // get
     image_delete: dipid => HOST + PROJECTS + DRAWING + `${dipid}/`, //delete
     image_save: () => HOST + PROJECTS + DRAWING, //post
