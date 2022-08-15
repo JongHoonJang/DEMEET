@@ -122,6 +122,7 @@ export default {
       isData,
       isImage,
       carousel,
+      isDelete,
       downloadDelete
     }
   },
