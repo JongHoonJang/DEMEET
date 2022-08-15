@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+// import {ref} from 'vue'
 
 export default {
 	name: 'OvVideo',
@@ -20,10 +20,10 @@ export default {
 		}
 	},
 	
-	setup(props) {
-		const data = ref(props)
-		console.log(data.value.isDrawing)
-	},
+	// setup(props) {
+	// 	const data = ref(props)
+	// 	console.log(data.value.isDrawing)
+	// },
 
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
@@ -33,9 +33,12 @@ export default {
 <style scoped>
 
 #videoID {
-	height: 160px;
-	width: 240px;
+	height: 100%;
+	max-width: 160px;
+	width: 100%;
+	max-width: 240px;
 	margin: 1rem 1rem 0 1rem;
+	cursor: pointer;
 }
 
 </style>>

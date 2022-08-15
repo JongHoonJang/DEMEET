@@ -58,7 +58,7 @@ export default {
 <style scoped>
 #ConferenceUsers {
   background-color: rgb(207, 134, 134);
-  height: 50%;
+  height: 30%;
 }
 
 </style>

@@ -67,10 +67,21 @@ export default {
 </script>
 
 <style scoped>
-div.dump {
+
+@media all and (max-width: 1024px){
+		#video-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: stretch;
+	}
+
+}
+
+/* div.dump {
   background-color: 0D131E;
   width: 20vw;
   height: 100vh;
-}
+} */
 
 </style>
