@@ -1,6 +1,6 @@
 <template>
   <router-link :to="{ name: 'DetailView', params: {pid: pid}}" class="project-container">
-    <img class="project-img" src="https://images.edrawsoft.com/kr/sample.jpg" alt="">
+    <img class="project-img" src="@/assets/DEMEET.jpg" alt="">
     <div class="project-data">
       <p>PJT name: {{ endPjt.endProject.pjtName }}</p>
       <p>start PJT: {{ endPjt.endProject.pjtStartDate }}</p>
@@ -12,7 +12,6 @@
 
 <script>
 import { defineComponent,ref } from "vue"
-// import { useAccountStore } from "@/stores/account"
 export default defineComponent({
   props:['endProject'],
   setup(props) {
@@ -20,7 +19,7 @@ export default defineComponent({
     const pid = ref(endPjt.value.endProject.pid)
     return {
       pid,
-      endPjt
+      endPjt,
     }
   }
 })
@@ -29,15 +28,18 @@ export default defineComponent({
 <style>
 .project-container {
   width: 300px;
-  height: 440px;
+  height: 350px;
   background: #111315;
   text-decoration: none;
   border-radius: 10px;
   margin: 50px;
 }
+.project-container:hover {
+  transform: scale(1.1);
+}
 .project-img {
   width: 300px;
-  height: 300px;
+  height: 200px;
   border-radius: 10px;
 }
 .project-data {

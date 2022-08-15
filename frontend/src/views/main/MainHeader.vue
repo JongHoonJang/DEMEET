@@ -14,7 +14,7 @@
         :key="project.pid"
         :project="project"
         />
-      </div>
+    </div>
   </header>
 </template>
 
@@ -47,6 +47,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@media (max-width: 678px){
+  .container{
+		justify-content: center;
+  }
+}
 #add {
   font-size: 64px;
   color: white;
