@@ -41,7 +41,7 @@ export const useAccountStore = defineStore("account", {
       })
         .then(res => {
           this.profile = res.data.user
-          this.endProjects = res.data.user.deActivateProjects
+          this.endProjects = res.data.user.deActivateProjects.reverse()
         })
     },
 
