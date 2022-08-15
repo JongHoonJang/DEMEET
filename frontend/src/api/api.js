@@ -21,7 +21,7 @@ export default {
     projects_list: () => HOST + PROJECTS + 'activate/joined/',
     project_detail: pid => HOST + PROJECTS + `${pid}/`, //get, patch
     image_list: pid => HOST + PROJECTS + DRAWING + `${pid}/`, // get
-    image_delete: dipid => HOST + PROJECTS + `${dipid}/images/`, //delete
+    image_delete: dipid => HOST + PROJECTS + `${dipid}/`, //delete
     image_save: () => HOST + PROJECTS + DRAWING, //post
     add_delete_user: () => HOST + PROJECTS + 'user/', //post, delete
   },
