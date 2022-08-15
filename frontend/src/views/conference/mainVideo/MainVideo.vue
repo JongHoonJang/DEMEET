@@ -1,13 +1,13 @@
 <template>
 <div v-if="streamManager">
 	<main-ov-video :streamManager="streamManager" :isDrawing="isDrawing"/>
-	<div id="mainVideoFrame"><p>{{ clientData.clientData }}</p></div>
+	<!-- <div id="mainVideoFrame"><p>"{{ mainUserNickName.clientData }}" 님의 비디오</p></div> -->
 </div>
 </template>
 
 <script>
 import MainOvVideo from './MainOvVideo'
-import { computed } from 'vue'
+import { onMounted, ref } from 'vue'
 
 export default {
 	name: 'UserVideo',
@@ -29,19 +29,45 @@ export default {
 	},
 
 	setup(props){
+		const mainUserNickName = ref(Object)
 		
 	async function getConnectionData() {
 		const { connection } = await props.streamManager.stream
 		return  JSON.parse(connection.data.split('%')[0])
 		}
 
-	const clientData = computed(() => {
-			const clientData = getConnectionData()
+	const clientData = onMounted(async() => {
+			const clientData = await getConnectionData()
+			console.log(clientData)
+			mainUserNickName.value = clientData
 			return clientData
 	})
 		return {
 			clientData,
+			mainUserNickName
 		}
 	}
 }
 </script>
+
+<style scoped>
+	#mainVideoFrame{
+		background-color: #394867c4;
+	}
+
+	#mainVideoFrame p {
+		color: #f1f6f9bd;
+		margin: 0;
+	}
+
+	@media all and (max-width: 1024px){
+	#mainVideoFrame{
+		background-color: #394867c4;
+	}
+
+	#mainVideoFrame p {
+		color: #f1f6f9bd;
+		margin: 0;
+	}
+}
+</style>>
