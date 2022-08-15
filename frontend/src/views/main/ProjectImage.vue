@@ -109,13 +109,13 @@ export default {
       carousel.value = init
       isData.value = true
     }    
-    function createHTMLDocument() {
+    function createHTMLDocument(image) {
       var blob = new Blob(
-        ['<!doctype html>','<html><head><title>Blob Example</title><body>',document.getElementById('clnkDownloadode').value,'</body></html>'],
+        ['<!doctype html>','<html><head><title>Blob Example</title><body>',image,'</body></html>'],
         {type:'text/html'}
       );
       var url = URL.createObjectURL(blob);
-      var link = document.getElementById('link');
+      var link = document.getElementById('lnkDownload');
           
       link.setAttribute('href', url);
     }
