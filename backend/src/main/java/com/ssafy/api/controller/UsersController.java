@@ -79,6 +79,7 @@ public class UsersController {
         try {
             log.info("회원가입");
             boolean check = checkEmailValidate(registerInfo.getEmail());
+//            boolean check = true;
             if (!check) {
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Email validation failed"));
             }

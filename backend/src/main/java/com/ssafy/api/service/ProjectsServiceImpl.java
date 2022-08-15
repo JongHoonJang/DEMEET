@@ -1,12 +1,14 @@
 package com.ssafy.api.service;
 
 import com.ssafy.DTO.project.ProjectDeactivateSimpleInfoDTO;
+import com.ssafy.DTO.project.ProjectJoinedActivateSimpleInfoDTO;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.common.customException.NoAuthorizedException;
 import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.common.customException.UidNullException;
+import com.ssafy.db.entity.Conferences;
 import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.UserProject;
 import com.ssafy.db.entity.Users;
@@ -44,14 +46,28 @@ public class ProjectsServiceImpl implements ProjectsService {
     UserProjectService userProjectService;
 
 
-    public ProjectSimpleInfoDTO makeProjectSimpleInfoDTO(Projects project) {
-        ProjectSimpleInfoDTO simpleInfoDTO = new ProjectSimpleInfoDTO();
+    public ProjectJoinedActivateSimpleInfoDTO makeProjectJoinedActivateSimpleInfoDTO(Projects project) {
+        ProjectJoinedActivateSimpleInfoDTO simpleInfoDTO = new ProjectJoinedActivateSimpleInfoDTO();
         simpleInfoDTO.setPid(project.getPid());
         simpleInfoDTO.setProjectOwner(project.getOwnerId());
         simpleInfoDTO.setPjtName(project.getPjtName());
         simpleInfoDTO.setPjtDesc(project.getPjtDesc());
         simpleInfoDTO.setActivation(project.isActivation());
+        // 세션 활성화 여부 체크
+        simpleInfoDTO.setSessionActivate(sessionActivateCheck(project));
         return simpleInfoDTO;
+    }
+    public boolean sessionActivateCheck(Projects project){
+        boolean activationCheck = false;
+        List<Conferences> conferenceList = project.getConferencesList();
+        for(Conferences conf : conferenceList){
+            if(conf.isActivation()){
+                activationCheck = true;
+                break;
+            }
+        }
+        return activationCheck;
+
     }
 
     public ProjectDeactivateSimpleInfoDTO makeProjectDeactivateSimpleInfoDTO(Projects project) throws UidNullException {
@@ -70,9 +86,19 @@ public class ProjectsServiceImpl implements ProjectsService {
         log.info("위 프로젝트를 ProjectSimpleInfoDTOList로 변환해준다.");
         List<ProjectSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectSimpleInfoDTO>();
         for (Projects project : activateProjectsList) {
-            projectSimpleInfoList.add(makeProjectSimpleInfoDTO(project));
+            projectSimpleInfoList.add(makeProjectJoinedActivateSimpleInfoDTO(project));
         }
         log.debug("projectSimpleInfoList = " + projectSimpleInfoList.toString());
+        return projectSimpleInfoList;
+    }
+    private List<ProjectJoinedActivateSimpleInfoDTO> getProjectJoinedActivateSimpleInfoDTOS(List<Projects> activateProjectsList) {
+        log.debug("projectsList = {}" + activateProjectsList.toString());
+        log.info("위 프로젝트를 ProjectJoinedActivateSimpleInfoDTOSList로 변환해준다.");
+        List<ProjectJoinedActivateSimpleInfoDTO> projectSimpleInfoList = new ArrayList<ProjectJoinedActivateSimpleInfoDTO>();
+        for (Projects project : activateProjectsList) {
+            projectSimpleInfoList.add(makeProjectJoinedActivateSimpleInfoDTO(project));
+        }
+        log.debug("ProjectJoinedActivateSimpleInfoDTOSList = " + projectSimpleInfoList.toString());
         return projectSimpleInfoList;
     }
 
@@ -195,17 +221,17 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     public List<ProjectSimpleInfoDTO> getActivateProjectsList(Long uid) throws ProjectNullException {
-        log.info("uid를 기반으로 내가 속해있는 활성화된 프로젝트 조회");
+        log.info("get activate projects with uid");
         List<Projects> activateProjectsList = projectRepository.findProjectsByOwnerIdAndActivation(uid, true).orElseThrow(() -> new ProjectNullException("not found"));
         List<ProjectSimpleInfoDTO> projectSimpleInfoList = getProjectSimpleInfoDTOS(activateProjectsList);
         return projectSimpleInfoList;
     }
 
     @Override
-    public List<ProjectSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException {
+    public List<ProjectJoinedActivateSimpleInfoDTO> getJoinedProjectList(Long uid) throws ProjectNullException {
         log.info("내가 속해있는 프로젝트 조회");
         List<Projects> activateProjectsList = userProjectRepositorySupport.getJoinedProjectList(uid).orElseThrow(() -> new ProjectNullException("Projets not found"));
-        List<ProjectSimpleInfoDTO> projectSimpleInfoList = getProjectSimpleInfoDTOS(activateProjectsList);
+        List<ProjectJoinedActivateSimpleInfoDTO> projectSimpleInfoList = getProjectJoinedActivateSimpleInfoDTOS(activateProjectsList);
         return projectSimpleInfoList;
     }
 
