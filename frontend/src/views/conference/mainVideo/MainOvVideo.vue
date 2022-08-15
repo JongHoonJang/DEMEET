@@ -30,7 +30,14 @@ export default {
 </script>
 <style scoped>
 	#mainVideoID {
-		width: 50VW;
-		margin-top: 10vh;
+		width: 40VW;
+		margin-top: 8vh;
 	}
+
+	@media all and (max-width: 1024px){
+			#mainVideoID {
+		width: 90VW;
+		margin-top: 8vh;
+	}
+}
 </style>
