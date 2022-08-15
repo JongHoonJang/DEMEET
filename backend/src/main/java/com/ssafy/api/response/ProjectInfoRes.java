@@ -26,14 +26,11 @@ public class ProjectInfoRes extends BaseResponseBody {
 //         project = new ProjectInfoDTO();
         res.setStatusCode(statusCode);
         res.setMessage(message);
-        System.out.println(project.toString());
         res.project.setPid(project.getPid());
-        System.out.println("pid완료");
         res.project.setProjectOwner(projectOwner);
         res.project.setMember(userList);
         res.project.setSessionId(project.getCustomSessionName());
         res.project.setPjtStartDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtStartDate()));
-        System.out.println(project.getPjtEndDate());
         if(project.getPjtEndDate() != null){
             res.project.setPjtEndDate(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(project.getPjtEndDate()));
         }
@@ -42,7 +39,6 @@ public class ProjectInfoRes extends BaseResponseBody {
         }
         res.project.setPjtName(project.getPjtName());
         res.project.setPjtDesc(project.getPjtDesc());
-        System.out.println(project.getTotalMeetTime());
         TypeConverter typeConverter;
         res.project.setTotalMeetTime(TypeConverter.LongSecondsToStringTime(project.getTotalMeetTime()));
         res.project.setActivation(project.isActivation());

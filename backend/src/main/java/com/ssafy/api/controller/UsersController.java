@@ -28,18 +28,21 @@ import com.ssafy.db.entity.Projects;
 import com.ssafy.db.entity.Users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,11 +70,18 @@ public class UsersController {
     @Autowired
     AwsS3Service awsS3Service;
 
+    @Value("${whoisxml.key}")
+    String apiKey;
+
     @PostMapping()
     public ResponseEntity<? extends BaseResponseBody> register(
             @RequestBody @Validated UsersRegisterPostReq registerInfo) {
         try {
             log.info("회원가입");
+            boolean check = checkEmailValidate(registerInfo.getEmail());
+            if (!check) {
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Email validation failed"));
+            }
             Users newUser = usersService.createUser(registerInfo);
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "sign-in success"));
         } catch (Exception e) {
@@ -130,13 +140,14 @@ public class UsersController {
             return ResponseEntity.status(400).body(BaseResponseBody.of(422, "invalid uid"));
         }
     }
+
     @PatchMapping("/password/forget")
-    public ResponseEntity<BaseResponseBody> changeForgotPassword(@RequestBody UserForgetPasswordReq userForgetPasswordReq){
+    public ResponseEntity<BaseResponseBody> changeForgotPassword(@RequestBody UserForgetPasswordReq userForgetPasswordReq) {
         log.info("Change forgot password");
         Users user = null;
         try {
             user = usersService.getUsersByUserEmail(userForgetPasswordReq.getEmail());
-            if(!user.getNickname().equals(userForgetPasswordReq.getNickname())){
+            if (!user.getNickname().equals(userForgetPasswordReq.getNickname())) {
                 log.error("nickname is incorrect");
                 return ResponseEntity.status(426).body(BaseResponseBody.of(426, "nickname is incorrect"));
             }
@@ -147,12 +158,12 @@ public class UsersController {
             log.info("save tempPassword");
             boolean changePassword = usersService.changeUserPassword(user.getUid(), tempPassword);
 
-            if(changePassword){
+            if (changePassword) {
                 log.info("password change success");
                 log.info("send tempPassword to user's email");
-                emailUtil.sendEmail(user.getEmail(),user.getEmail(),tempPassword);
+                emailUtil.sendEmail(user.getEmail(), user.getEmail(), tempPassword);
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "password change success"));
-            }else{
+            } else {
                 log.error("server error");
                 return ResponseEntity.status(500).body(BaseResponseBody.of(500, "server error during change user password"));
             }
@@ -231,7 +242,7 @@ public class UsersController {
             log.info("토큰을 통해 유저 받아오기");
             Users user = usersService.getUsersByUid(ssafyUsersDetails.getUserUid());
             log.info("현재 nickname과 newNickname이 같은지 비교");
-            boolean check =user.getNickname().equals(newNickname);
+            boolean check = user.getNickname().equals(newNickname);
             log.debug("일치여부 = {}", check);
             if (check) {
                 log.error("현재 닉네임과 새로운 닉네임이 같으므로 변경하지않음.");
@@ -279,7 +290,6 @@ public class UsersController {
             // 파일, id, 프로필/드로잉 구분
             path = awsS3Service.putImage(imageUploadReq.getMultipartFile(), uid, "profile");
             // 성공시 db에 정보 넣기
-            System.out.println(path);
             Users users = awsS3Service.saveProfileImagePath(path, uid, "profile");
             users.toString();
         } catch (IOException e) {
@@ -308,5 +318,25 @@ public class UsersController {
 
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Profile image Delete Success"));
+    }
+
+    public boolean checkEmailValidate(String email) {
+        log.info("Checking email validation");
+        boolean validateCheck = false;
+        String url = "https://emailverification.whoisxmlapi.com/api/v2?apiKey=" + apiKey + "&emailAddress=" + email;
+        RestTemplate restTemplate = new RestTemplate();
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        ResponseEntity<?> responseEntity = restTemplate.getForEntity(url, HashMap.class);
+        result = (HashMap<String, Object>) responseEntity.getBody();
+        log.debug(result.toString());
+        // 대부분의 포털사이트 이메일들은 smtpcheck가 true다.
+        // 이메일 검증조건을 아래 모두를 충족하는것으로 하겠다
+        boolean smtpCheck = Boolean.parseBoolean((String) result.get("smtpCheck"));
+        boolean formatCheck = Boolean.parseBoolean((String) result.get("formatCheck"));
+        boolean dnsCheck = Boolean.parseBoolean((String) result.get("dnsCheck"));
+        if (smtpCheck & formatCheck & dnsCheck)
+            validateCheck = true;
+        log.info("validateCheck = {}",validateCheck);
+        return validateCheck;
     }
 }

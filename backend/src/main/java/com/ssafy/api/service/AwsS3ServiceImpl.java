@@ -18,10 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
+
+import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
 @Service("AwsS3Service")
 public class AwsS3ServiceImpl implements AwsS3Service{
@@ -79,7 +79,7 @@ public class AwsS3ServiceImpl implements AwsS3Service{
             S3ObjectSummary objectSummary = listIterator.next();
             DeleteObjectRequest request = new DeleteObjectRequest(bucket, objectSummary.getKey());
             amazonS3Client.deleteObject(request);
-            System.out.println("Image Deleted");
+            log.info("Image Deleted");
         }
     }
 
