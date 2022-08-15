@@ -64,6 +64,7 @@ export default {
   margin: 2px;
   padding-left: 5px;
   padding-right: 5px;
+  white-space: pre-line;
 }
 #chat {
 
