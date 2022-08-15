@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.ssafy.common.customException.NotImageException;
+import com.ssafy.common.customException.ProjectNullException;
 import com.ssafy.db.entity.Conferences;
 import com.ssafy.db.entity.DrawingImgPath;
 import com.ssafy.db.entity.Users;
@@ -132,10 +133,17 @@ public class AwsS3ServiceImpl implements AwsS3Service{
         return drawingImagePathRepository.save(drawingImgPath);
     }
 
+
     @Override
     public ListIterator<S3ObjectSummary> getS3Object(String folderPath) {
         ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderPath);
         ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
         return listObjectsV2Result.getObjectSummaries().listIterator();
+    }
+
+    @Override
+    public void deleteDrawingPath(long dipid) throws NotImageException {
+        DrawingImgPath drawingImgPath = drawingImagePathRepository.findDrawingImgPathByDipid(dipid).orElseThrow(() -> new NotImageException("not found"));
+        drawingImagePathRepository.delete(drawingImgPath);
     }
 }
