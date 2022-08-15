@@ -306,7 +306,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          router.go({name:'MainView'})
+          router.push({name:'MainView'})
         })
         .catch(err => console.error(err.response))
     },
