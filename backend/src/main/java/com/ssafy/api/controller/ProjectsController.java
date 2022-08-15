@@ -1,7 +1,5 @@
 package com.ssafy.api.controller;
 
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.ssafy.DTO.project.DrawingPathDTO;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
@@ -26,12 +24,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 import static org.kurento.jsonrpc.client.JsonRpcClient.log;
 
@@ -115,7 +110,6 @@ public class ProjectsController {
     public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
-        System.out.println(uid);
         try {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
             for (int i = 0; i < projectList.size(); i++) {
@@ -137,7 +131,6 @@ public class ProjectsController {
     public ResponseEntity<BaseResponseBody> getActivateProjects(Authentication authentication) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
-        System.out.println(uid);
         try {
             List<ProjectSimpleInfoDTO> projectList = projectsService.getActivateProjectsList(uid);
             for (int i = 0; i < projectList.size(); i++) {
