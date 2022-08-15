@@ -108,7 +108,10 @@ export default {
     }    
     const downloadDelete = (setImageData) => {
       isImage.value = true
+      console.log(isDelete.value)
+      console.log(setImageData.dipid)
       if (isDelete.value) {
+        console.log(isDelete.value)
         demeet.deleteImage({dipid: setImageData.dipid})
         isDelete.value = false
         isImage.value = false
