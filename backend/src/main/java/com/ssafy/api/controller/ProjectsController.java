@@ -230,11 +230,11 @@ public class ProjectsController {
             }
 
         } catch (UidNullException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "incorrect uid"));
         } catch (UserNullException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "cannot find user"));
         } catch (ProjectNullException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "can't not find project"));
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "project delete success"));
     }
