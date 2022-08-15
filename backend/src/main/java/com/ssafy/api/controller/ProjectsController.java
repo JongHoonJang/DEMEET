@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.DTO.project.DrawingPathDTO;
+import com.ssafy.DTO.project.ProjectJoinedActivateSimpleInfoDTO;
 import com.ssafy.DTO.project.ProjectSimpleInfoDTO;
 import com.ssafy.DTO.user.UserSimpleInfoDTO;
 import com.ssafy.api.request.AddDelUserInProjectPostReq;
@@ -9,6 +10,7 @@ import com.ssafy.api.request.ProjectPatchPostReq;
 import com.ssafy.api.request.ProjectsCreatePostReq;
 import com.ssafy.api.response.DrawingPathRes;
 import com.ssafy.api.response.ProjectInfoRes;
+import com.ssafy.api.response.ProjectJoinedActivateSimpleInfoRes;
 import com.ssafy.api.response.ProjectSimpleInfoRes;
 import com.ssafy.api.service.*;
 import com.ssafy.common.auth.SsafyUsersDetails;
@@ -108,16 +110,18 @@ public class ProjectsController {
 
     @GetMapping("/activate/joined")
     public ResponseEntity<BaseResponseBody> getJoindActivateProjects(Authentication authentication) {
+        log.info("getJoindActivateProjects");
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         try {
-            List<ProjectSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
+            List<ProjectJoinedActivateSimpleInfoDTO> projectList = projectsService.getJoinedProjectList(uid);
+
             for (int i = 0; i < projectList.size(); i++) {
-                //
+                // 각각의 ProjectSimpleInfoDTO에
                 List<UserSimpleInfoDTO> userList = usersProjectService.getUserSimpleInfoDTOListByPid(projectList.get(i).getPid());
                 projectList.get(i).setMember(userList);
             }
-            return ResponseEntity.status(200).body(ProjectSimpleInfoRes.of(200, "success", projectList));
+            return ResponseEntity.status(200).body(ProjectJoinedActivateSimpleInfoRes.of(200, "success", projectList));
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         } catch (UidNullException e) {
