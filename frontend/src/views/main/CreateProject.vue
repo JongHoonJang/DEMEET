@@ -48,7 +48,7 @@
       </div>
     </div>
   </div>
-  <button class="create-btn" @click="account.createProject(projectData)">start project</button>
+  <button class="create-btn" @click="startProject(projectData)">start project</button>
 </template>
 
 <script scoped>
@@ -80,6 +80,13 @@ export default defineComponent({
         searchList.value = resData.slice(0,3)
       }
     }
+    const startProject = (data) => {
+      if (data.pjt_name === '') {
+        alert('프로젝트 이름을 작성해주세요')
+      }else {
+        account.createProject(data)
+      }
+    }
     return {
       account,
       userData,
@@ -88,7 +95,8 @@ export default defineComponent({
       projectData,
       findData,
       add,
-      remove
+      remove,
+      startProject
     }
   },
   async created () {
