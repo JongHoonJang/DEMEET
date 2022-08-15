@@ -1,12 +1,11 @@
 <template>
   <div id="ConferenceUsers">
     <p>유저 목록입니다.</p>
-    <div><p>{{ clientData.clientData }}</p></div>
+    <div v-for="(user, index) in users" :key="index" :users="users">{{user.clientData.slice(15,-2)}}</div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue'
 
 export default {
   name: 'ConferenceUsers',
@@ -31,21 +30,12 @@ export default {
 			}
 		}
 	},
-  setup(props) {
+  setup() {
 
-	async function getConnectionData() {
-		const { connection } = await props.publisher.stream
-		return  JSON.parse(connection.data.split('%')[0])
-		}
 
-   const clientData = computed(() => {
-			const clientData  = getConnectionData()
-			return clientData
-	})
   
   return {
-    getConnectionData,
-    clientData
+
   }
   },
   create() {},

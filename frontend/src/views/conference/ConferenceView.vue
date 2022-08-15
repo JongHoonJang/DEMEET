@@ -175,7 +175,8 @@ setup() {
 			session.value.on('streamCreated', ({ stream }) => {
 				const subscriber = session.value.subscribe(stream)
 				subscribers.value.push(subscriber)
-				users.value.push(subscriber)
+				getConnections(openviduSessionId.value).then(res => { users.value = res} )
+				
 			})
 
 
