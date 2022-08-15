@@ -68,12 +68,21 @@ export default {
 
 <style scoped>
 
+	#video-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: stretch;
+		overflow: auto;
+	}
+
 @media all and (max-width: 1024px){
-		#video-container {
+	#video-container {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: stretch;
+		overflow: auto;
 	}
 
 }
