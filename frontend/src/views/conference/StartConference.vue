@@ -6,8 +6,8 @@
 			<div id="join-dialog" class="jumbotron vertical-center">
 				<h1>Join a video session</h1>
 				<div class="form-group">
-					<p>Participant : {{demeet.profile.nickname}}</p>	
-					<p>Session : {{demeet.project.pjtName}}</p>
+					<p>{{demeet.profile.nickname}}</p>	
+					<p>PROJECT NAME : {{demeet.project.pjtName}}</p>
 					
 					<p class="text-center">
 						<button class="btn btn-lg btn-success" @click="$emit('joinSession')">Join!</button>
