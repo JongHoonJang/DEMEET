@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div class="button-container" v-if="isData || !isImage">
+  <div class="button-container" v-if="isData && !isImage">
     <button class="prev">previous</button>
     <button class="next">next</button>
   </div>
