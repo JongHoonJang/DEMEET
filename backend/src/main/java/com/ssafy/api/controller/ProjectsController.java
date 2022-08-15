@@ -208,6 +208,37 @@ public class ProjectsController {
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
+    @DeleteMapping("/{pid}")
+    public ResponseEntity<BaseResponseBody> deleteProjects( Authentication authentication,@PathVariable("pid") Long pid){
+        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
+        try {
+            log.info("deleteProjects");
+            log.info("Check whether the user is the owner.");
+            Users user = usersService.getUsersByUid(ssafyUsersDetails.getUserUid());
+            Projects projects = projectsService.getProject(pid);
+            if(!projects.getOwnerId().equals(user.getUid())){
+                // 프로젝트의 오너가 해당 유저가 아님.
+                log.error("User " + user.getUid() + " is not the owner of the project ");
+                return ResponseEntity.status(422).body(BaseResponseBody.of(422, "this user is not the owner of this projects"));
+            }
+            log.info("owner check success");
+            log.info("deleteProjects");
+            boolean deleteCheck = projectsService.deleteProjects(projects);
+            if(!deleteCheck) {
+                log.error("delete fail");
+                return ResponseEntity.status(423).body(BaseResponseBody.of(423,"project delete fail"));
+            }
+
+        } catch (UidNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "incorrect uid"));
+        } catch (UserNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "cannot find user"));
+        } catch (ProjectNullException e) {
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "can't not find project"));
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "project delete success"));
+    }
+
 
     // 드로잉 이미지 업로드
     @PostMapping("/drawing")
@@ -273,6 +304,7 @@ public class ProjectsController {
 
     @DeleteMapping("/drawing/{dipid}")
     public ResponseEntity<BaseResponseBody> deleteProjectImage(@ApiIgnore Authentication authentication, @PathVariable long dipid){
+        log.info("dipid = {}",dipid);
         try{
             // pipid 위치에 있는 테이블 값 제거
             awsS3Service.deleteDrawingPath(dipid);
