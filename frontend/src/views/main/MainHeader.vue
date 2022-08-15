@@ -52,6 +52,10 @@ export default defineComponent({
 		justify-content: center;
   }
 }
+header {
+  width: 90%;
+  margin-left: 5%;
+}
 #add {
   font-size: 64px;
   color: white;
@@ -83,7 +87,6 @@ export default defineComponent({
 }
 
 .container {
-  margin-left: 100px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
