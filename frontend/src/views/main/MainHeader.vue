@@ -86,7 +86,6 @@ export default defineComponent({
   margin-left: 100px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   flex-wrap: wrap;
 }
 </style>
