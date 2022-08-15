@@ -45,6 +45,12 @@ props: {
 
     };
   },
+  updated() {
+    if (!this.isScrolled) {
+      var objDiv = document.getElementById("chat_list");
+      objDiv.scrollTop = objDiv.scrollHeight + 500;
+    }
+  },
 
 
 
