@@ -322,8 +322,8 @@ export const useAccountStore = defineStore("account", {
           headers: this.authHeader,
         })
           .then(() => {
-            console.log(dipid)
-            //router.go({ name: 'DetailView' })
+            alert('삭제되었습니다.')
+            router.go({ name: 'DetailView' })
           })
           .catch(err => console.error(err.response))
       }
