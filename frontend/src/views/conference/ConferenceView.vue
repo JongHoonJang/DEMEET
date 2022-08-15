@@ -25,6 +25,7 @@
 				:subscribers = "subscribers"
 				:isDrawing="isDrawing"
 				:secondPublisher="secondPublisher"
+				:users="users"
 				@main-video-change="updateMainVideoStreamManager"
 			/>
 			<!-- 중앙 화면 -->
@@ -111,6 +112,8 @@ import { ref } from 'vue'
 import api from "@/api/api"
 // pinia
 import { useAccountStore } from "@/stores/account"
+// router
+import router from "@/router"
 
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -156,8 +159,8 @@ setup() {
 
 	// foooter 작동을 위한 변수
 	const micStatus = ref(100)
-	const audioStatus = ref(true)
-	const videoStatus = ref(true)
+	const audioStatus = ref(false)
+	const videoStatus = ref(false)
 	const userListStatus = ref(true)
 	const chattingStatus = ref(true)
 	const isSharing = ref(false)
@@ -214,8 +217,8 @@ setup() {
 					let ppublisher = OV.value.initPublisher(undefined, {
 						audioSource: undefined, // The source of audio. If undefined default microphone
 						videoSource: undefined, // The source of video. If undefined default webcam
-						publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
-						publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
+						publishAudio: audioStatus.value,  	// Whether you want to start publishing with your audio unmuted or not
+						publishVideo: videoStatus.value,  	// Whether you want to start publishing with your video enabled or not
 						resolution: '640x480',  // The resolution of your video
 						frameRate: 30,			// The frame rate of your video
 						insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
@@ -251,6 +254,7 @@ setup() {
 			secondPublisher.value = undefined
 
 			window.removeEventListener('beforeunload', leaveSession)
+			router.push({name:'MainView'})
 		}
 
 		const updateMainVideoStreamManager = (stream) => {
@@ -443,8 +447,8 @@ setup() {
 			videoSource: "screen", 
 			resolution: "640x480",
 			insertMode: "APPEND",
-			publishAudio: true,
-			publishVideo: true,
+			publishAudio: audioStatus.value,
+			publishVideo: videoStatus.value,
 			frameRate: 30,
 			mirror: false
 		})
@@ -496,8 +500,8 @@ setup() {
 			videoSource: "screen", 
 			resolution: "640x480",
 			insertMode: "APPEND",
-			publishAudio: true,
-			publishVideo: true,
+			publishAudio: audioStatus.value,
+			publishVideo: videoStatus.value,
 			frameRate: 30,
 			mirror: false
 		})

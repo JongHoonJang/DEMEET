@@ -61,8 +61,8 @@ export default {
 
 
   setup() {
-    const audioValue = ref(true)
-    const videoValue = ref(true)
+    const audioValue = ref(false)
+    const videoValue = ref(false)
     const micValue = ref(true)
     const drawValue = ref(true)
     const chatValue = ref(true)

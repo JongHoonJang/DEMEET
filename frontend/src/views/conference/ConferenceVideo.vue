@@ -8,7 +8,7 @@
 			<div id="video-container" class="col-md-6">
 				<!-- 내얼굴 -->
 				<user-video v-if="publisher==secondPublisher" :streamManager="publisher" :isDrawing="isDrawing" @click="$emit('mainVideoChange', publisher)"/>   
-				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub"  @click="$emit('mainVideoChange', sub)"/>
+				<user-video v-for="sub in subscribers" :key="sub.stream.connection.connectionId" :streamManager="sub" :users="users"  @click="$emit('mainVideoChange', sub)"/>
 			</div>
 		</div>
   </div>
@@ -44,6 +44,12 @@ export default {
 			}
 		},
 		secondPublisher:{
+			type:Array,
+			default: () => {
+				return []
+			}
+		},
+		users:{
 			type:Array,
 			default: () => {
 				return []
