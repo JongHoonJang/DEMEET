@@ -7,8 +7,6 @@ import LoginView from '@/views/account/LoginView'
 import SignupView from '@/views/account/SignupView'
 import GuestLogin from '@/views/account/GuestLogin'
 import FindPassword from '@/views/account/FindPassword'
-//코딩을 위한 import 추후 삭제
-import DrawingView from '@/views/conference/DrawingView'
 
 const routes = [
   {
@@ -50,12 +48,6 @@ const routes = [
     path: '/findpw',
     name: 'FindPassword',
     component: FindPassword
-  },
-  //코딩을 하기위해 생성 - 추후 삭제
-  {
-    path: '/drawing',
-    name: 'DrawingView',
-    component: DrawingView
   },
 ]
 

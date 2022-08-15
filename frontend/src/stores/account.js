@@ -343,7 +343,6 @@ export const useAccountStore = defineStore("account", {
       })
         .then(() => {
           alert('저장되었습니다.')
-          router.go({name: 'Detailview'})
         })
         .catch(err => console.error(err.response))
     }
