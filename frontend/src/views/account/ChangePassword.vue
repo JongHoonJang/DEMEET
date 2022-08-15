@@ -4,14 +4,14 @@
       <form @submit.prevent="pwupdata(credentials, newPassword2)">
         <div>
           <p>Password</p>
-          <input v-model="credentials.currPassword" type="password" placeholder="*********">
+          <input @input="limitPassword()" v-model="credentials.currPassword" type="password" placeholder="*********">
         </div>
 
         <div>
           <p>New Password</p>
-          <input v-model="credentials.newPassword" type="password" placeholder="*********">
+          <input @input="limitPassword()" v-model="credentials.newPassword" type="password" placeholder="*********">
         </div>
-
+        <p class="pw-error" v-if="isPasswordError">최소 8자리이상 입력해주세요</p>
         <div>
           <p>Confirm Password</p>
           <input v-model="newPassword2" type="password" placeholder="*********">
@@ -24,20 +24,37 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 
 export default defineComponent({
 
   setup() {
     const account = useAccountStore()
+    const isPasswordError = ref(false)
     const newPassword2 = ""
-    const credentials = {
+    const credentials = ref({
         currPassword : "",
         newPassword : "",
+    })
+    const limitPassword = () => {
+      const newPassword = []
+      if(credentials.value.newPassword.length >= 8) {
+        credentials.value.newPassword.split(' ').reduce((acc, cur) => {
+          if (1 < acc + cur.length < 8) {
+            newPassword.push(cur)
+          }  
+          isPasswordError.value = false
+        }, 0)
+      }else if (credentials.value.newPassword.length === 0){
+        isPasswordError.value = false
+      }else{
+        isPasswordError.value = true
+      }
+
     }
     const pwupdata = (credentials, newPassword2) => {
-      if (credentials.newPassword === newPassword2){
+      if (credentials.newPassword === newPassword2 && isPasswordError.value){
         if(confirm('비밀번호를 변경하시겠습니까?')) {
             alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
             account.changePassword(credentials)
@@ -51,13 +68,22 @@ export default defineComponent({
       account,
       newPassword2,
       credentials,
-      pwupdata
+      pwupdata,
+      limitPassword
     }
   },
 })
 </script>
 
 <style scoped>
+.pw-error {
+  color: red;
+  font-size: 8px;
+  margin: 0%;
+  text-align: start;
+  margin-left:12px;
+}
+
 .container {
   margin: 30px;
   display: flex;

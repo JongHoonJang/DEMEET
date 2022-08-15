@@ -12,9 +12,8 @@
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" @click="isDownload=true" id="lnkDownload" href="" download="filename">다운로드</a></button>
-    <button><a type="button" @click="isDelete=true">삭제</a></button>
-    <button><a type="button" @click="isImage=false">취소</a></button>
+    <button><a type="button" @click="isDelete=true">delete</a></button>
+    <button><a type="button" @click="isImage=false">cancel</a></button>
   </div>
   <div class="window" v-if="!isData">
     <div class="content">
@@ -46,7 +45,6 @@ export default {
           route = useRoute()  ,
           project_pk = ref(route.params.pid),
           isImage = ref(false),
-          isDownload = ref(false),
           isDelete = ref(false)
   
     await axios({
@@ -92,7 +90,6 @@ export default {
       function translateContainer(direction){
         const selectedBtn = (direction === 1) ? 'prev' : 'next'
         container.style.transitionDuration = '500ms'
-        // container.style.transform = `translateX(${direction * (100 / 100)}%)`;
         container.style.transform = `translateX(0%)`
         container.ontransitionend = () => reorganizeEl(selectedBtn)
       }
@@ -109,23 +106,8 @@ export default {
       carousel.value = init
       isData.value = true
     }    
-    function createHTMLDocument(image) {
-      var blob = new Blob(
-        ['<!doctype html>','<html><head><title>Blob Example</title><body>',image,'</body></html>'],
-        {type:'text/html'}
-      );
-      var url = URL.createObjectURL(blob);
-      var link = document.getElementById('lnkDownload');
-          
-      link.setAttribute('href', url);
-    }
     const downloadDelete = (setImageData) => {
-      isImage.value = true
-      if (isDownload.value) {
-        createHTMLDocument(setImageData.url)
-        isDownload.value = false
-        isImage.value = false
-      }else if (isDelete.value) {
+      if (isDelete.value) {
         demeet.deleteImage({dipid: setImageData.dipid})
         isDelete.value = false
         isImage.value = false
@@ -172,7 +154,22 @@ h1 {
   margin-left: 28px;
   color: white;
 }
-
+.image-btn button {
+  height: 30px;
+  width: 80px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+  margin: 20px;
+}
 .window {
   overflow: hidden;  /*check out container's movement : command + */
   border: 4px solid; 
@@ -188,12 +185,19 @@ h1 {
 }
 
 button {
-  font-size: 10px;
-  height: 24px;
+  height: 30px;
   width: 80px;
-  background-color: #f6e58d;
-  border: 4px solid #555;
-  border-radius: 10px;
+  background: radial-gradient(95% 60% at 50% 75%, #d6d600 0%, #f6e58d 100%);
+  border: 1px solid #fdf754;
+  box-shadow: 0px 8px 20px -8px #fbff11, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
   margin: 20px;
 }
 
