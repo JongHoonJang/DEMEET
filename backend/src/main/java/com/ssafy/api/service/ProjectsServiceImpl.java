@@ -100,6 +100,19 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
+    public boolean deleteProjects(Projects projects) throws ProjectNullException {
+        long pid = projects.getPid();
+        projectRepository.delete(projects);
+        Optional<Projects> checkProjects = projectRepository.findProjectsByPid(pid);
+        if(checkProjects.isPresent()){
+            log.error("Project delete fail");
+            return false;
+        }
+        log.info("Project delete success");
+        return true;
+    }
+
+    @Override
     @Transactional
     public Projects createProject(ProjectsCreatePostReq projectsCreatePostReq) throws UidNullException {
         log.info("프로젝트 생성 시작");

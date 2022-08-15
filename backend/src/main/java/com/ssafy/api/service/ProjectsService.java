@@ -38,4 +38,6 @@ public interface ProjectsService {
 
 
     List<ProjectDeactivateSimpleInfoDTO> changetProjectListToProjectDeactivateSimpleInfoDTOList(List<Projects> deActivateProjectsList) throws UidNullException;
+
+    boolean deleteProjects(Projects projects) throws ProjectNullException;
 }
