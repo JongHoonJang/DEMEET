@@ -106,7 +106,7 @@ export const useAccountStore = defineStore("account", {
               router.push({ name: 'LoginView' })
             })
             .catch(err => {
-              if (err.response.statusCode===400){
+              if (err.response.data.statusCode===400){
                 alert('이메일이 존재하지 않습니다.')
               }
               

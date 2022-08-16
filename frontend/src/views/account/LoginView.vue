@@ -12,11 +12,11 @@
         <button class="login-btn">Sign In</button>
         <div class="createuser">
           <router-link :to="{ name: 'SignupView' }">회원가입</router-link>
-          <router-link :to="{ name: 'FindPassword' }">비밀번호 찾기</router-link>
         </div>
       </div>
     </form>
-      </div>
+    <p class="text">비밀번호를 잊으셨다면 <router-link :to="{ name: 'FindPassword' }">여기</router-link>를 클릭하세요</p>
+    </div>
       <div class='account-right'>
         <h1 class="main-logo">DEMEET</h1>
       </div>
@@ -62,6 +62,13 @@ export default defineComponent({
 .btn-box {
   display: flex;
   justify-content: space-between;
+}
+.text {
+  color: white;
+  font-size: 12px;
+}
+.text a {
+  color: #6dcef5;
 }
 .main-logo {
       /* width: 5rem;
