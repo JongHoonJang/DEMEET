@@ -1,6 +1,7 @@
 <template>
-<div v-if="streamManager">
-	<main-ov-video :streamManager="streamManager" :isDrawing="isDrawing"/>
+<div id="mainFrame" v-if="streamManager">
+	<main-ov-video :streamManager="streamManager" :isDrawing="isDrawing" ref="mainVideo"/>
+	<div id="fullScreenIcon"><span  @click="fullScreenFunc" class="material-symbols-outlined">fullscreen</span></div>
 	<!-- <div id="mainVideoFrame"><p>"{{ mainUserNickName.clientData }}" 님의 비디오</p></div> -->
 </div>
 </template>
@@ -29,7 +30,7 @@ export default {
 	},
 
 	setup(props){
-		const mainUserNickName = ref(Object)
+	const mainUserNickName = ref(Object)
 		
 	async function getConnectionData() {
 		const { connection } = await props.streamManager.stream
@@ -42,15 +43,47 @@ export default {
 			mainUserNickName.value = clientData
 			return clientData
 	})
+
 		return {
 			clientData,
-			mainUserNickName
+			mainUserNickName,
+		}
+	},
+
+	methods:{
+		fullScreenFunc(){
+			this.$refs.mainVideo.openFullscreen()
 		}
 	}
 }
 </script>
 
 <style scoped>
+	#mainFrame{
+  width: 100%;
+  overflow: hidden;
+  margin: 0px auto;
+  position: relative;
+	}
+
+	#fullScreenIcon{
+		margin: 0;
+		position: absolute;
+		width: 10rem;
+		top: 96%;
+		left: 97%;
+		transform: translate(-50%,-50%);
+		cursor: pointer;
+	}
+
+	#fullScreenIcon .material-symbols-outlined{
+		margin: 0;
+		font-size: 2rem;
+		font-weight:200;
+		color: #f1f6f9cc;
+		text-align: center;
+	}
+
 	#mainVideoFrame{
 		background-color: #394867c4;
 	}
