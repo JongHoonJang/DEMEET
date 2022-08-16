@@ -80,6 +80,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
+          alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
           this.removeToken()
           router.push({ name: 'LoginView'})
         })
@@ -94,7 +95,6 @@ export const useAccountStore = defineStore("account", {
       axios({
         url: api.accounts.checkemail(signdata.email),
         method: 'get',
-        // data: signdata.email
       })
         .then(() => {
           axios({
@@ -104,6 +104,12 @@ export const useAccountStore = defineStore("account", {
           })
             .then(() => {
               router.push({ name: 'LoginView' })
+            })
+            .catch(err => {
+              if (err.response.statusCode===400){
+                alert('이메일이 존재하지 않습니다.')
+              }
+              
             })
             
         })
