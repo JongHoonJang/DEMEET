@@ -92,9 +92,11 @@ export default defineComponent({
   text-align: end;
 }
 .username {
-  width: 34px;
+  width: 44px;
   height: 14px;
   font-size: 8px;
   color: black;
+  word-break:break-all;
+  text-align: center;
 }
 </style>
