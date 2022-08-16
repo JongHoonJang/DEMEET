@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, onUpdated, ref } from 'vue'
 export default {
 	name: 'OvVideo',
 
@@ -16,13 +16,13 @@ export default {
 	const vidoeRoot = ref(null)
 
 	const openFullscreen = () => {
-		var elem = document.getElementById("mainVideoID");
+		var elem = document.getElementById("mainVideoID")
 		if (elem.requestFullscreen) {
-    elem.requestFullscreen();
+    elem.requestFullscreen()
   } else if (elem.webkitRequestFullscreen) { /* Safari */
-    elem.webkitRequestFullscreen();
+    elem.webkitRequestFullscreen()
   } else if (elem.msRequestFullscreen) { /* IE11 */
-    elem.msRequestFullscreen();
+    elem.msRequestFullscreen()
   }
 	}
 
