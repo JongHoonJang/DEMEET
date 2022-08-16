@@ -1,7 +1,7 @@
 <template>
   <nav>
     <a href="/">
-      <img src="@/assets/logo.png" alt="">
+      <img src="@/assets/DEMEET_logo.png" alt="">
     </a>
     <div>
       <input v-model.trim="search" @input="setData" type="text" placeholder="Search">
@@ -89,10 +89,9 @@ nav {
 }
 
 nav img {
-  margin-top: 20px;
   margin-left: 20px;
   width: 200px;
-  height: 50px;
+  height: 100px;
 }
 
 nav input {
