@@ -227,7 +227,7 @@ export default defineComponent({
   display: flex;
   align-items: flex-start;
   padding: 0px;
-  width: 80px;
+  width: 60px;
   height: 36px;
   border-radius: 10px;
   margin-top: 6px;
