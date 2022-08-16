@@ -1,8 +1,11 @@
 <template>
-  <div id="ConferenceUsers">
+  <div id="userContainer">
+    <div id="ConferenceUsers">
     <p>유저 목록입니다.</p>
     <div v-for="(user, index) in users" :key="index" :users="users">{{user.clientData.slice(15,-2)}}</div>
+    </div>
   </div>
+
 </template>
 
 <script>
