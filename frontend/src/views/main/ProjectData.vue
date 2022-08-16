@@ -199,8 +199,10 @@ export default defineComponent({
       router.push({name:'ConferenceView', params: {pid: project_pk.value ,sessionId: pjt.value.sessionId}})
     }
     const endProject = () => {
-      projectData.value.deactivate = true
-      account.updateProject(projectData.value)
+      if (confirm("프로젝트를 종료하시겠습니까?")){
+        projectData.value.deactivate = true
+        account.updateProject(projectData.value)
+      }
     }
 
     const leave = () => {
