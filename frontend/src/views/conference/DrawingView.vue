@@ -16,8 +16,8 @@
       <button id="rect"><span class="material-symbols-outlined">check_box_outline_blank</span></button>
       <button id="triangle"><span class="material-symbols-outlined">change_history</span></button>
       <button id="delete"><span class="material-symbols-outlined">delete</span></button>
-    </div>
       <button id="save"><span class="material-symbols-outlined">save</span></button>
+    </div>
   </div>
 
 </template>
@@ -26,11 +26,12 @@
 import { onMounted,ref } from 'vue'
 import { fabric } from 'fabric'
 import { useAccountStore } from "@/stores/account"
-import _ from 'lodash'
+// import _ from 'lodash'
 export default {
   props:['openviduSessionId'],
   setup(props) {
     const init = () => {
+      const color = ref('black')
       const sessionData = ref(props)
       const demeet = useAccountStore()
       // $ = id를 통해 적용할 태그를 설정
@@ -66,7 +67,7 @@ export default {
       // 캔버스 초기화
       clearEl.onclick = function() { 
         canvas.clear() 
-        canvas.backgroundColor = 'rgb(250,250,250)'
+        canvas.backgroundColor = 'rgb(240,240,240)'
       }
       // 클릭할때마다 드로잉모드 true/false
       drawingModeEl.onclick = function() {
@@ -85,10 +86,12 @@ export default {
         canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1
         this.previousSibling.innerText = this.value
       }
+      
       // 펜 색상 설정
       drawingColorEl.onchange = function() {
         var brush = canvas.freeDrawingBrush
         brush.color = this.value
+        color.value = this.value
         if (brush.getPatternSrc) {
           brush.source = brush.getPatternSrc.call(brush)
         }
@@ -97,12 +100,12 @@ export default {
       // 원 텍스트 박스 설정
       drawingCircleEl.onclick = function () {
         
-        const color = _.sample(['red', 'blue','green','gray','orange','pink','plum','gold'])
+        
         let circle = new fabric.Circle({
           left: 150,
           top: 100,
           radius: 100,
-          fill: color,
+          fill: color.value,
           scaleY: 0.5,
           originX: 'center',
           originY: 'center'
@@ -111,13 +114,13 @@ export default {
       }
       //사각형 텍스트 박스
       drawingRectEl.onclick = function() {
-        const color = _.sample(['red', 'blue','green','gray','orange','pink','plum','gold'])
+        
         let rect = new fabric.Rect({
           left: 150,
           top: 100,
           width: 200,
           height: 100,
-          fill: color,
+          fill: color.value,
           originX: 'center',
           originY: 'center'
         })
@@ -126,13 +129,13 @@ export default {
       }
       // 삼각형 텍스트 박스
       drawingTriangleEl.onclick = function() {
-        const color = _.sample(['red', 'blue','green','gray','orange','pink','plum','gold'])
+        
         let triangle = new fabric.Triangle({
           left: 150,
           top: 100,
           width: 200,
           height: 100,
-          fill: color,
+          fill: color.value,
           originX: 'center',
           originY: 'center'
         })
@@ -156,7 +159,7 @@ export default {
         canvas.add(text)
       }
 
-      // 보기용 그림띄우는 법
+      // 데이터 저장
       saveImage.onclick = () => {
         const dataURLtoFile = (dataurl, fileName) => {
   
