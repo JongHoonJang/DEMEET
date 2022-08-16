@@ -81,13 +81,15 @@ public class UsersController {
             boolean check = checkEmailValidate(registerInfo.getEmail());
 //            boolean check = true;
             if (!check) {
-                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Email validation failed"));
+                log.error("Email validation failed");
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Email validation failed"));
             }
             Users newUser = usersService.createUser(registerInfo);
+            log.info("user register success");
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "sign-in success"));
         } catch (Exception e) {
-            log.info("Error:{}", e.getMessage());
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, e.getMessage()));
+            log.error("Error:{}", e.getMessage());
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, e.getMessage()));
         }
     }
 
@@ -99,6 +101,7 @@ public class UsersController {
             String userEmail = loginInfo.getEmail();
             String userPassword = loginInfo.getPassword();
             Users newUser = usersService.getUsersByUserEmail(userEmail);
+
             if (passwordEncoder.matches(userPassword, newUser.getPassword())) {
                 // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
                 log.info("로그인 성공");
@@ -106,11 +109,15 @@ public class UsersController {
             }
 //        유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
             log.error("로그인 실패");
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Invalid Password"));
+            return ResponseEntity.status(406).body(BaseResponseBody.of(406, "Invalid Password"));
+        } catch (UserNullException e) {
+            log.error("cannot find user");
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "email not matched"));
         } catch (Exception e) {
             log.error("Error: " + e.getMessage());
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, e.getMessage()));
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, e.getMessage()));
         }
+
     }
 
     @GetMapping("/me")
@@ -134,11 +141,11 @@ public class UsersController {
 
             return ResponseEntity.status(200).body(UsersMyInfoRes.of(200, "Success", user, ProjectDeactivateSimpleInfoDTOList));
         } catch (UserNullException e) {
-            return ResponseEntity.status(400).body(BaseResponseBody.of(422, "fail to find user"));
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "fail to find user"));
         } catch (ProjectNullException e) {
-            return ResponseEntity.status(400).body(BaseResponseBody.of(422, "not found"));
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, "fail to find projects"));
         } catch (UidNullException e) {
-            return ResponseEntity.status(400).body(BaseResponseBody.of(422, "invalid uid"));
+            return ResponseEntity.status(424).body(BaseResponseBody.of(424, "invalid uid"));
         }
     }
 
@@ -174,7 +181,7 @@ public class UsersController {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, "can't find user"));
         } catch (MessagingException e) {
             log.error("can't send Email");
-            return ResponseEntity.status(422).body(BaseResponseBody.of(502, "can't send Email"));
+            return ResponseEntity.status(503).body(BaseResponseBody.of(503, "can't send Email"));
         }
     }
 
@@ -226,7 +233,7 @@ public class UsersController {
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to change user password"));
             }
             log.error("서버 오류로 비밀번호 변경 실패");
-            return ResponseEntity.status(200).body(BaseResponseBody.of(500, "server error"));
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "server error"));
         } catch (UserNullException e) {
             throw new RuntimeException(e);
         } catch (UidNullException e) {
@@ -337,7 +344,7 @@ public class UsersController {
         boolean dnsCheck = Boolean.parseBoolean((String) result.get("dnsCheck"));
         if (smtpCheck & formatCheck & dnsCheck)
             validateCheck = true;
-        log.info("validateCheck = {}",validateCheck);
+        log.info("validateCheck = {}", validateCheck);
         return validateCheck;
     }
 }

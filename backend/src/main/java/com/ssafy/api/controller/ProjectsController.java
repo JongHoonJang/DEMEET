@@ -68,19 +68,6 @@ public class ProjectsController {
         }
     }
 
-//    @PatchMapping("/deactivate")
-//    public ResponseEntity<BaseResponseBody> deactivateProject(Authentication authentication, @RequestBody Map<String, Integer> request) {
-//        SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-//        log.info("프로젝트 비활성화");
-//        long pid = request.get("pid");
-//        try {
-//            Projects project = projectsService.deactivateProject(pid, ssafyUsersDetails.getUserUid());
-//        } catch (ProjectNullException | NoAuthorizedException e) {
-//            return ResponseEntity.status(422).body(BaseResponseBody.of(200, e.getMessage()));
-//        }
-//        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success to deactivate " + pid + " project"));
-//    }
-
     @GetMapping("/{pid}")
     public ResponseEntity<BaseResponseBody> getProject(Authentication authentication, @PathVariable Long pid) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
@@ -103,7 +90,7 @@ public class ProjectsController {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         } catch (UidNullException e) {
             log.error("pid를 기반으로 userProject테이블에서 user를 찾지 못함");
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         }
     }
 
@@ -123,11 +110,13 @@ public class ProjectsController {
             }
             return ResponseEntity.status(200).body(ProjectJoinedActivateSimpleInfoRes.of(200, "success", projectList));
         } catch (ProjectNullException e) {
+            log.error(e.getMessage(), e);
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         } catch (UidNullException e) {
+            log.error(e.getMessage(), e);
             // db가 꼬일경우만 발생할듯함
             // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         }
     }
 
@@ -147,7 +136,7 @@ public class ProjectsController {
         } catch (UidNullException e) {
             // db가 꼬일경우만 발생할듯함
             // pid를 기반으로 userProject테이블에서 user를 찾을때 없으면 발생하는 오류
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         }
     }
 
@@ -161,7 +150,7 @@ public class ProjectsController {
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
         } catch (NullPointerException e) {
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "Either name or desc or deactivate must not be null."));
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, "Either name or desc or deactivate must not be null."));
         }
     }
 
@@ -174,13 +163,13 @@ public class ProjectsController {
             Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
             // 같지않다면
             if (!project.getOwnerId().equals(uid))
-                return ResponseEntity.status(422).body(BaseResponseBody.of(422, "You do not have permission."));
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             // 해당하는 uid를 가지는 유저가 Users에 있는지 체크
             Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
             // 해당하는 uid를 가지는 유저가 프로젝트에 이미 추가되어있는지 확인
             // true면 중복됨, false면 중복 없음
             if (usersProjectService.userDuplicateCheck(project, user)) {
-                return ResponseEntity.status(200).body(BaseResponseBody.of(422, "member duplicate"));
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "member duplicate"));
             }
             // 두 조건 모두 완료하면 실제 추가직업 진행
             usersProjectService.addUserInProject(addDelUserInProjectPostReq, project, user);
@@ -188,10 +177,8 @@ public class ProjectsController {
 
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
-        } catch (UidNullException e) {
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
-        } catch (UserNullException e) {
-            throw new RuntimeException(e);
+        } catch (UserNullException | UidNullException e) {
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         }
     }
 
@@ -200,43 +187,44 @@ public class ProjectsController {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         try {
+            // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저추가가 가능하기때문에 일단 그 여부부터 확인한다.
             Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
+            // 같지않다면
+            if (!project.getOwnerId().equals(uid))
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
             usersProjectService.deleteUserInProject(project, user);
         } catch (ProjectNullException e) {
-            throw new RuntimeException(e);
-        } catch (UidNullException e) {
-            throw new RuntimeException(e);
-        } catch (UserNullException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        } catch (UserNullException | UidNullException e) {
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
+
     @DeleteMapping("/{pid}")
-    public ResponseEntity<BaseResponseBody> deleteProjects( Authentication authentication,@PathVariable("pid") Long pid){
+    public ResponseEntity<BaseResponseBody> deleteProjects(Authentication authentication, @PathVariable("pid") Long pid) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         try {
             log.info("deleteProjects");
             log.info("Check whether the user is the owner.");
             Users user = usersService.getUsersByUid(ssafyUsersDetails.getUserUid());
             Projects projects = projectsService.getProject(pid);
-            if(!projects.getOwnerId().equals(user.getUid())){
+            if (!projects.getOwnerId().equals(user.getUid())) {
                 // 프로젝트의 오너가 해당 유저가 아님.
                 log.error("User " + user.getUid() + " is not the owner of the project ");
-                return ResponseEntity.status(422).body(BaseResponseBody.of(422, "this user is not the owner of this projects"));
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "this user is not the owner of this projects"));
             }
             log.info("owner check success");
             log.info("deleteProjects");
             boolean deleteCheck = projectsService.deleteProjects(projects);
-            if(!deleteCheck) {
+            if (!deleteCheck) {
                 log.error("delete fail");
-                return ResponseEntity.status(423).body(BaseResponseBody.of(423,"project delete fail"));
+                return ResponseEntity.status(500).body(BaseResponseBody.of(400, "project delete fail"));
             }
 
-        } catch (UidNullException e) {
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "incorrect uid"));
-        } catch (UserNullException e) {
-            return ResponseEntity.status(422).body(BaseResponseBody.of(422, "cannot find user"));
+        } catch (UserNullException | UidNullException e) {
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         } catch (ProjectNullException e) {
             return ResponseEntity.status(422).body(BaseResponseBody.of(422, "can't not find project"));
         }
@@ -267,23 +255,25 @@ public class ProjectsController {
             drawingImgPath = awsS3Service.saveDrawingImagePath(path, conference, user, "drawing");
             log.debug("saveDrawingImagePath = {}", drawingImgPath.toString());
         } catch (ConferenceNullException e) {
-            throw new RuntimeException(e);
-        } catch (UserNullException e) {
-            throw new RuntimeException(e);
-        } catch (UidNullException e) {
-            throw new RuntimeException(e);
-        } catch (NotImageException e) {
-            throw new RuntimeException(e);
+            log.error("ConferenceNullException: {}", e.getMessage());
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, e.getMessage()));
+        } catch (UserNullException | UidNullException e) {
+            log.error("user null exception {}", e.getMessage());
+            return ResponseEntity.status(423).body(BaseResponseBody.of(423, e.getMessage()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("IOException");
+            return ResponseEntity.status(422).body(BaseResponseBody.of(422, e.getMessage()));
+        } catch (NotImageException e) {
+            log.error("image type is not matches");
+            return ResponseEntity.status(426).body(BaseResponseBody.of(426, "the File is NOT image"));
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, path));
     }
 
     // 프로젝트 이미지 전체 가져오기
     @GetMapping("/drawing/{pid}")
-    public ResponseEntity<DrawingPathRes> getProjectImages(@ApiIgnore Authentication authentication, @PathVariable long pid){
-        try{
+    public ResponseEntity<DrawingPathRes> getProjectImages(@ApiIgnore Authentication authentication, @PathVariable long pid) {
+        try {
             // file path image
             List<DrawingPathDTO> drawingPathList = new ArrayList<>();
             // pid를 통해서 cid 목록 불러오기
@@ -307,13 +297,13 @@ public class ProjectsController {
     }
 
     @DeleteMapping("/drawing/{dipid}")
-    public ResponseEntity<BaseResponseBody> deleteProjectImage(@ApiIgnore Authentication authentication, @PathVariable long dipid){
-        log.info("dipid = {}",dipid);
-        try{
+    public ResponseEntity<BaseResponseBody> deleteProjectImage(@ApiIgnore Authentication authentication, @PathVariable long dipid) {
+        log.info("dipid = {}", dipid);
+        try {
             // pipid 위치에 있는 테이블 값 제거
             awsS3Service.deleteDrawingPath(dipid);
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "drawing delete success"));
-        }catch (NotImageException e){
+        } catch (NotImageException e) {
             e.printStackTrace();
             return ResponseEntity.status(400).body(BaseResponseBody.of(200, "there is no image"));
         }
