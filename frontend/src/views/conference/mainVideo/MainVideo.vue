@@ -2,13 +2,13 @@
 <div id="mainFrame" v-if="streamManager">
 	<main-ov-video :streamManager="streamManager" :isDrawing="isDrawing" ref="mainVideo"/>
 	<div id="fullScreenIcon"><span  @click="fullScreenFunc" class="material-symbols-outlined">fullscreen</span></div>
-	<!-- <div id="mainVideoFrame"><p>"{{ mainUserNickName.clientData }}" 님의 비디오</p></div> -->
+	<div id="mainVideoFrame"><p>"{{ mainUserNickName.clientData }}" 님의 비디오</p></div>
 </div>
 </template>
 
 <script>
 import MainOvVideo from './MainOvVideo'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 export default {
 	name: 'UserVideo',
@@ -37,16 +37,22 @@ export default {
 		return  JSON.parse(connection.data.split('%')[0])
 		}
 
-	const clientData = onMounted(async() => {
-			const clientData = await getConnectionData()
-			console.log(clientData)
-			mainUserNickName.value = clientData
-			return clientData
+	onMounted(async() => {
+			const clientInf = await getConnectionData()
+			mainUserNickName.value = clientInf
 	})
 
+	const clientData =(async() => {
+			const clientData = await getConnectionData()
+			mainUserNickName.value = clientData
+	})
+
+	watch(props.streamManager, () =>{
+		clientData()
+	})
 		return {
 			clientData,
-			mainUserNickName,
+			mainUserNickName
 		}
 	},
 
@@ -70,7 +76,7 @@ export default {
 		margin: 0;
 		position: absolute;
 		width: 10rem;
-		top: 96%;
+		top: 93%;
 		left: 97%;
 		transform: translate(-50%,-50%);
 		cursor: pointer;
