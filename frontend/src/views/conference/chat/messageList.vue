@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="chatForm">
     <div id="chat_list" class="container" >
       <ConferenceMessage
         v-for="(msg, index) in msgs"
