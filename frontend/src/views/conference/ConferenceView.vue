@@ -673,7 +673,7 @@ main {
 footer {
   background-color: rgb(21, 29, 42);
 	display: block;
-	position: fixed;
+	position: bottom;
 	bottom: 0px;
 	width: 100vw;
 	height: auto;
@@ -697,6 +697,12 @@ footer {
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: stretch;
+	overflow-y: scroll;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}
+div::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
 }
 
 .right-container {
