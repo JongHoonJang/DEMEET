@@ -224,6 +224,7 @@ h3 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
 }
 
 input {
