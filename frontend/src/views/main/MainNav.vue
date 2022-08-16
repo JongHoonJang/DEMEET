@@ -1,7 +1,7 @@
 <template>
   <nav>
     <a href="/">
-      <img src="@/assets/DEMEET_logo.png" alt="">
+      <img src="@/assets/logo.png" alt="">
     </a>
     <div>
       <input v-model.trim="search" @input="setData" type="text" placeholder="Search">
@@ -54,7 +54,7 @@ export default defineComponent({
 		display: none;
   }
 }
-@media (max-width: 768px){
+@media (max-width: 1170px){
   nav div a {
     display: none;
   }
@@ -91,7 +91,7 @@ nav {
 nav img {
   margin-top: 20px;
   margin-left: 20px;
-  width: 180px;
+  width: 200px;
   height: 50px;
 }
 

@@ -28,7 +28,6 @@
             @click="remove(user)"  
             class="cancle-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="cancel">취소</span>
             </button>
             <button
@@ -36,7 +35,6 @@
             @click="add(user)" 
             class="plus-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="plus">초대</span>
             </button>
           </div>
@@ -135,5 +133,14 @@ export default defineComponent({
   background: #333333;
   color: white;
   border-radius: 5px;
+}
+.plus {
+  font-size: 16px;
+  margin: auto;
+}
+
+.cancel {
+  font-size: 16px;
+  margin: auto;
 }
 </style>
