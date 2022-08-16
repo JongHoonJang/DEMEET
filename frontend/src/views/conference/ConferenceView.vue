@@ -1,7 +1,7 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
-<div class="conferenve-container">
+<div class="conference-container">
 	<Suspense v-if="!conferenceAction" >
 		<template #default>
 			<StartConference 
@@ -258,7 +258,9 @@ setup() {
 		}
 
 		const updateMainVideoStreamManager = (stream) => {
-			console.log(mainStreamManager.value)
+			if (isDrawing.value===true){
+				closeShareDrawing()
+			}
 			if (mainStreamManager.value  === stream) return
 			mainStreamManager.value  = stream
 		}
@@ -377,7 +379,7 @@ setup() {
 
 	const sendMsg =(msg) => {
 	// Sender of the message (after 'session.connect')
-		console.log(msg)
+		// console.log(msg)
 		session.value
 			.signal({
 				data: msg, // Any string (optional)
@@ -435,8 +437,7 @@ setup() {
 		}else if(isDrawing.value === false && isSharing.value === true){
 			closeShareScreen()
 		}else if (isDrawing.value === true && isSharing.value === false){
-			// changeDrawingScreen()
-			closeShareDrawing()
+			closeShareScreen()
     }
 	}
 
@@ -494,49 +495,6 @@ setup() {
 		})
 	}
 
-	const changeDrawingScreen = () => {  // 드로잉 공유하는 중에 바로 화면 공유 클릭시
-		var newPublisher = OV.value.initPublisher('ConferenceVideo', // 공유용 퍼블릭 생성
-		{ 
-			videoSource: "screen", 
-			resolution: "640x480",
-			insertMode: "APPEND",
-			publishAudio: audioStatus.value,
-			publishVideo: videoStatus.value,
-			frameRate: 30,
-			mirror: false
-		})
-
-		newPublisher.once('accessAllowed', () => {
-		isSharing.value = !isSharing.value
-		isDrawing.value = false
-		console.log(isDrawing)
-		newPublisher.stream.getMediaStream().getVideoTracks()[0].addEventListener('ended', () => {
-			// 정지 누르면 다시 원상 복귀
-			session.value.unpublish(publisher.value).then(() => {
-			mainStreamManager.value = secondPublisher.value
-			publisher.value = secondPublisher.value
-			}).then(()=> {
-				// publish your stream
-				session.value.publish(publisher.value).then(()=>{
-					isSharing.value = !isSharing.value
-				})
-			})
-		})
-
-	// Unpublishing the old publisher
-	session.value.unpublish(publisher.value).then(() => {
-		
-		// Assigning the new publisher to our global variable 'publisher'
-		mainStreamManager.value = newPublisher
-		publisher.value = newPublisher
-			}).then(() => {
-				// Publishing the new publisher
-				session.value.publish(publisher.value).then(() => {
-					isDrawing.value = !isDrawing.value
-				})
-			})
-		})
-	}
 
 	const shareDrawing = () => {
 		if(isSharing.value === false && isDrawing.value === false){
@@ -644,7 +602,6 @@ setup() {
 		shareDrawing,
 		startShareDrawing,
 		closeShareDrawing,
-		changeDrawingScreen
 	}
 },
 
@@ -704,59 +661,7 @@ footer {
 	}
 }
 
-
-
-
-/* main {
-	height: auto;
+.conference-container{
+	margin: 10%;
 }
-#conference-main{
-  display: flex;
-  margin: 0;
-  width: 100%;
-	justify-content: space-between;
-
-}
-
-footer {
-  background-color: rgb(21, 29, 42);
-	display: block;
-	position: fixed;
-
-	bottom: 0px;
-	width: 100%;
-}
-
-.chat-box {
-  height: fit-content;
-}
-
-.users-box {
-	height: fit-content;
-}
-
-#session {
-	height: 100%;
-}
-
-.dump{
-	display: flex;
-	justify-content:flex-start;
-	background-color: 0D131E;
-  width: 200px;
-  height: auto;
-  overflow: auto;
-}
-
-.conferenve-container {
-	bottom:50%;
-	right:50%;
-
-	justify-content: center;
-	align-items: center;
-}
-
-#right-sidebar {
-	height: 30vh;
-} */
 </style>
