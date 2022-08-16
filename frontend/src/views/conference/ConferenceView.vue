@@ -683,6 +683,9 @@ footer {
   height: fit-content;
 }
 
+#main-video{
+	width: 100%;
+}
 
 .right-container {
 	flex-direction: column
