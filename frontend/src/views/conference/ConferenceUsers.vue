@@ -47,8 +47,26 @@ export default {
 
 <style scoped>
 #ConferenceUsers {
-  background-color: rgb(207, 134, 134);
-  height: 30%;
+  background-color: #9BA4B4;
+  margin:10px;
+  width:300px;
+  height: 90%;
+  
+  border-radius:10px;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+}
+div::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+#userContainer {
+  background-color:#394867;
+  height: 15%;
+  padding-top:3px;
+  margin-top: 30px;
+  border-radius:10px;
 }
 
 </style>

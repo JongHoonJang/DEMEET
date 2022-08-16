@@ -58,25 +58,29 @@ export default {
 
 <style scoped>
 .my-btn {
-  width:60px;
+  width:70px;
   height: 64px;
   padding:0px;
+  margin: 0px 10px 10px 0px;
 
+  border-radius:10px;
 }
 .input-text {
+  width:inherit;
+  margin: 0px 10px 0px 10px;
   height: 60px;
   padding:0;
-  justify-content: stretch;
-  align-items: stretch;
-
+  
+  border-radius:10px;
 }
-#inputTextArea {
+#inputForm {
   display: flex;
   position : relative;
-  height: 60px;
-  justify-content: stretch;
-  align-items: stretch;
-
+  height: 80px;
+  background-color:#394867;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  
 }
 </style>
 

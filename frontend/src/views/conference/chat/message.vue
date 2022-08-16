@@ -59,12 +59,18 @@ export default {
 
 <style scoped>
 
+
 #msgs {
-  font-size: 15px;
+  font-size: 17px;
   margin: 2px;
   padding-left: 5px;
   padding-right: 5px;
   white-space: pre-line;
+  width:230px;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: white;
+  
 }
 #chat {
 
@@ -74,6 +80,7 @@ export default {
   width: fit-content;
   text-align: left;
   display: inline-block;
+  white-space: pre-line;
 }
 #mychat {
 
@@ -88,8 +95,10 @@ export default {
   float: right;
 }
 #chatbox {
-  background-color: #b4b4b4;
-  width: fit-content;
+  background-color: #14274E;
+  border-radius: 10px;
+  width: 96%;
+  margin: 5px;
   text-align: left;
 }
 </style>
