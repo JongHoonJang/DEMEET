@@ -66,7 +66,7 @@ div::-webkit-scrollbar {
 
 #userContainer {
   background-color:#394867;
-  height: 15%;
+  height: 320px;
   padding-top:3px;
   margin-top: 30px;
   border-radius:10px;
