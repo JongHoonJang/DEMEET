@@ -210,7 +210,8 @@ export const useAccountStore = defineStore("account", {
         data: userData,
       })
         .then(() => {
-          alert('메일을 확인하세요!')
+          alert('임시비밀번호가 이메일로 전송되었습니다')
+          router.push({name : 'LoginView'})
         })
         .catch(err => {
           console.error(err)
