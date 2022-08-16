@@ -66,7 +66,7 @@ export default {
   border-radius:10px;
 }
 .input-text {
-  width:inherit;
+  width: 215px;
   margin: 0px 10px 0px 10px;
   height: 60px;
   padding:0;
