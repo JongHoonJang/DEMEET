@@ -7,9 +7,10 @@
         <h1 class='sign-head'>Sign Up</h1>
     </div>
     <form @submit.prevent="sign(signdata)" class='account-info'>
-      <p><input v-model.trim="signdata.nickname" type="text" placeholder="NickName" class="input-prop"></p>
+      <p><input v-model.trim="signdata.nickname" @input="limitNickname" type="text" placeholder="NickName" class="input-prop"></p>
+      <p class="pw-error" v-if="isNicknameError">닉네임은 10자이상 입력할수 없습니다.</p>
       <p><input v-model.trim="signdata.email" type="email" placeholder="Email" class="input-prop"></p>
-      <p><input v-model.trim="signdata.password" @input="limitPassword()" type="password" placeholder="Password" class="input-prop"></p>
+      <p><input v-model.trim="signdata.password" @input="limitPassword" type="password" placeholder="Password" class="input-prop"></p>
       <p class="pw-error" v-if="isPasswordError">최소 8자리이상 입력해주세요</p>
       <p><input v-model.trim="password2" type="password" placeholder="Confirm password" class="input-prop"></p>
       <button class="signup-btn">Sign Up</button>
@@ -32,6 +33,7 @@ export default defineComponent({
 
   setup() {
     const isPasswordError = ref(false)
+    const isNicknameError = ref(false)
     const signdata = ref({
       nickname: '',
       email: '',
@@ -51,11 +53,13 @@ export default defineComponent({
     const sign = (signdata) => {
       if(signdata.nickname === '') {
         alert('닉네임을 입력해 주세요.')
+      }else if (isNicknameError.value) {
+        alert('닉네임을 10글자 이하로 작성해 주세요.')
       }else {
         if (signdata.email === '') {
           alert('email을 입력해 주세요.')
         }else if (checkEmail(signdata.email)) {  
-          alert('이메일을 정확하게 입력해주세요')
+          alert('이메일을 정확하게 입력해주세요.')
         }else{
           if (isPasswordError.value){
             alert('비밀번호를 최소 8자리 이상 입력해주세요.')
@@ -83,15 +87,23 @@ export default defineComponent({
       }
 
     }
-
+    const limitNickname = () => {
+      if(signdata.value.nickname.length <= 10) {
+        isNicknameError.value = false
+      }else{
+        isNicknameError.value = true
+      }
+    }
     const account = useAccountStore()
     return {
       account,
       signdata,
       password2,
       isPasswordError,
+      isNicknameError,
       sign,
-      limitPassword
+      limitPassword,
+      limitNickname
     }
   },
 })
