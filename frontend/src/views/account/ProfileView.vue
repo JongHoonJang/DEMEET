@@ -25,7 +25,7 @@
               <span class="material-symbols-outlined" id="edit" v-if="!isEdit" @click="isEdit=true">edit</span>
               </h1>
               <div class="name-edit">
-                <input v-if="isEdit" v-model="name" type="text">
+                <input v-if="isEdit" v-model="name" @input="limitNickname" type="text">
                 <div class="name-btn">
                   <span class="material-symbols-outlined" id="done" v-if="isEdit" @click="onUpdate(name)">done</span>
                   <span class="material-symbols-outlined" id="close" v-if="isEdit" @click="isEdit=false">close</span>
@@ -84,15 +84,19 @@ export default defineComponent({
   setup() {
     const profileImage = ''
     const account = useAccountStore()
-    const name = ''
+    const name = ref('')
+    const isNicknameError = ref(false)
 
 
     const onUpdate = (data) => {
-      if (data !== '') {
-        account.changeName(data)
-      }
-      else {
+      if (data === '') {
         alert('변경할 닉네임을 입력하세요')
+      }else {
+        if (isNicknameError.value) {
+          alert('닉네임을 10글자 이하로 작성해 주세요.')
+        }else{
+          account.changeName(data)
+        }
       }
     }
     const signout = () => {
@@ -116,6 +120,13 @@ export default defineComponent({
     const cancel = () => {
       router.go({name : 'ProfileView'})
     }
+    const limitNickname = () => {
+      if(name.value.length <= 10) {
+        isNicknameError.value = false
+      }else{
+        isNicknameError.value = true
+      }
+    }
     account.fetchProfile()
     return {
       profileImage,
@@ -126,6 +137,8 @@ export default defineComponent({
       fileUpload,
       cancel,
       profileDelete,
+      limitNickname,
+      isNicknameError
     }
   },
 })
@@ -148,6 +161,15 @@ export default defineComponent({
     align-items: center;
   }
 }
+
+.pw-error {
+  color: red;
+  font-size: 8px;
+  margin: 0%;
+  text-align: start;
+  margin-left:12px;
+}
+
 .image-btn {
   display: flex;
   justify-content: space-around;
