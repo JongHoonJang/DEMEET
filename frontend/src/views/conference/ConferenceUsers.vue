@@ -50,7 +50,7 @@ export default {
   background-color: #9BA4B4;
   margin:10px;
   width:300px;
-  height: 90%;
+  height: 300px;
   
   border-radius:10px;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
