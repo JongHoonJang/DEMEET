@@ -27,18 +27,18 @@ export default defineComponent({
 
 <style>
 .project-container {
-  width: 300px;
+  width: 250px;
   height: 350px;
   background: #111315;
   text-decoration: none;
   border-radius: 10px;
-  margin: 50px;
+  margin: 25px;
 }
 .project-container:hover {
   transform: scale(1.1);
 }
 .project-img {
-  width: 300px;
+  width: 250px;
   height: 200px;
   border-radius: 10px;
 }
