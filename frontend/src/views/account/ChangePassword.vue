@@ -57,13 +57,12 @@ export default defineComponent({
       if (isPasswordError.value){
         alert('비밀번호를 최소 8자리 이상 입력해주세요.')
       }else {
-        if (credentials.newPassword === newPassword2){
+        if (credentials.newPassword !== newPassword2){
+          alert('비밀번호 확인에 실패하였습니다')
+        }else {
           if(confirm('비밀번호를 변경하시겠습니까?')) {
-              alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
               account.changePassword(credentials)
             }
-        }else {
-          alert('비밀번호 확인에 실패하였습니다')
         }
       }
     }  
