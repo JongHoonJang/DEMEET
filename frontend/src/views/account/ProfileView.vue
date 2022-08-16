@@ -246,7 +246,7 @@ h3 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-
+  justify-content: space-evenly;
 }
 
 input {
