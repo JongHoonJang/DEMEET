@@ -1,9 +1,9 @@
 <template>
-	<video id="videoID" autoplay></video>
+	<video class="videoID" :class="{ active: userSpeakStatus }" autoplay></video>
 </template>
 
 <script>
-// import {ref} from 'vue'
+import {ref} from 'vue'
 
 export default {
 	name: 'OvVideo',
@@ -15,15 +15,23 @@ export default {
 				return {}
 			}
 		},
-		isDrawing:{
-			type:Boolean
-		}
+	},
+
+	setup(props){
+		const userSpeakStatus = ref(false)
+
+		props.streamManager.on('publisherStartSpeaking', () => {  // 말할때
+			userSpeakStatus.value = true
+		})
+
+		props.streamManager.on('publisherStopSpeaking', () => {  // 말 안 할때
+			userSpeakStatus.value = false
+	})
+		return {
+			userSpeakStatus
+			}
 	},
 	
-	// setup(props) {
-	// 	const data = ref(props)
-	// 	console.log(data.value.isDrawing)
-	// },
 
 	mounted () {
 		this.streamManager.addVideoElement(this.$el);
@@ -32,13 +40,17 @@ export default {
 </script>
 <style scoped>
 
-#videoID {
+.videoID {
 	height: 100%;
 	max-width: 160px;
 	width: 100%;
 	max-width: 240px;
-	margin: 1rem 1rem 0 1rem;
+	margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 	cursor: pointer;
+	border: 2px solid rgb(255, 255, 255,0);
+}
+.active{
+	border: 2px solid #9BA4B4;
 }
 
 </style>>
