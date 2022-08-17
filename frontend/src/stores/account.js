@@ -16,7 +16,6 @@ export const useAccountStore = defineStore("account", {
     authError: null,
   }),
   getters: {
-    // getUserList: state => state.userList,
     isLoggedIn: state => !!state.token,
     authHeader: state => ({ Authorization: `Bearer ${state.token}`}),
 
@@ -57,10 +56,62 @@ export const useAccountStore = defineStore("account", {
           this.saveToken(token)        
           router.push({ name: 'MainView' })
         })
-        .catch(err => (
-          console.error(err.response),
-          alert('이메일 혹은 비밀번호가 잘못되었습니다.')
-        ))
+        .catch(err => {
+          console.error(err.response)
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '이메일 혹은 비밀번호가 잘못되었습니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+        })
     },
 
     // 로그아웃
@@ -78,12 +129,118 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          //alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
           this.removeToken()
           router.push({ name: 'LoginView'})
         })
         .catch(err => {
-          alert('현재 비밀번호가 다릅니다.')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '현재 비밀번호가 다릅니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('현재 비밀번호가 다릅니다.')
           console.error(err.response)
         })
     },
@@ -105,16 +262,122 @@ export const useAccountStore = defineStore("account", {
             })
             .catch(err => {
               if (err.response.data.statusCode===400){
-                alert('이메일이 존재하지 않습니다.')
+                const modal = document.createElement('div')
+                const overlay = document.createElement('div')
+                const modalCard = document.createElement('div')
+                const h3 = document.createElement('h3')
+                const button = document.createElement('button')
+                const body = document.querySelector('body')
+                modal.style.display = 'flex'
+                modal.style.width = '100%'
+                modal.style.height = '100%'
+                modal.style.position = 'fixed'
+                modal.style.left = 0
+                modal.style.top = 0
+                overlay.style.width = '100%'
+                overlay.style.height = '100%'
+                overlay.style.position = 'fixed'
+                overlay.style.left = 0
+                overlay.style.top = 0
+                overlay.style.opacity = 0.5
+                overlay.style.backgroundColor = '#C4C4C4'
+                modalCard.style.background = '#2b2b2b'
+                modalCard.style.borderRadius = '5px'
+                modalCard.style.position = 'relative'
+                modalCard.style.width = '400px'
+                modalCard.style.margin = 'auto'
+                modalCard.style.marginTop = '30px'
+                modalCard.style.backgroundColor = '#111315'
+                modalCard.style.minHeight = '100px'
+                modalCard.style.zIndex = 10
+                modalCard.style.opacity = 1
+                h3.innerText = '이메일이 존재하지 않습니다.'
+                h3.style.color = 'white'
+                h3.style.textAlign = 'center'
+                button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+                button.style.border = '1px solid #54A1FD'
+                button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+                button.style.borderRadius = '12px'
+                button.style.color = 'white'
+                button.style.fontSize = '16px'
+                button.style.lineHeight = '22px'
+                button.style.letterSpacing = '.02em'
+                button.style.transition = 'all .2s ease'
+                button.style.width = '60px'
+                button.style.height = '30px'
+                button.style.textAlign = 'center'
+                button.innerText = '확인'
+                button.style.marginLeft = '340px'
+                button.style.marginTop = '7px'
+                button.addEventListener('click',function () {
+                  modal.style.display = 'none'
+                })
+                modalCard.append(h3,button)
+                modal.append(overlay,modalCard)
+                body.append(modal)
+                // alert('이메일이 존재하지 않습니다.')
               }
               
             })
             
         })
-        .catch(err => (
-          console.error(err.response),
-          alert('중복된 메일입니다.')
-        ))
+        .catch(err => {
+          console.error(err.response)
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '중복된 메일입니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('중복된 메일입니다.')
+        })
 
     },
 
@@ -126,7 +389,60 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader
       })
         .then(() => {
-          alert('회원탈퇴 되었습니다.')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '회원 탈퇴되었습니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('회원탈퇴 되었습니다.')
           this.removeToken()
           router.push({ name: 'LoginView'})
         })
@@ -208,7 +524,60 @@ export const useAccountStore = defineStore("account", {
         data: userData,
       })
         .then(() => {
-          alert('임시비밀번호가 이메일로 전송되었습니다')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '임시 비밀번호가 이메일로\n전송되었습니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('임시비밀번호가 이메일로 전송되었습니다')
           router.push({name : 'LoginView'})
         })
         .catch(err => {
@@ -338,7 +707,60 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          alert('삭제되었습니다.')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '삭제되었습니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('삭제되었습니다.')
           router.go({ name: 'DetailView' })
         })
         .catch(err => console.error(err.response))
@@ -357,7 +779,60 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          alert('저장되었습니다.')
+          const modal = document.createElement('div')
+          const overlay = document.createElement('div')
+          const modalCard = document.createElement('div')
+          const h3 = document.createElement('h3')
+          const button = document.createElement('button')
+          const body = document.querySelector('body')
+          modal.style.display = 'flex'
+          modal.style.width = '100%'
+          modal.style.height = '100%'
+          modal.style.position = 'fixed'
+          modal.style.left = 0
+          modal.style.top = 0
+          overlay.style.width = '100%'
+          overlay.style.height = '100%'
+          overlay.style.position = 'fixed'
+          overlay.style.left = 0
+          overlay.style.top = 0
+          overlay.style.opacity = 0.5
+          overlay.style.backgroundColor = '#C4C4C4'
+          modalCard.style.background = '#2b2b2b'
+          modalCard.style.borderRadius = '5px'
+          modalCard.style.position = 'relative'
+          modalCard.style.width = '400px'
+          modalCard.style.margin = 'auto'
+          modalCard.style.marginTop = '30px'
+          modalCard.style.backgroundColor = '#111315'
+          modalCard.style.minHeight = '100px'
+          modalCard.style.zIndex = 10
+          modalCard.style.opacity = 1
+          h3.innerText = '저장되었습니다.'
+          h3.style.color = 'white'
+          h3.style.textAlign = 'center'
+          button.style.background = 'radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%)'
+          button.style.border = '1px solid #54A1FD'
+          button.style.boxShadow = '0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF'
+          button.style.borderRadius = '12px'
+          button.style.color = 'white'
+          button.style.fontSize = '16px'
+          button.style.lineHeight = '22px'
+          button.style.letterSpacing = '.02em'
+          button.style.transition = 'all .2s ease'
+          button.style.width = '60px'
+          button.style.height = '30px'
+          button.style.textAlign = 'center'
+          button.innerText = '확인'
+          button.style.marginLeft = '340px'
+          button.style.marginTop = '7px'
+          button.addEventListener('click',function () {
+            modal.style.display = 'none'
+          })
+          modalCard.append(h3,button)
+          modal.append(overlay,modalCard)
+          body.append(modal)
+          // alert('저장되었습니다.')
         })
         .catch(err => console.error(err.response))
     }
