@@ -313,7 +313,7 @@ export const useAccountStore = defineStore("account", {
         headers: this.authHeader,
       })
         .then(() => {
-          router.push({name:'MainView'})
+          router.push({name:'ProfileView'})
         })
         .catch(err => console.error(err.response))
     },
