@@ -1,5 +1,5 @@
 <template>
-	<video class="videoID" :class="{ active: userSpeakStatus }" autoplay></video>
+	<video id="videoID" class="videoDefault" :class="{ active: userSpeakStatus }"></video>
 </template>
 
 <script>
@@ -40,7 +40,7 @@ export default {
 </script>
 <style scoped>
 
-.videoID {
+.videoDefault {
 	height: 100%;
 	max-width: 160px;
 	width: 100%;
