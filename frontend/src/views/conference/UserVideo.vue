@@ -1,6 +1,6 @@
 <template>
 <div id="frame" v-if="streamManager">
-	<ov-video :streamManager="streamManager" :isDrawing="isDrawing"/>
+	<ov-video :streamManager="streamManager" />
 	<div class="videoNickName"><p id="userNickName">{{ userNickName.clientData }}</p></div>
 </div>
 </template>
@@ -36,19 +36,21 @@ export default {
 
 	setup(props){
 	const userNickName = ref(Object)
+	// const userSpeakStatus = ref(false)
 		
 	async function getConnectionData() {
 		const { connection } = await props.streamManager.stream
 		return  connection.data.split('%')
 		}
 
-	const clientData = onMounted(async() => {
-			const clientData = await getConnectionData()
-			userNickName.value = JSON.parse(clientData[0])
-			return clientData
+	onMounted(async() => {
+		const clientData = await getConnectionData()
+		userNickName.value = JSON.parse(clientData[0])
+		
+
 	})
+
 		return {
-			clientData,
 			userNickName,
 		}
 	}
@@ -66,7 +68,7 @@ export default {
 		margin: 0;
 		position: absolute;
 		width: 10rem;
-		top: 90%;
+		top: 84%;
 		left: 50%;
 		transform: translate(-50%,-50%);
 	}
