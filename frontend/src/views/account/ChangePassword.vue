@@ -1,8 +1,11 @@
 <template>
   <div class="container">
-    <AlertView AlertView v-if="isError" @close-modal="isError=false">
+    <AlertView v-if="isError" @close-modal="isError=false">
       <h3>{{ alertText }}</h3>
     </AlertView>
+    <ConfirmView v-if="isBool" @close-modal="result">
+      <h3>{{ confirmText }}</h3>
+    </ConfirmView>
     <div class="changepw-box">
       <form @submit.prevent="pwupdata(credentials, newPassword2)">
         <div>
@@ -20,7 +23,6 @@
           <input v-model="newPassword2" type="password" placeholder="*********">
         </div>
         <button class='pass-cg-btn'>Change Password</button>
-
       </form>
     </div>
   </div>
@@ -30,13 +32,18 @@
 import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import AlertView from "@/views/main/AlertView"
+import ConfirmView from "@/views/main/ConfirmView"
 export default defineComponent({
   components: {
-    AlertView
+    AlertView,
+    ConfirmView
   },
   setup() {
     const alertText = ref('')
     const isError = ref(false)
+    const confirmText = ref('')
+    const isBool = ref(false)
+    let result 
     const account = useAccountStore()
     const isPasswordError = ref(false)
     const newPassword2 = ""
@@ -69,9 +76,16 @@ export default defineComponent({
           alertText.value = '비밀번호 확인에 실패하였습니다'
           isError.value = true
         }else {
-          if(confirm('비밀번호를 변경하시겠습니까?')) {
+          confirmText.value = '비밀번호를 변경하시겠습니까?'
+          isBool.value = true
+          console.log(result)
+          if(result[0] === 1) {
+              isBool.value = false
               account.changePassword(credentials)
-            }
+          }
+          // }else {
+          //   isBool.value = false
+          // }
         }
       }
     }  
@@ -82,8 +96,11 @@ export default defineComponent({
       isPasswordError,
       alertText,
       isError,
+      confirmText,
+      isBool,
+      result,
       pwupdata,
-      limitPassword
+      limitPassword,
     }
   },
 })

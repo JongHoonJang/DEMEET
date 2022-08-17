@@ -140,20 +140,12 @@
       >
       팀나가기</button>
       <button
-      v-if="pjt.projectOwner === account.profile.uid && !pjt.activation" 
+      v-if="pjt.projectOwner !== account.profile.uid && !pjt.activation" 
       class="delete-btn"
       @click="deleteProject"
       >
       프로젝트 삭제</button>
     </div>
-  </div>
-  <div class="delete-flex">
-    <button
-    v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
-    class="delete-btn"
-    @click="deleteProject"
-    >
-    프로젝트 삭제</button>
   </div>
 </template>
 
@@ -351,7 +343,7 @@ export default defineComponent({
 .delete-btn {
   width: 130px;
   height: 36px;
-  margin-left: 16px;
+  margin-left: 180px;
   background: radial-gradient(95% 60% at 50% 75%, #d60000 0%, #ff2020 100%);
   border: 1px solid #fd5454;
   box-shadow: 0px 8px 20px -8px #ff1111, inset 0px 1px 8px -4px #FFFFFF;

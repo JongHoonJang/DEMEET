@@ -1,5 +1,8 @@
 <template>
 <div class="bar"></div>
+<AlertView v-if="isError" @close-modal="isError=false">
+  <h3>{{ alertText }}</h3>
+</AlertView>
 <div class="name-bar">
   <input class="name-input" v-model="projectData.pjt_name" type="text" placeholder="pjt-name">
 </div>
@@ -52,9 +55,14 @@
 <script scoped>
 import { ref,defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const projectData = ref({
       pjt_name: '',
       memberList: [],
@@ -80,7 +88,8 @@ export default defineComponent({
     }
     const startProject = (data) => {
       if (data.pjt_name === '') {
-        alert('프로젝트 이름을 작성해주세요')
+        alertText.value = '프로젝트 이름을 작성해주세요'
+        isError.value = true
       }else {
         account.createProject(data)
       }
@@ -91,6 +100,8 @@ export default defineComponent({
       searchUser,
       searchList,
       projectData,
+      alertText,
+      isError,
       findData,
       add,
       remove,
@@ -109,6 +120,10 @@ export default defineComponent({
   height: 34px;
 }
 
+h3 {
+  margin: 25px;
+  color: white;
+}
 
 .name-input {
   margin-top: 10px;
