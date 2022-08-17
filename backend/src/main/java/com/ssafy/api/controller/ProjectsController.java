@@ -185,12 +185,18 @@ public class ProjectsController {
     @DeleteMapping("/user")
     public ResponseEntity<BaseResponseBody> deleteUserInProject(Authentication authentication, @RequestBody AddDelUserInProjectPostReq addDelUserInProjectPostReq) {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
-        Long uid = ssafyUsersDetails.getUserUid();
+        Long myUid = ssafyUsersDetails.getUserUid();
         try {
             // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저삭제가 가능하기때문에 일단 그 여부부터 확인한다.
             Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
-            // 내가 나를 삭제하는 경우가 아니거나, 내가 프로젝트의 주인이 아니면 진행 막음
-            if (!uid.equals(addDelUserInProjectPostReq.getUid()) || !project.getOwnerId().equals(uid)) {
+            // 작동조건
+            // 1. 내가 오너이고, 내(오너)가 아닌 다른사람을 삭제하는 경우
+            if (project.getOwnerId().equals(myUid) && !addDelUserInProjectPostReq.getUid().equals(project.getOwnerId())) {
+                log.error("you don't have permissions");
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
+            }
+            // 2. 내가 유저이고, 내가 아닌 다른 유저를 삭제하는 경우
+            if (!myUid.equals(project.getOwnerId()) && !myUid.equals(addDelUserInProjectPostReq.getUid())) {
                 log.error("you don't have permissions");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
