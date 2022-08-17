@@ -187,11 +187,13 @@ public class ProjectsController {
         SsafyUsersDetails ssafyUsersDetails = (SsafyUsersDetails) authentication.getDetails();
         Long uid = ssafyUsersDetails.getUserUid();
         try {
-            // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저추가가 가능하기때문에 일단 그 여부부터 확인한다.
+            // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저삭제가 가능하기때문에 일단 그 여부부터 확인한다.
             Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
-            // 같지않다면
-            if (!project.getOwnerId().equals(uid))
+            // 내가 나를 삭제하는 경우가 아니거나, 내가 프로젝트의 주인이 아니면 진행 막음
+            if (!uid.equals(addDelUserInProjectPostReq.getUid()) || !project.getOwnerId().equals(uid)) {
+                log.error("you don't have permissions");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
+            }
             Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
             usersProjectService.deleteUserInProject(project, user);
         } catch (ProjectNullException e) {
