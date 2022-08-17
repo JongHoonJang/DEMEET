@@ -16,6 +16,7 @@
     "vue": "^3.2.13",
     "vue-fabric": "^0.1.42",
     "vue-router": "^4.0.3",
+    "yorkie": "^2.0.0",
     "yorkie-js-sdk": "^0.2.16"
   },
   "devDependencies": {
