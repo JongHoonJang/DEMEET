@@ -1,10 +1,11 @@
 <!-- 임시로 옵션 API 에서 컴포지션 API 로 수정 중 -->
 
 <template>
-<div class="conference-container">
+<div>
 	<Suspense v-if="!conferenceAction" >
 		<template #default>
-			<StartConference 
+			<StartConference
+			class="conference-container" 
 			@joinSession="joinSession"
 			/>
 		</template>
@@ -616,6 +617,7 @@ setup() {
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: stretch;
+	margin-top: 2%;
 }
 
 #mainItem {
@@ -649,7 +651,7 @@ footer {
 	display: block;
 	position: bottom;
 	bottom: 0px;
-	width: 100vw;
+	width: 100%;
 	height: auto;
 	margin-top: 60px
 }
