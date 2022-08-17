@@ -20,8 +20,8 @@
         <div class="modal-card">
           <h3 class="confirm-text">{{ confirmText }}</h3>
           <div class="confirm-btn">
-            <button @click="changeBool(true)" id="ckeck">확인</button>
-            <button @click="changeBool(false)" id="ckeck">취소</button>
+            <button @click="changeBool(true)" id="check">확인</button>
+            <button @click="changeBool(false)" id="check">취소</button>
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ nav div a {
   font-weight: 600;
   font-size: 24px;
 }
-#ckeck {
+#check {
   margin-left: 8px;
   background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
   border: 1px solid #54A1FD;
