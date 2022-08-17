@@ -1,5 +1,8 @@
 <template>
   <div class='backdrop'>
+    <AlertView v-if="isError" @close-modal="isError=false">
+      <h3>{{ alertText }}</h3>
+    </AlertView>
     <div class='account-box'>
       <div class='account-left'>
         <div style='display:flex; justify-content:center;'>
@@ -25,27 +28,39 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
-
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const credentials = {
       email: '',
       password: ''
     }
     const account = useAccountStore()
     const login = (data) => {
-      if (data.password) {
-        account.login(data)
+      if (data.email === ''){
+        alertText.value = '이메일를 입력해주세요.'
+        isError.value = true
       }else {
-        alert('비밀번호를 입력해주세요')
+        if (data.password) {
+          account.login(data)
+        }else {
+          alertText.value = '비밀번호를 입력해주세요.'
+          isError.value = true
+        }
       }
     }
     return {
       account,
       credentials,
+      alertText,
+      isError,
       login
     }
   },
@@ -58,6 +73,10 @@ export default defineComponent({
     flex-direction: column-reverse;
     align-items: center;
   }
+}
+h3 {
+  margin: 25px;
+  color: white;
 }
 .btn-box {
   display: flex;

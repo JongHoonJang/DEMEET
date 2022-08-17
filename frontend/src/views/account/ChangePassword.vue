@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <AlertView AlertView v-if="isError" @close-modal="isError=false">
+      <h3>{{ alertText }}</h3>
+    </AlertView>
     <div class="changepw-box">
       <form @submit.prevent="pwupdata(credentials, newPassword2)">
         <div>
@@ -26,10 +29,14 @@
 <script>
 import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
-
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const account = useAccountStore()
     const isPasswordError = ref(false)
     const newPassword2 = ""
@@ -55,10 +62,12 @@ export default defineComponent({
     }
     const pwupdata = (credentials, newPassword2) => {
       if (isPasswordError.value){
-        alert('비밀번호를 최소 8자리 이상 입력해주세요.')
+        alertText.value = '비밀번호를 8자리 이상 입력해주세요.'
+        isError.value = true
       }else {
         if (credentials.newPassword !== newPassword2){
-          alert('비밀번호 확인에 실패하였습니다')
+          alertText.value = '비밀번호 확인에 실패하였습니다'
+          isError.value = true
         }else {
           if(confirm('비밀번호를 변경하시겠습니까?')) {
               account.changePassword(credentials)
@@ -71,6 +80,8 @@ export default defineComponent({
       newPassword2,
       credentials,
       isPasswordError,
+      alertText,
+      isError,
       pwupdata,
       limitPassword
     }
@@ -79,6 +90,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+h3 {
+  margin: 25px;
+  color: white;
+}
 .pw-error {
   color: red;
   font-size: 8px;

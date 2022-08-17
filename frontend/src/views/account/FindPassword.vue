@@ -2,6 +2,9 @@
   <div>
   <div class='backdrop'>
     <div class='account-box'>
+      <AlertView v-if="isError" @close-modal="isError=false">
+        <h3>{{ alertText }}</h3>
+      </AlertView>
       <div class='account-left'>
         <div style='display:flex; justify-content:center;'>
         <h1 class='sign-head'>Find PW</h1>
@@ -25,9 +28,14 @@
 
 import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
-
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const isPasswordError = ref(false)
     const userData = ref({
       nickname: '',
@@ -46,12 +54,15 @@ export default defineComponent({
     }
     const findPW = (userData) => {
       if(userData.nickname === '') {
-        alert('닉네임을 입력해 주세요.')
+        alertText.value = '닉네임을 입력해 주세요.'
+        isError.value = true
       }else {
         if (userData.email === '') {
-          alert('email을 입력해 주세요.')
-        }else if (checkEmail(userData.email)) {  
-          alert('이메일을 정확하게 입력해주세요')
+          alertText.value = 'email을 입력해 주세요.'
+          isError.value = true
+        }else if (checkEmail(userData.email)) { 
+          alertText.value = '이메일을 정확하게 입력해주세요'
+          isError.value = true 
         }else{
           account.findPassword(userData)
         }
@@ -65,7 +76,9 @@ export default defineComponent({
       userData,
       password2,
       isPasswordError,
-      findPW
+      findPW,
+      alertText,
+      isError
     }
   },
 })
@@ -78,7 +91,10 @@ export default defineComponent({
     align-items: center;
   }
 }
-
+h3 {
+  margin: 25px;
+  color: white;
+}
 .pw-error {
   color: red;
   font-size: 8px;

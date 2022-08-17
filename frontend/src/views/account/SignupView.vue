@@ -2,6 +2,9 @@
   <div>
   <div class='backdrop'>
     <div class='account-box'>
+      <AlertView v-if="isError" @close-modal="isError=false">
+        <h3>{{ alertText }}</h3>
+      </AlertView>
       <div class='account-left'>
         <div style='display:flex; justify-content:center;'>
         <h1 class='sign-head'>Sign Up</h1>
@@ -29,9 +32,14 @@
 
 import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
-
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const isPasswordError = ref(false)
     const isNicknameError = ref(false)
     const signdata = ref({
@@ -52,21 +60,27 @@ export default defineComponent({
     }
     const sign = (signdata) => {
       if(signdata.nickname === '') {
-        alert('닉네임을 입력해 주세요.')
+        alertText.value = '닉네임을 입력해 주세요.'
+        isError.value = true
       }else if (isNicknameError.value) {
-        alert('닉네임을 10글자 이하로 작성해 주세요.')
+        alertText.value = '닉네임을 10글자 이하로 작성해 주세요.'
+        isError.value = true
       }else {
         if (signdata.email === '') {
-          alert('email을 입력해 주세요.')
+          alertText.value = 'email을 입력해 주세요.'
+          isError.value = true
         }else if (checkEmail(signdata.email)) {  
-          alert('이메일을 정확하게 입력해주세요.')
+          alertText.value = '이메일을 정확하게 입력해주세요.'
+          isError.value = true
         }else{
           if (isPasswordError.value){
-            alert('비밀번호를 최소 8자리 이상 입력해주세요.')
+            alertText.value = '비밀번호를 8자리 이상 입력해주세요.'
+            isError.value = true
           }else if (signdata.password === password2.value){
             account.signup(signdata)
           }else {
-            alert('비밀번호가 일치하지 않습니다.')
+            alertText.value = '비밀번호가 일치하지 않습니다.'
+            isError.value = true
           }
         }
       }
@@ -96,9 +110,11 @@ export default defineComponent({
     }
     const account = useAccountStore()
     return {
+      isError,
       account,
       signdata,
       password2,
+      alertText,
       isPasswordError,
       isNicknameError,
       sign,
@@ -115,6 +131,10 @@ export default defineComponent({
     flex-direction: column-reverse;
     align-items: center;
   }
+}
+h3 {
+  margin: 25px;
+  color: white;
 }
 
 .pw-error {

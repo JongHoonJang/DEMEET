@@ -1,4 +1,7 @@
 <template>
+  <AlertView AlertView v-if="isError" @close-modal="isError=false">
+    <h3>{{ alertText }}</h3>
+  </AlertView>
   <div 
   v-if="user.member.profileImagePath!==null" 
   class="user-icon" 
@@ -41,16 +44,23 @@
 import { defineComponent, ref } from "vue"
 import router from "@/router"
 import { useAccountStore } from "@/stores/account"
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
+  components: {
+    AlertView
+  },
   props: ['member','host'],
   setup(props) {
+    const alertText = ref('')
+    const isError = ref(false)
     const user = props
     const hostdata = user.host
     const project = useAccountStore()
     const pjt = ref(project.project)
     const remove = (user) => {
       if (user.member.uid===project.profile.uid) {
-        alert('호스트를 추방할 수 없습니다.')
+        alertText.value = '호스트를 추방할 수 없습니다.'
+        isError.value = true
       }else {
         if(confirm('추방시키겠습니까?')){
           project.removeUser({pid:pjt.value.pid,uid:user.member.uid})
@@ -62,6 +72,8 @@ export default defineComponent({
       user,
       project,
       hostdata,
+      alertText,
+      isError,
       remove
     }
   }
@@ -69,6 +81,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+h3 {
+  margin: 25px;
+  color: white;
+}
 #close {
   font-size: 16px;
   color: black;
