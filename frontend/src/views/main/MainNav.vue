@@ -194,5 +194,7 @@ nav div a {
 .confirm-btn {
   display: flex;
   justify-content: end;
+  margin-bottom: 8px;
+  margin-right: 8px;
 }
 </style>

@@ -260,6 +260,9 @@ button:hover {
   opacity:1;
   transition:all 0.3s;
 }
-
+.confirm-btn {
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
 
 </style>
