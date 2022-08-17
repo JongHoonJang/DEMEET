@@ -19,7 +19,7 @@
 		<div id="container">
         <!-- 왼쪽 비디오들-->
 			<ConferenceVideo
-				id="item"
+				id="leftItem"
 				:session = "session"
 				:publisher ="publisher"
 				:subscribers = "subscribers"
@@ -29,7 +29,7 @@
 				@main-video-change="updateMainVideoStreamManager"
 			/>
 			<!-- 중앙 화면 -->
-		<div id="item">
+		<div id="mainItem">
 			<DrawingView 
 					v-if="isDrawing"
 					:openviduSessionId="openviduSessionId"
@@ -42,7 +42,7 @@
 		</div>
 
       <!-- 오른쪽 참자가 목록, 채팅 -->
-			<div id="item" class="right-container">
+			<div id="rightItem" class="right-container">
 				<ConferenceUsers
 					class="right-item"
 					v-if="userListStatus"
@@ -614,26 +614,44 @@ setup() {
 	flex: 1;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: stretch;
 }
 
-#item {
+#mainItem {
 	/* width: 100px; */
-	flex-basis: 250x;
+	flex-basis: 250px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #14274E;
+	padding: 0px 16px 0px 16px;
+}
+#rightItem {
+	/* width: 100px; */
+	flex-basis: 250px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #14274E;
+	padding: 0px 16px 0px 16px;
+}
+#leftItem {
+	/* width: 100px; */
+	flex-basis: 250px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: #14274E;
+	padding: 0px 16px 0px 16px;
 }
 
-main {
-	height: 90vh;
-}
 
 footer {
-  background-color: rgb(21, 29, 42);
+  background-color: #394867;
 	display: block;
 	position: bottom;
 	bottom: 0px;
 	width: 100vw;
 	height: auto;
+	margin-top: 60px
 }
 
 #chat-box {
