@@ -29,7 +29,7 @@ import { fabric } from 'fabric'
 import { useAccountStore } from "@/stores/account"
 import yorkie from 'yorkie-js-sdk';
 export default {
-  props:['openviduSessionId'],
+  props:['openviduSessionId', 'mySessionId'],
   setup(props) {
     const init = async() => {
       const color = ref('black')
@@ -43,14 +43,14 @@ export default {
       })
       fabric.Object.prototype.transparentCorners = true
       // yorkie Client 설정
-      const client = new yorkie.Client('http://localhost:8088', {
+      const client = new yorkie.Client('http://i7b309.p.ssafy.io:8088', {
         syncLoopDuration: 0,
         reconnectStreamDelay: 1000
       })
       await client.activate()
 
       // yorkie Document 연결
-      const doc = new yorkie.Document('bbbb')
+      const doc = new yorkie.Document(props.mySessionId)
       await client.attach(doc)
 
       // yorkie document 설정
@@ -167,6 +167,9 @@ export default {
       // 캔버스 초기화
       clearEl.onclick = function() { 
         canvas.clear() 
+        doc.update((root) => {
+          root.shapes = [];
+        })
         canvas.backgroundColor = 'rgb(240,240,240)'
       }
       // 클릭할때마다 드로잉모드 true/false
