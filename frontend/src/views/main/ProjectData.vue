@@ -508,6 +508,12 @@ export default defineComponent({
   letter-spacing: .02em;
   transition: all .2s ease;
   -webkit-tap-highlight-color: rgba(255,255,255,0);
+  margin: 20px;
+  width: 80px;
+  height: 30px;
+}
+#check:hover {
+  transform: scale(1.2);
 }
 .confirm-text {
   margin: 25px;
@@ -542,8 +548,6 @@ export default defineComponent({
 }
 .confirm-btn {
   display: flex;
-  justify-content: end;
-  margin-bottom: 8px;
-  margin-right: 8px;
+  justify-content: center;
 }
 </style>
