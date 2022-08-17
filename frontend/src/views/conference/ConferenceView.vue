@@ -34,6 +34,7 @@
 			<DrawingView 
 					v-if="isDrawing"
 					:openviduSessionId="openviduSessionId"
+					:mySessionId="mySessionId"
 				/>
 			<div v-else id="main-video">
 				<MainVideo 
