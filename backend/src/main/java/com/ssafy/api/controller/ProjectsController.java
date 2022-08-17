@@ -196,7 +196,7 @@ public class ProjectsController {
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
             // 2. 내가 유저이고, 내가 아닌 다른 유저를 삭제하는 경우
-            if (!myUid.equals(project.getOwnerId()) && !myUid.equals(addDelUserInProjectPostReq.getUid())) {
+            else if (!myUid.equals(project.getOwnerId()) && !myUid.equals(addDelUserInProjectPostReq.getUid())) {
                 log.error("you don't have permissions");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
