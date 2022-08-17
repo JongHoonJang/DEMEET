@@ -7,8 +7,10 @@
       <div class="overlay"></div>
       <div class="modal-card">
         <h3>{{ confirmText }}</h3>
-        <button @click="changeBool(false)" id="close">취소</button>
-        <button @click="changeBool(true)" id="close">확인</button>
+        <div class="confirm-btn">
+          <button @click="changeBool(true)" id="close">확인</button>
+          <button @click="changeBool(false)" id="close">취소</button>
+        </div>
       </div>
     </div>
     <div class="changepw-box">
@@ -185,9 +187,14 @@ p {
   letter-spacing: .02em;
   transition: all .2s ease;
   -webkit-tap-highlight-color: rgba(255,255,255,0);
-  margin-bottom: 8px;
-  margin-right: 8px;
+  margin: 20px;
+  width: 80px;
+  height: 30px;
 }
+#close:hover {
+  transform: scale(1.2);
+}
+
 slot {
   margin: auto;
 }
@@ -217,5 +224,10 @@ slot {
   min-height: 100px;
   z-index: 10;
   opacity: 1;
+}
+
+.confirm-btn {
+  display: flex;
+  justify-content: center;
 }
 </style>
