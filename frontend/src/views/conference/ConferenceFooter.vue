@@ -122,6 +122,7 @@ export default {
 
 div #sideBar {
   float: right;
+  margin-right: 70px;
 }
 
 button{
