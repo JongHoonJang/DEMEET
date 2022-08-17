@@ -178,12 +178,12 @@ export const useAccountStore = defineStore("account", {
           button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({ name: 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
           this.removeToken()
-          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           const modal = document.createElement('div')
@@ -434,12 +434,12 @@ export const useAccountStore = defineStore("account", {
           button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({ name: 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
           this.removeToken()
-          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           console.error(err.response)
@@ -568,11 +568,11 @@ export const useAccountStore = defineStore("account", {
           button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({name : 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          router.push({name : 'LoginView'})
         })
         .catch(err => {
           console.error(err)
@@ -750,11 +750,11 @@ export const useAccountStore = defineStore("account", {
           button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.go({ name: 'DetailView' })
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          router.go({ name: 'DetailView' })
         })
         .catch(err => console.error(err.response))
     },
