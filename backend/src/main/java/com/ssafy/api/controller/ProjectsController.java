@@ -192,12 +192,12 @@ public class ProjectsController {
             // 작동조건
             // 1. 내가 오너이고, 내(오너)가 아닌 다른사람을 삭제하는 경우
             if (project.getOwnerId().equals(myUid) && !addDelUserInProjectPostReq.getUid().equals(project.getOwnerId())) {
-                log.error("you don't have permissions");
+                log.error("user is owner and delete other people");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
             // 2. 내가 유저이고, 내가 아닌 다른 유저를 삭제하는 경우
             else if (!myUid.equals(project.getOwnerId()) && !myUid.equals(addDelUserInProjectPostReq.getUid())) {
-                log.error("you don't have permissions");
+                log.error("user is not owner and delete other people");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
             Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());
