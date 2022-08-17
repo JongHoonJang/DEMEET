@@ -1,4 +1,14 @@
 <template>
+  <div class="modal" v-if="isBool">
+    <div class="overlay"></div>
+    <div class="modal-card">
+      <h3 class="confirm-text">{{ confirmText }}</h3>
+      <div class="confirm-btn">
+        <button @click="changeBool(true)" id="ckeck">확인</button>
+        <button @click="changeBool(false)" id="ckeck">취소</button>
+      </div>
+    </div>
+  </div>
 <div class="img-container">
   <h1>저장된 이미지</h1>
   <div class="window" v-if="isData">
@@ -12,7 +22,7 @@
     </div>
   </div>
   <div class="image-btn" v-if="isImage">
-    <button><a type="button" @click="deleteImage">delete</a></button>
+    <button><a type="button" @click="isBool=true, confirmText='정말 삭제하시겠습니까?'">delete</a></button>
     <button><a type="button" @click="isImage=false">cancel</a></button>
   </div>
   <div class="window" v-if="!isData">
@@ -40,6 +50,8 @@ import { useRoute } from 'vue-router'
 import axios from "axios"
 export default {
   async setup() {
+    const isBool = ref(false)
+    const confirmText = ref('')
     const isData = ref(false),
           demeet = useAccountStore(),
           route = useRoute()  ,
@@ -114,14 +126,25 @@ export default {
     const deleteImage = () => {
       demeet.deleteImage(selectImage.value)
     }
+    const changeBool = (res) => {
+      if(res){
+        deleteImage()
+        isBool.value = false
+      }else {
+        isBool.value = false
+      }
+    }
     return {
       demeet,
       isData,
+      isBool,
       isImage,
       carousel,
       isDelete,
+      confirmText,
       downloadDelete,
-      deleteImage
+      deleteImage,
+      changeBool
     }
   },
   mounted() {

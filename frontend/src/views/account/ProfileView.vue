@@ -217,6 +217,7 @@ export default defineComponent({
 
 h1 {
   color: white;
+  margin-left: 28px;
 }
 
 h3 {

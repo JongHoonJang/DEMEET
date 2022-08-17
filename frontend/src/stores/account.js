@@ -65,10 +65,8 @@ export const useAccountStore = defineStore("account", {
 
     // 로그아웃
     logout() {
-      if(confirm('로그아웃 하시겠습니까?')) {
-        this.removeToken()
-        router.push({ name: 'LoginView'})
-      }
+      this.removeToken()
+      router.push({ name: 'LoginView'})
     },
 
     // 비밀번호 수정
@@ -334,18 +332,16 @@ export const useAccountStore = defineStore("account", {
 
     // 프로젝트 이미지 삭제
     deleteImage(dipid) {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        axios({
-          url: api.projects.image_delete(dipid),
-          method: 'delete',
-          headers: this.authHeader,
+      axios({
+        url: api.projects.image_delete(dipid),
+        method: 'delete',
+        headers: this.authHeader,
+      })
+        .then(() => {
+          alert('삭제되었습니다.')
+          router.go({ name: 'DetailView' })
         })
-          .then(() => {
-            alert('삭제되었습니다.')
-            router.go({ name: 'DetailView' })
-          })
-          .catch(err => console.error(err.response))
-      }
+        .catch(err => console.error(err.response))
     },
 
     // 프로젝트 이미지 저장
