@@ -113,7 +113,6 @@ export default {
     }
     const deleteImage = () => {
       demeet.deleteImage(selectImage.value)
-      // isImage.value = false
     }
     return {
       demeet,
