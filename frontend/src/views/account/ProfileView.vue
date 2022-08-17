@@ -2,6 +2,9 @@
   <div class="profile-view">
     <MainNav/>
     <div class='profile-box'>
+      <AlertView v-if="isError" @close-modal="isError=false">
+        <h3>{{ alertText }}</h3>
+      </AlertView>
       <div class='profile-bg'>
         <img class='bg-image' src="@/assets/profile_bg.jpg" alt="">
       </div>
@@ -67,10 +70,12 @@ import ModalView from '@/views/main/ModalView'
 import ChangePassword from '@/views/account/ChangePassword'
 import EndprojectList from '@/views/account/EndProjectList'
 import router from "@/router"
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
   components: {
     MainNav,
     ModalView,
+    AlertView,
     ChangePassword,
     EndprojectList
   },
@@ -82,6 +87,8 @@ export default defineComponent({
     }
   },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const profileImage = ''
     const account = useAccountStore()
     const name = ref('')
@@ -90,10 +97,12 @@ export default defineComponent({
 
     const onUpdate = (data) => {
       if (data === '') {
-        alert('변경할 닉네임을 입력하세요')
+        alertText.value = '변경할 닉네임을 입력하세요'
+        isError.value = true
       }else {
         if (isNicknameError.value) {
-          alert('닉네임을 10글자 이하로 작성해 주세요.')
+          alertText.value = '닉네임을 10글자 이하로 작성해 주세요.'
+          isError.value = true
         }else{
           account.changeName(data)
         }
@@ -109,7 +118,8 @@ export default defineComponent({
       if (fileInput.value !== null) {
         account.changeImage(fileInput.value)
       }else {
-        alert('이미지를 업로드해주세요.')
+        alertText.value = '이미지를 업로드해주세요.'
+        isError.value = true
       }
     }
     const profileDelete = () => {
@@ -138,7 +148,9 @@ export default defineComponent({
       cancel,
       profileDelete,
       limitNickname,
-      isNicknameError
+      isNicknameError,
+      alertText,
+      isError,
     }
   },
 })
