@@ -3,11 +3,16 @@
     <AlertView v-if="isError" @close-modal="isError=false">
       <h3>{{ alertText }}</h3>
     </AlertView>
-    <ConfirmView v-if="isBool" @close-modal="result">
-      <h3>{{ confirmText }}</h3>
-    </ConfirmView>
+    <div class="modal" v-if="isBool">
+      <div class="overlay"></div>
+      <div class="modal-card">
+        <h3>{{ confirmText }}</h3>
+        <button @click="changeBool(false)" id="close">취소</button>
+        <button @click="changeBool(true)" id="close">확인</button>
+      </div>
+    </div>
     <div class="changepw-box">
-      <form @submit.prevent="pwupdata(credentials, newPassword2)">
+      <form @submit.prevent="isBool=true, confirmText='비밀번호를 변경하시겠습니까?'">
         <div>
           <p>Password</p>
           <input v-model="credentials.currPassword" type="password" placeholder="*********">
@@ -32,21 +37,18 @@
 import { defineComponent, ref } from "vue"
 import { useAccountStore } from "@/stores/account"
 import AlertView from "@/views/main/AlertView"
-import ConfirmView from "@/views/main/ConfirmView"
 export default defineComponent({
   components: {
     AlertView,
-    ConfirmView
   },
   setup() {
     const alertText = ref('')
     const isError = ref(false)
     const confirmText = ref('')
     const isBool = ref(false)
-    let result 
     const account = useAccountStore()
     const isPasswordError = ref(false)
-    const newPassword2 = ""
+    const newPassword2 = ref("")
     const credentials = ref({
         currPassword : "",
         newPassword : "",
@@ -67,8 +69,16 @@ export default defineComponent({
       }
 
     }
+    const changeBool = (res) => {
+      if(res){
+        pwupdata(credentials.value, newPassword2.value)
+        isBool.value = false
+      }else {
+        isBool.value = false
+      }
+    }
     const pwupdata = (credentials, newPassword2) => {
-      if (isPasswordError.value){
+      if (isPasswordError.value || credentials.newPassword===''){
         alertText.value = '비밀번호를 8자리 이상 입력해주세요.'
         isError.value = true
       }else {
@@ -76,16 +86,8 @@ export default defineComponent({
           alertText.value = '비밀번호 확인에 실패하였습니다'
           isError.value = true
         }else {
-          confirmText.value = '비밀번호를 변경하시겠습니까?'
-          isBool.value = true
-          console.log(result)
-          if(result[0] === 1) {
-              isBool.value = false
-              account.changePassword(credentials)
-          }
-          // }else {
-          //   isBool.value = false
-          // }
+          isBool.value = false
+          account.changePassword(credentials)
         }
       }
     }  
@@ -98,9 +100,9 @@ export default defineComponent({
       isError,
       confirmText,
       isBool,
-      result,
       pwupdata,
       limitPassword,
+      changeBool,
     }
   },
 })
@@ -168,5 +170,51 @@ p {
 
 
   color: #FFFFFF;
+}
+
+
+#close {
+  margin-left: 8px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+slot {
+  margin: auto;
+}
+.modal{
+  display: flex;
+}
+.modal,
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.overlay {
+  opacity: 0.5;
+  background-color: #C4C4C4;
+}
+.modal-card {
+  background: #2b2b2b !important;
+  border-radius: 5px;
+  position: relative;
+  width: 400px;
+  margin: auto;
+  margin-top: 30px;
+  background-color: #111315;
+  min-height: 100px;
+  z-index: 10;
+  opacity: 1;
 }
 </style>

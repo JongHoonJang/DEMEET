@@ -1,4 +1,14 @@
 <template>
+  <div class="modal" v-if="isBool">
+    <div class="overlay"></div>
+    <div class="modal-card">
+      <h3 class="confirm-text">{{ confirmText }}</h3>
+      <div class="confirm-btn">
+        <button @click="changeBool(true)" id="ckeck">확인</button>
+        <button @click="changeBool(false)" id="ckeck">취소</button>
+      </div>
+    </div>
+  </div>
   <div class="host-box">
     <img class="host-img" v-if="host.profileImagePath!==null" :src="`${host.profileImagePath}`" alt="">
     <img class="host-img" v-else src="@/assets/기본프로필.jpg" alt="">
@@ -124,7 +134,7 @@
       <button 
       v-if="pjt.projectOwner === account.profile.uid && pjt.activation" 
       class="red-btn"
-      @click="endProject"
+      @click="isBool=true, confirmText='프로젝트를 종료하시겠습니까?'"
       >
       종료하기</button>
       <button 
@@ -136,13 +146,13 @@
       <button 
       v-if="pjt.projectOwner !== account.profile.uid && pjt.activation" 
       class="red-btn"
-      @click="leave"
+      @click="isBool=true, confirmText='정말 팀을 떠나시겠습니까?'"
       >
       팀나가기</button>
       <button
-      v-if="pjt.projectOwner !== account.profile.uid && !pjt.activation" 
+      v-if="pjt.projectOwner === account.profile.uid && !pjt.activation" 
       class="delete-btn"
-      @click="deleteProject"
+      @click="isBool=true, confirmText='정말 삭제하시겠습니까?'"
       >
       프로젝트 삭제</button>
     </div>
@@ -172,6 +182,8 @@ export default defineComponent({
     }
   },
   async setup() {
+    const isBool = ref(false)
+    const confirmText = ref('')
     const account = useAccountStore()
     const route = useRoute()  
     const project_pk = ref(route.params.pid)
@@ -191,17 +203,12 @@ export default defineComponent({
       router.push({name:'ConferenceView', params: {pid: project_pk.value ,sessionId: pjt.value.sessionId}})
     }
     const endProject = () => {
-      if (confirm("프로젝트를 종료하시겠습니까?")){
-        projectData.value.deactivate = true
-        account.updateProject(projectData.value)
-      }
+      projectData.value.deactivate = true
+      account.updateProject(projectData.value)
     }
-
     const leave = () => {
-      if (confirm('정말 팀을 떠나시겠습니까?')){
-        router.push({name:'MainView'})
-        account.removeUser({ pid:pjt.value.pid, uid:account.profile.uid })
-      }
+      router.push({name:'MainView'})
+      account.removeUser({ pid:pjt.value.pid, uid:account.profile.uid })
     }
     const back = () => {
       if (pjt.value.activation) {
@@ -211,21 +218,37 @@ export default defineComponent({
       }
     }
     const deleteProject = () => {
-      if(confirm("정말 삭제하시겠습니까?")){
-        account.deleteProject(pjt.value.pid)
+      account.deleteProject(pjt.value.pid)
+    }
+    const changeBool = (res) => {
+      if(res){
+        if (confirmText.value === '프로젝트를 종료하시겠습니까?'){
+          endProject()
+          isBool.value = false
+        }else if (confirmText.value === '정말 팀을 떠나시겠습니까?') {
+          leave()
+          isBool.value = false
+        }else if (confirmText.value === '정말 삭제하시겠습니까?'){
+          deleteProject()
+          isBool.value = false
+        }
+      }else {
+        isBool.value = false
       }
     }
-    
     return {
       host,
       pjt,
+      isBool,
       account,
       projectData,
+      confirmText,
       back,
       endProject,
       goConference,
       leave,
-      deleteProject
+      deleteProject,
+      changeBool
     }
   }
 })
@@ -459,9 +482,66 @@ export default defineComponent({
 .host-data{
   margin-left: 200px;
 }
-
+.host-data h3{
+  margin-left:0%;
+  margin-bottom: 0%;
+}
+.host-data p {
+  color: white;
+  margin-top: 10px;
+}
 .delete-flex {
   margin-left: 270px;
   margin-top: 30px;
+}
+
+#ckeck {
+  margin-left: 8px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+.confirm-text {
+  margin: 25px;
+  color: white;
+}
+.modal{
+  display: flex;
+}
+.modal,
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.overlay {
+  opacity: 0.5;
+  background-color: #C4C4C4;
+}
+.modal-card {
+  background: #2b2b2b !important;
+  border-radius: 5px;
+  position: relative;
+  width: 400px;
+  margin: auto;
+  margin-top: 30px;
+  background-color: #111315;
+  min-height: 100px;
+  z-index: 10;
+  opacity: 1;
+}
+.confirm-btn {
+  display: flex;
+  justify-content: end;
 }
 </style>
