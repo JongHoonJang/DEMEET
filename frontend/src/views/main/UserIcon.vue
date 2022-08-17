@@ -137,7 +137,6 @@ h3 {
   text-align: center;
 }
 #check {
-  margin-left: 8px;
   background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
   border: 1px solid #54A1FD;
   box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
@@ -149,6 +148,12 @@ h3 {
   letter-spacing: .02em;
   transition: all .2s ease;
   -webkit-tap-highlight-color: rgba(255,255,255,0);
+  margin: 20px;
+  width: 80px;
+  height: 30px;
+}
+#check:hover {
+  transform: scale(1.2);
 }
 .confirm-text {
   margin: 25px;
@@ -183,8 +188,6 @@ h3 {
 }
 .confirm-btn {
   display: flex;
-  justify-content: end;
-  margin-bottom: 8px;
-  margin-right: 8px;
+  justify-content: center;
 }
 </style>
