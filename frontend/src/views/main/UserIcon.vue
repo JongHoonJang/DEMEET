@@ -18,7 +18,7 @@
   :style="`background-image: url(${user.member.profileImagePath});`">
     <span 
     v-if="project.project.projectOwner===project.profile.uid && project.project.activation" 
-    @click="remove(user)" 
+    @click="isBool=true, confirmText='추방시키겠습니까?'" 
     class="material-symbols-outlined" 
     id="close"
     >
