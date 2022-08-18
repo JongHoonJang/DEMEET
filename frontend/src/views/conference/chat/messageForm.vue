@@ -59,7 +59,7 @@ export default {
 <style scoped>
 .my-btn {
   width:70px;
-  height: 64px;
+  height: 84px;
   padding:0px;
   margin: 0px 10px 10px 0px;
 
@@ -68,7 +68,7 @@ export default {
 .input-text {
   width: 215px;
   margin: 0px 10px 0px 10px;
-  height: 60px;
+  height: 80px;
   padding:0;
   
   border-radius:10px;
@@ -76,7 +76,7 @@ export default {
 #inputForm {
   display: flex;
   position : relative;
-  height: 80px;
+  height: 100px;
   background-color:#394867;
   border-bottom-left-radius:10px;
   border-bottom-right-radius:10px;
