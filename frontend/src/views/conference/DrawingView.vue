@@ -27,7 +27,7 @@
 import { onMounted,ref } from 'vue'
 import { fabric } from 'fabric'
 import { useAccountStore } from "@/stores/account"
-import yorkie from 'yorkie-js-sdk';
+// import yorkie from 'yorkie-js-sdk'
 export default {
   props:['openviduSessionId', 'mySessionId'],
   setup(props) {
@@ -43,102 +43,102 @@ export default {
       })
       fabric.Object.prototype.transparentCorners = true
       // yorkie Client 설정
-      const client = new yorkie.Client('//localhost:8088', {
-        syncLoopDuration: 0,
-        reconnectStreamDelay: 1000
-      })
-      await client.activate()
+      // const client = new yorkie.Client('//localhost:8088', {
+      //   syncLoopDuration: 0,
+      //   reconnectStreamDelay: 1000
+      // })
+      // await client.activate()
 
-      // yorkie Document 연결
-      const doc = new yorkie.Document(props.mySessionId)
-      await client.attach(doc)
+      // // yorkie Document 연결
+      // const doc = new yorkie.Document(props.mySessionId)
+      // await client.attach(doc)
 
-      // yorkie document 설정
-      doc.update((root) => {
-        if(!root['shapes']) {
-          root['shapes'] = []
-        }
-      }, 'create shape if not exists')
+      // // yorkie document 설정
+      // doc.update((root) => {
+      //   if(!root['shapes']) {
+      //     root['shapes'] = []
+      //   }
+      // }, 'create shape if not exists')
 
-      // 이벤트 연결 -> 변경된 부분을 새로 그리기.
-      doc.subscribe(() => {
-        repaint(doc.getRoot().shapes)
-      })
-      await client.sync()
+      // // 이벤트 연결 -> 변경된 부분을 새로 그리기.
+      // doc.subscribe(() => {
+      //   repaint(doc.getRoot().shapes)
+      // })
+      // await client.sync()
 
-      // 원격으로 변경된 도형들을 새로 그리는 함수
-      function repaint(shapes){
-        // 새로 그리기 전 초기화
-        canvas.clear()
+      // // 원격으로 변경된 도형들을 새로 그리는 함수
+      // function repaint(shapes){
+      //   // 새로 그리기 전 초기화
+      //   canvas.clear()
 
-        // shapes에 저장된 도형 그리기.
-        for(const shape of shapes){
-          // console.log(shape.object)
-          fabric.loadSVGFromString(shape.object, (object) => {
-            canvas.add(object[0])
-          })
-        }
-      }
+      //   // shapes에 저장된 도형 그리기.
+      //   for(const shape of shapes){
+      //     // console.log(shape.object)
+      //     fabric.loadSVGFromString(shape.object, (object) => {
+      //       canvas.add(object[0])
+      //     })
+      //   }
+      // }
 
-      repaint(doc.getRoot().shapes)
+      // repaint(doc.getRoot().shapes)
 
 
-      var isObjectMoving = false
-      canvas.on('object:moving', function () {
-          isObjectMoving = true
-      });
-      var isObjectScaling = false
-      canvas.on('object:scaling', function() {
-          isObjectScaling = true
-      });
-      var isObjectRotating = false
-      canvas.on('object:rotating', function() {
-          isObjectRotating = true
-      })
-      canvas.on('mouse:up', function () {
-          if (isObjectMoving || isObjectScaling || isObjectRotating ){
-            isObjectMoving = false
-            isObjectScaling = false
-            isObjectRotating = false
-            const object = canvas.getActiveObject()
+      // var isObjectMoving = false
+      // canvas.on('object:moving', function () {
+      //     isObjectMoving = true
+      // });
+      // var isObjectScaling = false
+      // canvas.on('object:scaling', function() {
+      //     isObjectScaling = true
+      // });
+      // var isObjectRotating = false
+      // canvas.on('object:rotating', function() {
+      //     isObjectRotating = true
+      // })
+      // canvas.on('mouse:up', function () {
+      //     if (isObjectMoving || isObjectScaling || isObjectRotating ){
+      //       isObjectMoving = false
+      //       isObjectScaling = false
+      //       isObjectRotating = false
+      //       const object = canvas.getActiveObject()
             
             
-            const ID = object.id
+      //       const ID = object.id
             
-            console.log(ID + " changed")
-            doc.update((root) => {
+      //       console.log(ID + " changed")
+      //       doc.update((root) => {
               
-              root.shapes = root.shapes.filter((e) => e.id !== ID)
-              root.shapes.push({
-                'id' : ID,
-                'object' : object.toSVG()
-              })
+      //         root.shapes = root.shapes.filter((e) => e.id !== ID)
+      //         root.shapes.push({
+      //           'id' : ID,
+      //           'object' : object.toSVG()
+      //         })
 
-              repaint(root.shapes)
-            })
-          } 
-      })
+      //         repaint(root.shapes)
+      //       })
+      //     } 
+      // })
       // 선 그리기 이벤트
-      canvas.on('path:created', function(opt) {
-        opt.path.id = getRandomId('path')
-        const ID = opt.path.id
-        console.log(opt.path);
+      // canvas.on('path:created', function(opt) {
+      //   opt.path.id = getRandomId('path')
+      //   const ID = opt.path.id
+      //   console.log(opt.path);
 
-        doc.update((root) => {
-          //console.log(opt.path)
-          const serialize = opt.path.toSVG();
-          console.log(ID + " created")
-          root.shapes.push({
-            'id' : ID,
-            'object' : serialize,
-          });
-          repaint(root.shapes);
-        }, `update content by ${client.getID()}`)
-      })
+      //   doc.update((root) => {
+      //     //console.log(opt.path)
+      //     const serialize = opt.path.toSVG();
+      //     console.log(ID + " created")
+      //     root.shapes.push({
+      //       'id' : ID,
+      //       'object' : serialize,
+      //     });
+      //     repaint(root.shapes);
+      //   }, `update content by ${client.getID()}`)
+      // })
 
-      function getRandomId(type){
-        return type + Math.random().toString(32);
-      }
+      // function getRandomId(type){
+      //   return type + Math.random().toString(32);
+      // }
       // 드로잉모드 on/off element
       const drawingModeEl = $('drawing-mode'),
             // 도구상자 숨김/보이기 => 추후에 적용
@@ -167,9 +167,9 @@ export default {
       // 캔버스 초기화
       clearEl.onclick = function() { 
         canvas.clear() 
-        doc.update((root) => {
-          root.shapes = [];
-        })
+        // doc.update((root) => {
+        //   root.shapes = [];
+        // })
         canvas.backgroundColor = 'rgb(240,240,240)'
       }
       // 클릭할때마다 드로잉모드 true/false
@@ -202,7 +202,7 @@ export default {
 
       // 원 텍스트 박스 설정
       drawingCircleEl.onclick = function () {
-        const ID = getRandomId('circle')
+        // const ID = getRandomId('circle')
         let circle = new fabric.Circle({
           left: 150,
           top: 100,
@@ -211,21 +211,22 @@ export default {
           scaleY: 0.5,
           originX: 'center',
           originY: 'center',
-          id: ID,
+          //id: ID,
         })
-        doc.update((root) => {
-          const serialize = circle.toSVG();
-          console.log(ID + " created")
-          root.shapes.push({
-            'id' : ID,
-            'object' : serialize,
-          });
-          repaint(root.shapes);
-        }, `update content by ${client.getID()}`)
+        canvas.add(circle)
+        // doc.update((root) => {
+        //   const serialize = circle.toSVG();
+        //   console.log(ID + " created")
+        //   root.shapes.push({
+        //     'id' : ID,
+        //     'object' : serialize,
+        //   });
+        //   repaint(root.shapes);
+        // }, `update content by ${client.getID()}`)
       }
       //사각형 텍스트 박스
       drawingRectEl.onclick = function() {
-        const ID = getRandomId('rect')
+        // const ID = getRandomId('rect')
         let rect = new fabric.Rect({
           left: 150,
           top: 100,
@@ -234,22 +235,22 @@ export default {
           fill: color.value,
           originX: 'center',
           originY: 'center',
-          id: ID,
+          // id: ID,
         })
-
-        doc.update((root) => {
-          const serialize = rect.toSVG();
-          console.log(ID + " created")
-          root.shapes.push({
-            'id' : ID,
-            'object' : serialize,
-          });
-          repaint(root.shapes)
-        }, `update content by ${client.getID()}`)
+        canvas.add(rect)
+      //   doc.update((root) => {
+      //     const serialize = rect.toSVG();
+      //     console.log(ID + " created")
+      //     root.shapes.push({
+      //       'id' : ID,
+      //       'object' : serialize,
+      //     });
+      //     repaint(root.shapes)
+      //   }, `update content by ${client.getID()}`)
       }
       // 삼각형 텍스트 박스
       drawingTriangleEl.onclick = function() {
-        const ID = getRandomId('triangle')
+        // const ID = getRandomId('triangle')
         let triangle = new fabric.Triangle({
           left: 150,
           top: 100,
@@ -258,17 +259,18 @@ export default {
           fill: color.value,
           originX: 'center',
           originY: 'center',
-          id: ID
+          // id: ID
         })
-        doc.update((root) => {
-          const serialize = triangle.toSVG();
-          console.log(ID + " created")
-          root.shapes.push({
-            'id' : ID,
-            'object' : serialize,
-          });
-          repaint(root.shapes)
-        }, `update content by ${client.getID()}`)
+        canvas.add(triangle)
+        // doc.update((root) => {
+        //   const serialize = triangle.toSVG();
+        //   console.log(ID + " created")
+        //   root.shapes.push({
+        //     'id' : ID,
+        //     'object' : serialize,
+        //   });
+        //   repaint(root.shapes)
+        // }, `update content by ${client.getID()}`)
       }
 
 
@@ -279,24 +281,25 @@ export default {
 
       // 텍스트 박스 입력
       ITextEl.onclick = function () {
-        const ID = getRandomId('IText')
+        //const ID = getRandomId('IText')
         let text = new fabric.IText(`${inputdata.value}`,{
           left: 100,
           top: 100,
           fontSize: 30,
           originX: 'center',
           originY: 'center',
-          id: ID,
+          //id: ID,
         })
-        doc.update((root) => {
-          const serialize = text.toSVG();
-          console.log(ID + " created")
-          root.shapes.push({
-            'id' : ID,
-            'object' : serialize,
-          });
-          repaint(root.shapes)
-        }, `update content by ${client.getID()}`)
+        canvas.add(text)
+        // doc.update((root) => {
+        //   const serialize = text.toSVG();
+        //   console.log(ID + " created")
+        //   root.shapes.push({
+        //     'id' : ID,
+        //     'object' : serialize,
+        //   });
+        //   repaint(root.shapes)
+        // }, `update content by ${client.getID()}`)
       }
 
       // 데이터 저장
@@ -336,6 +339,11 @@ export default {
 
 </script>
 <style>
+#text {
+  width: 130px;
+  height: 40px;
+  border-radius: 10px;
+}
 .drawing-box button {
   margin: 4px;
   border-radius: 5px;
