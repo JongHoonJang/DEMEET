@@ -387,6 +387,7 @@ export default defineComponent({
 .btn-box {
   margin-top: 30px;
   margin-right: 20px;
+  margin-bottom: 30px;
   display: flex;
   justify-content: flex-start;
   margin-left: 20%;
@@ -430,7 +431,6 @@ export default defineComponent({
 .pjt-detail-box {
   margin-left: 20%;
   width: 400px;
-  height: 120px;
   background: #333333;
   color: #9E9E9E;
 }
