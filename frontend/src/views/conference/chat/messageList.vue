@@ -56,7 +56,7 @@ props: {
 
 <style scoped>
 #chat_list {
-  height: 640px;
+  height: 720px;
   width: 300px;
   background: #9BA4B4;
   overflow-y: scroll;
@@ -71,7 +71,7 @@ div::-webkit-scrollbar {
   display: none; /* for Chrome, Safari, and Opera */
 }
 #chatForm {
-  height:670px;
+  height:750px;
   background-color:#394867;
   border-top-left-radius:10px;
   border-top-right-radius:10px;
