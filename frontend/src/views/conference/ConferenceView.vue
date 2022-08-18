@@ -422,14 +422,14 @@ setup() {
 	}
 
 	const userListOnOff = () =>{
-		chattingStatus.value = !chattingStatus.value
-		userListStatus.value = !userListStatus.value
+		chattingStatus.value = false
+		userListStatus.value = true
 
 	}
 
 	const chattingOnOff = () =>{
-		userListStatus.value = !userListStatus.value
-		chattingStatus.value = !chattingStatus.value
+		userListStatus.value = false
+		chattingStatus.value = true
 	}
 
 
