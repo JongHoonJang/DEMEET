@@ -41,9 +41,9 @@ import { useAccountStore } from "@/stores/account"
 export default {
   props:['openviduSessionId', 'mySessionId'],
   setup(props) {
-    const isBool = ref(false)
-    const confirmText = ref('')
     const init = async() => {
+      const isBool = ref(false)
+      const confirmText = ref('')
       const color = ref('black')
       const sessionData = ref(props)
       const demeet = useAccountStore()
