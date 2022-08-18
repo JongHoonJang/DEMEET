@@ -45,7 +45,7 @@ export default {
 </script>
 <style scoped>
 	#mainVideoID {
-		width: 52VW;
+		width: 50VW;
 		margin-top: 4vh;
 	}
 

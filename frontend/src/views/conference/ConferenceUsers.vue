@@ -53,7 +53,7 @@ export default {
   background-color: #9BA4B4;
   margin:10px;
   width:300px;
-  height: 300px;
+  height: 710px;
   
   border-radius:10px;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
@@ -66,7 +66,7 @@ div::-webkit-scrollbar {
 
 #userContainer {
   background-color:#394867;
-  height: 320px;
+  height: 740px;
   padding-top:3px;
   margin-top: 30px;
   border-radius:10px;
