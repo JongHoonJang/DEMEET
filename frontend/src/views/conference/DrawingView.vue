@@ -1,5 +1,5 @@
 <template>
-  <canvas width="58vw" height="600" id="canvas" style="border: 1px solid #ccc"></canvas>
+  <canvas width="1000" height="600" id="canvas" style="border: 1px solid #ccc"></canvas>
   <div class="item-box">
     <div class="drawing-box">
       <button id="clear-canvas">clear</button>
