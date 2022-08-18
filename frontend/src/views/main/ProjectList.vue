@@ -2,11 +2,11 @@
   <router-link :to="{ name: 'DetailView', params: {pid: pid}}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
-      <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
+      <span style="font-size: 16px">{{ demeet.project.pjtName }}</span>
     </div>
     <div class="box">
       <span class="material-symbols-outlined" id="group">group</span>
-      <span style="font-size: 20px">Members</span>
+      <span style="font-size: 16px">Members</span>
       <span class="member">{{ member.length }}</span>
     </div>
     <div class="box" v-if="!demeet.project.sessionActivate">
@@ -58,6 +58,7 @@ export default defineComponent({
   color: white;
   margin-right: 20px;
   margin-bottom: 10px;
+  overflow: hidden
 }
 
 #group {
