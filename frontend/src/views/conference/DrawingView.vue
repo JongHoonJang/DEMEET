@@ -1,5 +1,5 @@
 <template>
-  <canvas width="640" height="480" id="canvas" style="border: 1px solid #ccc"></canvas>
+  <canvas width="58vw" height="600" id="canvas" style="border: 1px solid #ccc"></canvas>
   <div class="item-box">
     <div class="drawing-box">
       <button id="clear-canvas">clear</button>
@@ -291,6 +291,7 @@ export default {
           //id: ID,
         })
         canvas.add(text)
+        inputdata.value = ''
         // doc.update((root) => {
         //   const serialize = text.toSVG();
         //   console.log(ID + " created")
