@@ -645,7 +645,13 @@ setup() {
 	border-radius: 10px;
 	border-style: solid;
 	border-color: #14274E;
-	padding: 0px 16px 0px 16px;
+	padding: 0px 16px 0px 16px;	
+	height: 600px;
+	overflow-y: scroll;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}div::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
 }
 
 
