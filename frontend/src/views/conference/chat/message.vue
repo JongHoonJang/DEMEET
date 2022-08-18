@@ -39,22 +39,22 @@ export default {
       ismy: this.equal(),
       sendname: "",
       chat: ""
-    };
+    }
   },
   mounted() {
-    this.sendname = JSON.parse(this.msg).userName;
-    this.chat = JSON.parse(this.msg).msg;
+    this.sendname = JSON.parse(this.msg).userName
+    this.chat = JSON.parse(this.msg).msg
   },
   methods: {
     equal() {
       if (this.myId == this.fromId) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

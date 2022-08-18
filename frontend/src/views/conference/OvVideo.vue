@@ -26,15 +26,15 @@ export default {
 
 		props.streamManager.on('publisherStopSpeaking', () => {  // 말 안 할때
 			userSpeakStatus.value = false
-	})
+		})
+
 		return {
-			userSpeakStatus
+			userSpeakStatus,
 			}
 	},
-	
 
 	mounted () {
-		this.streamManager.addVideoElement(this.$el);
+		this.streamManager.addVideoElement(this.$el)
 	},
 };
 </script>
