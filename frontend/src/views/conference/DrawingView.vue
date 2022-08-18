@@ -20,16 +20,6 @@
       <button id="save"><span class="material-symbols-outlined">save</span></button>
     </div>
   </div>
-  <div class="modal" v-if="isBool">
-    <div class="overlay"></div>
-    <div class="modal-card">
-      <h3 class="confirm-text">{{ confirmText }}</h3>
-      <div class="confirm-btn">
-        <button @click="changeBool(true)" id="check">확인</button>
-        <button @click="changeBool(false)" id="check">취소</button>
-      </div>
-    </div>
-  </div>
 
 </template>
 
@@ -41,9 +31,7 @@ import { useAccountStore } from "@/stores/account"
 export default {
   props:['openviduSessionId', 'mySessionId'],
   setup(props) {
-    const init = async() => {
-      const isBool = ref(false)
-      const confirmText = ref('')
+    const init = () => {
       const color = ref('black')
       const sessionData = ref(props)
       const demeet = useAccountStore()
@@ -313,8 +301,9 @@ export default {
         //   repaint(root.shapes)
         // }, `update content by ${client.getID()}`)
       }
-      const changeBool = (res) => {
-      if(res){
+      
+      // 데이터 저장
+      saveImage.onclick = () => {
         const dataURLtoFile = (dataurl, fileName) => {
   
           var arr = dataurl.split(','),
@@ -338,21 +327,6 @@ export default {
         })
         // 백엔드로 갈 데이터 형식
         demeet.saveImage(imageData.value)
-        isBool.value = false
-      }else {
-        isBool.value = false
-      }
-    }
-      
-      // 데이터 저장
-      saveImage.onclick = () => {
-        confirmText.value = '저장하시겠습니까?'
-        isBool.value = true
-      }
-      return {
-        confirmText,
-        isBool,
-        changeBool
       }
     }
     onMounted(() => {
