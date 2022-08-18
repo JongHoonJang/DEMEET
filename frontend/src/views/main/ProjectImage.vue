@@ -25,7 +25,7 @@
     <button><a type="button" @click="isBool=true, confirmText='정말 삭제하시겠습니까?'">delete</a></button>
     <button><a type="button" @click="isImage=false">cancel</a></button>
   </div>
-  <div class="window" v-if="!isData">
+  <div class="window2" v-if="!isData">
     <div class="content">
       <div class="slides">
         <img class="slide_item" src="@/assets/DEMEET.jpg" alt="">
@@ -202,14 +202,20 @@ h1 {
 .image-btn button:hover {
   transform: scale(1.2);
 }
-
 .window {
   overflow: hidden;  /*check out container's movement : command + */
   border: 4px solid; 
   width: 500px;
   height: 300px;
   margin-left: 28px;
-
+}
+.window2 {
+  overflow: hidden;  /*check out container's movement : command + */
+  border: 4px solid; 
+  width: 500px;
+  height: 300px;
+  margin-left: 28px;
+  margin-bottom: 100px;
 }
 
 .container img {
