@@ -103,8 +103,8 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
           })
@@ -174,17 +174,16 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({ name: 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          //alert('비밀번호가 변경되었습니다. \n 다시 로그인 해주세요.')
           this.removeToken()
-          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           const modal = document.createElement('div')
@@ -232,15 +231,14 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('현재 비밀번호가 다릅니다.')
           console.error(err.response)
         })
     },
@@ -315,7 +313,6 @@ export const useAccountStore = defineStore("account", {
                 modalCard.append(h3,button)
                 modal.append(overlay,modalCard)
                 body.append(modal)
-                // alert('이메일이 존재하지 않습니다.')
               }
               
             })
@@ -368,15 +365,14 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('중복된 메일입니다.')
         })
 
     },
@@ -434,17 +430,16 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({ name: 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('회원탈퇴 되었습니다.')
           this.removeToken()
-          router.push({ name: 'LoginView'})
         })
         .catch(err => {
           console.error(err.response)
@@ -569,16 +564,15 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.push({name : 'LoginView'})
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('임시비밀번호가 이메일로 전송되었습니다')
-          router.push({name : 'LoginView'})
         })
         .catch(err => {
           console.error(err)
@@ -752,16 +746,15 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
+            router.go({ name: 'DetailView' })
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('삭제되었습니다.')
-          router.go({ name: 'DetailView' })
         })
         .catch(err => console.error(err.response))
     },
@@ -824,15 +817,14 @@ export const useAccountStore = defineStore("account", {
           button.style.height = '30px'
           button.style.textAlign = 'center'
           button.innerText = '확인'
-          button.style.marginLeft = '340px'
-          button.style.marginTop = '7px'
+          button.style.marginLeft = '332px'
+          button.style.marginBottom = '8px'
           button.addEventListener('click',function () {
             modal.style.display = 'none'
           })
           modalCard.append(h3,button)
           modal.append(overlay,modalCard)
           body.append(modal)
-          // alert('저장되었습니다.')
         })
         .catch(err => console.error(err.response))
     }

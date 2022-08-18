@@ -189,15 +189,15 @@ public class ProjectsController {
         try {
             // 내가 해당 pid를 가지는 프로젝트의 오너일 경우에만 유저삭제가 가능하기때문에 일단 그 여부부터 확인한다.
             Projects project = projectsService.getProject(addDelUserInProjectPostReq.getPid());
-            // 작동조건
-            // 1. 내가 오너이고, 내(오너)가 아닌 다른사람을 삭제하는 경우
-            if (project.getOwnerId().equals(myUid) && !addDelUserInProjectPostReq.getUid().equals(project.getOwnerId())) {
-                log.error("user is owner and delete other people");
+            // 작동 중지 조건
+            // 1. 내가 오너이고, 나를 삭제하는 경우
+            if (project.getOwnerId().equals(myUid) && addDelUserInProjectPostReq.getUid().equals(project.getOwnerId())) {
+                log.error("owner can't delete himself");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
             // 2. 내가 유저이고, 내가 아닌 다른 유저를 삭제하는 경우
             else if (!myUid.equals(project.getOwnerId()) && !myUid.equals(addDelUserInProjectPostReq.getUid())) {
-                log.error("user is not owner and delete other people");
+                log.error("user can't delete other user.");
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "You do not have permission."));
             }
             Users user = usersService.getUsersByUid(addDelUserInProjectPostReq.getUid());

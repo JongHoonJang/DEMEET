@@ -14,14 +14,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 #close {
   text-align: end;
   float: right;
   border-radius: 5px;
 }
-
+#close:hover {
+  transform: scale(1.2);
+}
 .modal,
 .overlay {
   width: 100%;

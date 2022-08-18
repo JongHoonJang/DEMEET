@@ -27,6 +27,8 @@ export default {
   letter-spacing: .02em;
   transition: all .2s ease;
   -webkit-tap-highlight-color: rgba(255,255,255,0);
+  margin-bottom: 8px;
+  margin-right: 8px;
 }
 slot {
   margin: auto;
