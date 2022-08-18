@@ -25,7 +25,7 @@ export default {
       messageForm: {
         message: ""
       }
-    };
+    }
   },
 
   props: {
@@ -38,19 +38,19 @@ export default {
   methods: {
     submitForm(event) {
 
-      const msg = this.messageForm.message.trim();
+      const msg = this.messageForm.message.trim()
 
       if (msg != "") {
 
-        event.preventDefault();
-        // this.$emit("sendMsg", "[" + this.userName + "] : " + msg);
+        event.preventDefault()
+        // this.$emit("sendMsg", "[" + this.userName + "] : " + msg)
         var string = JSON.stringify({
           userName: this.userName,
           msg: msg
-        });
-        this.$emit("sendMsg", string);
+        })
+        this.$emit("sendMsg", string)
       }
-      this.messageForm.message = "";
+      this.messageForm.message = ""
     }
   }
 };

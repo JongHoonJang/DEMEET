@@ -193,6 +193,6 @@ nav div a {
 }
 .confirm-btn {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 </style>

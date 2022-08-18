@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ConferenceMessage from "./message";
+import ConferenceMessage from "./message"
 export default {
   name: "MessageList",
   components: {
@@ -43,18 +43,15 @@ props: {
   data() {
     return {
 
-    };
+    }
   },
   updated() {
     if (!this.isScrolled) {
-      var objDiv = document.getElementById("chat_list");
-      objDiv.scrollTop = objDiv.scrollHeight + 500;
+      var objDiv = document.getElementById("chat_list")
+      objDiv.scrollTop = objDiv.scrollHeight + 500
     }
   },
-
-
-
-};
+}
 </script>
 
 <style scoped>

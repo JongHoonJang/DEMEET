@@ -183,6 +183,6 @@ h3 {
 }
 .confirm-btn {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 </style>

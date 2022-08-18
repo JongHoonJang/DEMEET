@@ -1,7 +1,11 @@
 <template>
 <div id="frame" v-if="streamManager">
-	<ov-video :streamManager="streamManager" />
+	<ov-video :streamManager="streamManager" ref="subVideo"/>
 	<div class="videoNickName"><p id="userNickName">{{ userNickName.clientData }}</p></div>
+	<button v-if="isSub" type="button" class="btn_muted" @click="mutedIcon">
+		<span v-if="isMuted" style="color:#F1F6F9" class="material-symbols-outlined">volume_up</span>
+		<span v-if="!isMuted" style="color:rgb(234, 71, 71)" class="material-symbols-outlined">volume_off</span>
+	</button>
 </div>
 </template>
 
@@ -23,37 +27,38 @@ export default {
 				return {}
 			}
 		},
-		users:{
-			type:Array,
-			default: () => {
-				return []
-			}
-		},
-		isDrawing:{
-			type:Boolean
+		isSub:{
+			type:Boolean,
 		}
 	},
 
 	setup(props){
 	const userNickName = ref(Object)
-	// const userSpeakStatus = ref(false)
-		
+	const isMuted = ref(true)
+
+
 	async function getConnectionData() {
 		const { connection } = await props.streamManager.stream
 		return  connection.data.split('%')
 		}
+	
+	const mutedIcon = () => {
+		isMuted.value = !isMuted.value
+		props.streamManager.subscribeToAudio(isMuted.value)
+	}
 
 	onMounted(async() => {
 		const clientData = await getConnectionData()
 		userNickName.value = JSON.parse(clientData[0])
-		
 
 	})
 
 		return {
 			userNickName,
+			isMuted,
+			mutedIcon,
 		}
-	}
+	},
 }
 </script>
 <style scoped>
@@ -81,6 +86,22 @@ export default {
 		text-align: center;
 		background-color: #14274e86;
 	}
+
+	button.btn_muted{
+		border-radius: 50%;
+		font-size: 8px;
+		cursor: pointer;
+		padding: 0;
+		border: none;
+		background: none;
+		margin: 0;
+		position: absolute;
+		width: 2rem;
+		top: 84%;
+		left: 92%;
+		transform: translate(-50%,-50%);
+	}
+
 	@media all and (max-width: 1024px){
 	#frame{
   width: 100%;
