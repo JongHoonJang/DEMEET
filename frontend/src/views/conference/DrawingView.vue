@@ -346,6 +346,7 @@ export default {
       
       // 데이터 저장
       saveImage.onclick = () => {
+        confirmText.value = '저장하시겠습니까?'
         isBool.value = true
       }
       return {
@@ -422,5 +423,41 @@ export default {
 
 #drawing-mode-options button span{
   margin-top: 4px;
+}
+
+.confirm-text {
+  margin: 25px;
+  color: white;
+}
+.modal{
+  display: flex;
+}
+.modal,
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.overlay {
+  opacity: 0.5;
+  background-color: #C4C4C4;
+}
+.modal-card {
+  background: #2b2b2b !important;
+  border-radius: 5px;
+  position: relative;
+  width: 400px;
+  margin: auto;
+  margin-top: 30px;
+  background-color: #111315;
+  min-height: 100px;
+  z-index: 10;
+  opacity: 1;
+}
+.confirm-btn {
+  display: flex;
+  justify-content: center;
 }
 </style>
