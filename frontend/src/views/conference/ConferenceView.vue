@@ -163,7 +163,7 @@ setup() {
 	const micStatus = ref(100)
 	const audioStatus = ref(false)
 	const videoStatus = ref(false)
-	const userListStatus = ref(true)
+	const userListStatus = ref(false)
 	const chattingStatus = ref(true)
 	const isSharing = ref(false)
 	const isDrawing = ref(false)
@@ -422,11 +422,13 @@ setup() {
 	}
 
 	const userListOnOff = () =>{
+		chattingStatus.value = !chattingStatus.value
 		userListStatus.value = !userListStatus.value
 
 	}
 
 	const chattingOnOff = () =>{
+		userListStatus.value = !userListStatus.value
 		chattingStatus.value = !chattingStatus.value
 	}
 
