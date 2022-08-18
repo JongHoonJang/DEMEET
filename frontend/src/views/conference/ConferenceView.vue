@@ -648,7 +648,7 @@ setup() {
 	border-style: solid;
 	border-color: #14274E;
 	padding: 0px 16px 0px 16px;	
-	height: 800px;
+	height: 920px;
 	overflow-y: scroll;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none; /* for Firefox */
@@ -664,7 +664,7 @@ footer {
 	bottom: 0px;
 	width: 100%;
 	height: auto;
-	margin-top: 29px
+	margin-top: 50px
 }
 
 #chat-box {
