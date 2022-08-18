@@ -43,7 +43,7 @@ export default {
       })
       fabric.Object.prototype.transparentCorners = true
       // yorkie Client 설정
-      const client = new yorkie.Client('https://i7b309.p.ssafy.io/envoy', {
+      const client = new yorkie.Client('http://i7b309.p.ssafy.io:8082', {
         syncLoopDuration: 0,
         reconnectStreamDelay: 1000
       })
