@@ -262,6 +262,8 @@ setup() {
 		const updateMainVideoStreamManager = (stream) => {
 			if (isDrawing.value===true){
 				closeShareDrawing()
+			}else if(isSharing.value===true){
+				closeShareScreen()
 			}
 			if (mainStreamManager.value  === stream) return
 			mainStreamManager.value  = stream
@@ -289,8 +291,8 @@ setup() {
 					let tempToken = token.substring(
 					token.indexOf("ses_"),
 					token.indexOf("&token")
-					);
-					openviduSessionId.value = tempToken;					
+					)
+					openviduSessionId.value = tempToken	
 					
 					callback(token) // Continue the join operation
 				}
@@ -360,8 +362,8 @@ setup() {
 			.then(data =>   resolve(data.content[0].connections.content))
 			.catch(error => reject(error.response))
 		
-		});
-	};
+		})
+	}
 
 	// See https://docs.openvidu.io/en/stable/reference-docs/REST-API/#post-connection
 	const createToken = (sessionId) => {
