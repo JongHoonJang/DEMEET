@@ -58,7 +58,7 @@
 
 `https://dbdiagram.io/d/62d6e2280d66c746550997fa`
 
-`https://www.notion.so/wondaeme/ERD-cb0166f9c02e4dbd9f75153c127e60ed`![ERD.PNG](./image/ERD.png)
+`https://www.notion.so/wondaeme/ERD-cb0166f9c02e4dbd9f75153c127e60ed`![ERD.PNG](./image/ERD.PNG)
 
 #### **와이어 프레임**
 
@@ -103,23 +103,23 @@
 
 #### 로그인 화면
 
-![로그인.PNG](./image/로그인.png)
+![로그인.PNG](./image/로그인.PNG)
 
 #### 회원가입
 
-![회원가입.PNG](./image/회원가입.png)
+![회원가입.PNG](./image/회원가입.PNG)
 
 #### 마이페이지
 
-![마이페이지.PNG](./image/마이페이지.png)
+![마이페이지.PNG](./image/마이페이지.PNG)
 
 #### 메인 페이지
 
-![메인 페이지.PNG](./image/메인 페이지.png)
+![메인 페이지.PNG](./image/메인_페이지.PNG)
 
 #### 프로젝트 디테일
 
-![프로젝트 디테일.PNG](./image/프로젝트 디테일.png)
+![프로젝트 디테일.PNG](./image/프로젝트_디테일.PNG)
 
 #### 화상 미팅 화면
 
@@ -127,4 +127,4 @@
 
 #### 캔버스 공유 화면
 
-![캔버스 공유화면.png](./image/캔버스 공유화면.png)
+![캔버스 공유화면.png](./image/캔버스_공유화면.png)
