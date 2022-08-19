@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="chatForm">
     <div id="chat_list" class="container" >
       <ConferenceMessage
         v-for="(msg, index) in msgs"
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ConferenceMessage from "./message";
+import ConferenceMessage from "./message"
 export default {
   name: "MessageList",
   components: {
@@ -43,20 +43,39 @@ props: {
   data() {
     return {
 
-    };
+    }
   },
-
-
-
-};
+  updated() {
+    if (!this.isScrolled) {
+      var objDiv = document.getElementById("chat_list")
+      objDiv.scrollTop = objDiv.scrollHeight + 500
+    }
+  },
+}
 </script>
 
 <style scoped>
-.container {
-  height: 900px;
-  background: #b4b4b4;
-  overflow: scroll;
-  border-radius: 10px 10px 0px 0px;
-}
+#chat_list {
+  height: 720px;
+  width: 300px;
+  background: #9BA4B4;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  border-radius: 10px;
+  align-content: center;
+  margin:0px 10px 10px 10px;
 
+}
+div::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+#chatForm {
+  height:750px;
+  background-color:#394867;
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+  padding-top:10px;
+  margin-top:30px
+}
 </style>

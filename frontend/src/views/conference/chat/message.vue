@@ -1,7 +1,7 @@
 <template>
   <div id="chatbox">
     <div id="chat" v-if="!ismy">
-      <span id="msgs">[{{ sendname }}]:{{ chat }}</span>
+      <span id="msgs">{{ sendname }} : {{ chat }}</span>
     </div>
     </div>
   <div id="mychatbox">
@@ -39,43 +39,51 @@ export default {
       ismy: this.equal(),
       sendname: "",
       chat: ""
-    };
+    }
   },
   mounted() {
-    this.sendname = JSON.parse(this.msg).userName;
-    this.chat = JSON.parse(this.msg).msg;
+    this.sendname = JSON.parse(this.msg).userName
+    this.chat = JSON.parse(this.msg).msg
   },
   methods: {
     equal() {
       if (this.myId == this.fromId) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
 
+
 #msgs {
-  font-size: 15px;
+  font-size: 17px;
   margin: 2px;
   padding-left: 5px;
   padding-right: 5px;
+  white-space: pre-line;
+  width:230px;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: white;
+  
 }
 #chat {
-  background-color: rgb(255, 255, 255);
+
   margin: 5px;
   padding: 5px;
   border-radius: 15px;
   width: fit-content;
   text-align: left;
   display: inline-block;
+  white-space: pre-line;
 }
 #mychat {
-  background-color: rgb(243, 227, 3);
+
   margin: 5px;
   padding: 5px;
   border-radius: 15px;
@@ -84,10 +92,14 @@ export default {
   display: inline-block;
 }
 #mychatbox {
-  text-align: right;
+  float: right;
 }
 #chatbox {
-  background-color: rgb(243, 227, 3);
+  background-color: #14274E;
+  border-radius: 10px;
+  width: 96%;
+  margin: 5px;
   text-align: left;
 }
 </style>
+

@@ -1,10 +1,11 @@
 package com.ssafy.db.entity;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +30,20 @@ public class Projects {
 
     String pjtDesc;
 
-    String sessionId;
+    // 프로젝트명 + 시작시간을 base64로 인코딩한값
+    String customSessionName;
 
+    // 초단위로 변환된 값을 저장하기위해 Long타입으로 변경.
     @Column(nullable = false)
-    LocalDateTime totalMeetTime;
+    Long totalMeetTime;
+
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
 
     @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
     List<UserProject> userProjectList = new ArrayList<UserProject>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    List<Conferences> conferencesList = new ArrayList<Conferences>();
 
 }

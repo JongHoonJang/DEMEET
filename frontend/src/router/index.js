@@ -5,7 +5,8 @@ import ConferenceView from '@/views/conference/ConferenceView'
 import ProfileView from '@/views/account/ProfileView'
 import LoginView from '@/views/account/LoginView'
 import SignupView from '@/views/account/SignupView'
-import GuestLogin from '@/views/account/GuestLogin'
+import FindPassword from '@/views/account/FindPassword'
+
 const routes = [
   {
     path: '/',
@@ -18,7 +19,7 @@ const routes = [
     component: DetailView
   },
   {
-    path: '/conference',
+    path: '/:pid/conference/:sessionId',
     name: 'ConferenceView',
     component: ConferenceView
   },
@@ -33,14 +34,14 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/login/guest',
-    name: 'GuestLogin',
-    component: GuestLogin
-  },
-  {
     path: '/signup',
     name: 'SignupView',
     component: SignupView
+  },
+  {
+    path: '/findpw',
+    name: 'FindPassword',
+    component: FindPassword
   },
 ]
 
@@ -55,6 +56,12 @@ router.beforeEach((to, from, next) => {
   if(to.name === 'LoginView') {
     if(token) {
       next({ name:'MainView' })
+    }
+  }
+  // 토근이 존재할때 회원가입화면으로 가려고하면 메인으로 이동
+  else if (to.name === 'SignupView') {
+    if(token) {
+      next({ name:'LoginView' })
     }
   }
   // 메인화면에서 토큰이 존재하지 않으면 로그인화면으로 이동
@@ -73,11 +80,6 @@ router.beforeEach((to, from, next) => {
   else if (to.name === 'ProfileView') {
     if(!token) {
       next({ name:'LoginView' })
-    }
-  }
-  if (to.name === 'ConferenceView') {
-    if(!token) {
-      next({ name: 'GuestLogin'})
     }
   }
   next()

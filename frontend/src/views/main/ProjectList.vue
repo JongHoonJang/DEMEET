@@ -2,23 +2,24 @@
   <router-link :to="{ name: 'DetailView', params: {pid: pid}}" class="project-box">
     <div class="box">
       <span class="material-symbols-outlined" id="terminal">terminal</span>
-      <span style="font-size: 20px">{{ demeet.project.pjtName }}</span>
+      <span style="font-size: 16px">{{ demeet.project.pjtName }}</span>
     </div>
     <div class="box">
       <span class="material-symbols-outlined" id="group">group</span>
-      <span style="font-size: 20px">Members</span>
+      <span style="font-size: 16px">Members</span>
       <span class="member">{{ member.length }}</span>
     </div>
-    <!-- <div class="box">
+    <div class="box" v-if="!demeet.project.sessionActivate">
       <span class="material-symbols-outlined" id="cancel">cancel_presentation</span>
       <div class="off">OFF</div>
-    </div> -->
-    <div class="box">
+    </div>
+    <div class="box" v-if="demeet.project.sessionActivate">
       <span class="material-symbols-outlined" id="video">video_chat</span>
       <div class="on">ON</div>
     </div>
     <div class="host-box">
-      <span class="material-symbols-outlined" id="person">person</span>
+      <img class="host-img" v-if="host.profileImagePath!==null" :src="`${host.profileImagePath}`" alt="">
+      <img class="host-img" v-else src="@/assets/기본프로필.jpg" alt="">
       <div class="host-data">
         <p>{{ host.nickname }}</p>
         <p>{{ host.email }}</p>
@@ -35,7 +36,6 @@ export default defineComponent({
   setup(props) {
     const demeet = ref(props)
     const account = useAccountStore()
-    account.fetchUserList()
     const pid = ref(demeet.value.project.pid)
     const member = ref(demeet.value.project.member)
     const host = ref(member.value.find(user => user.uid === demeet.value.project.projectOwner))
@@ -43,7 +43,9 @@ export default defineComponent({
       demeet,
       host,
       member,
-      pid
+      pid,
+      account,
+      
     }
   }
 
@@ -56,6 +58,7 @@ export default defineComponent({
   color: white;
   margin-right: 20px;
   margin-bottom: 10px;
+  overflow: hidden
 }
 
 #group {
@@ -63,13 +66,6 @@ export default defineComponent({
   color: white;
   margin-right: 20px;
   margin-bottom: 10px;
-}
-
-#person {
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
-  font-size: 52px;
 }
 
 #cancel{
@@ -81,7 +77,6 @@ export default defineComponent({
   font-size: 24px;
   margin-right: 20px;
 }
-
 .project-box {
   margin-bottom: 50px;
   margin-left: 25px;
@@ -98,7 +93,9 @@ export default defineComponent({
   flex-direction: column;
   float: right;
 }
-
+.project-box:hover {
+  transform: scale(1.1);
+}
 .on {
   width: 28px;
   height: 20px;
@@ -135,6 +132,13 @@ export default defineComponent({
   margin-left: 28px;
 }
 
+.host-img {
+  height: 80px;
+  width: 80px;
+  margin: 6px;
+  border-radius: 50%;
+}
+
 .box {
   margin-top: 20px;
   margin-left: 50px;
@@ -152,5 +156,6 @@ export default defineComponent({
 
 .host-data {
   text-align: start;
+  margin-left: 10px;
 }
 </style>

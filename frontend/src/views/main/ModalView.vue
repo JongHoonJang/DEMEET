@@ -14,13 +14,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 #close {
   text-align: end;
   float: right;
   border-radius: 5px;
 }
-
+#close:hover {
+  transform: scale(1.2);
+}
 .modal,
 .overlay {
   width: 100%;
@@ -35,7 +38,7 @@ export default {
 }
 .modal-card {
   position: relative;
-  max-width: 50%;
+  width: 500px;
   margin: auto;
   margin-top: 30px;
   background-color: #111315;

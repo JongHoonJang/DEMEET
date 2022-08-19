@@ -1,12 +1,14 @@
 <template>
-  <div id="ConferenceUsers">
+  <div id="userContainer">
+    <div id="ConferenceUsers">
     <p>유저 목록입니다.</p>
-    <div><p>{{ clientData.clientData }}</p></div>
+    <div v-for="(user, index) in users" :key="index" :users="users">{{user.clientData.slice(15,-2)}}</div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import { computed } from 'vue'
 
 export default {
   name: 'ConferenceUsers',
@@ -31,21 +33,12 @@ export default {
 			}
 		}
 	},
-  setup(props) {
+  setup() {
 
-    const getConnectionData = () => {
-    const { connection } = props.publisher.stream
-    return JSON.parse(connection.data)
-   }
 
-   const clientData = computed(() => {
-			const clientData  = getConnectionData()
-			return clientData
-	})
   
   return {
-    getConnectionData,
-    clientData
+
   }
   },
   create() {},
@@ -57,8 +50,26 @@ export default {
 
 <style scoped>
 #ConferenceUsers {
-  background-color: rgb(207, 134, 134);
-  height: 50%;
+  background-color: #9BA4B4;
+  margin:10px;
+  width:300px;
+  height: 710px;
+  
+  border-radius:10px;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+}
+div::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+#userContainer {
+  background-color:#394867;
+  height: 740px;
+  padding-top:3px;
+  margin-top: 30px;
+  border-radius:10px;
 }
 
 </style>
