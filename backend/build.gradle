@@ -21,6 +21,7 @@ buildscript{
         // classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
         //[끝] 
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
+
     }
 }
 
@@ -141,7 +142,8 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
+//  이메일 서버
+    implementation ('org.springframework.boot:spring-boot-starter-mail')
     implementation('commons-io:commons-io:2.6')
     implementation("org.apache.commons:commons-collections4:4.4")
     implementation("org.apache.commons:commons-lang3:3.9")
@@ -178,6 +180,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:2.7.1")
     implementation("com.squareup.okhttp3:logging-interceptor:3.9.0")
 
+    // 소셜로그인을 위한 oauth2 현재 사용하지않음
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
     implementation("com.google.guava:guava:29.0-jre")
     annotationProcessor("com.google.guava:guava:29.0-jre")
 

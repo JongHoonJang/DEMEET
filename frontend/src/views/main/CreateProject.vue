@@ -1,5 +1,8 @@
 <template>
 <div class="bar"></div>
+<AlertView v-if="isError" @close-modal="isError=false">
+  <h3>{{ alertText }}</h3>
+</AlertView>
 <div class="name-bar">
   <input class="name-input" v-model="projectData.pjt_name" type="text" placeholder="pjt-name">
 </div>
@@ -10,7 +13,7 @@
       class="search" 
       placeholder="Search User"
       v-model.trim="searchUser" 
-      @input="findData(searchUser)"
+      @input="findData()"
       >
       <div class="user-list">
         <div 
@@ -20,7 +23,8 @@
         >
           <div class="user-box" v-if="user.uid !== account.profile.uid">
             <div class="user-data">
-              <img class="user-img" src="@/assets/profile.jpg" alt="">
+              <img class="user-img" v-if="user.profileImagePath===null" src="@/assets/기본프로필.jpg" alt="">
+              <img class="user-img" v-else-if="user.profileImagePath!==null" :src="`${user.profileImagePath}`" alt="">
               <div>
                 <div class="text-type">{{ user.nickname }}</div>
                 <div class="text-type">{{ user.email }}</div>
@@ -31,7 +35,6 @@
             @click="remove(user)"  
             class="cancle-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="cancel">취소</span>
             </button>
             <button
@@ -39,7 +42,6 @@
             @click="add(user)" 
             class="plus-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="plus">초대</span>
             </button>
           </div>
@@ -47,15 +49,20 @@
       </div>
     </div>
   </div>
-  <button class="create-btn" @click="account.createProject(projectData)">start project</button>
+  <button class="create-btn" @click="startProject(projectData)">start project</button>
 </template>
 
 <script scoped>
 import { ref,defineComponent } from "vue"
 import { useAccountStore } from "@/stores/account"
-
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
+  components: {
+    AlertView
+  },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
     const projectData = ref({
       pjt_name: '',
       memberList: [],
@@ -63,17 +70,28 @@ export default defineComponent({
     const add = (addUser) => {
       projectData.value.memberList.push(addUser.uid)
     }
-    const remove = (addUser) => {
-      projectData.value.memberList.pop(addUser.uid)
+    const remove = (removeUser) => {
+      projectData.value.memberList.splice(projectData.value.memberList.findIndex(res => res===removeUser.uid),1)
     }
     const account = useAccountStore()
-    account.fetchUserList()
     const userData = ref(account.userList)
-    const searchUser = ''
+    const searchUser = ref('')
     const searchList = ref([]) 
-    const findData = (inputData) => {
-      if (inputData.length != 0){
-        searchList.value = userData.value.filter(user => user.nickname.includes(inputData))
+    const findData = () => {
+      if (searchUser.value.length != 0){
+        const result = account.userList.filter(user => user.nickname.includes(searchUser.value))
+        result.push(...account.userList.filter(user => user.email.includes(searchUser.value)))
+        const res = new Set(result)
+        const resData = [...res]
+        searchList.value = resData.slice(0,3)
+      }
+    }
+    const startProject = (data) => {
+      if (data.pjt_name === '') {
+        alertText.value = '프로젝트 이름을 작성해주세요'
+        isError.value = true
+      }else {
+        account.createProject(data)
       }
     }
     return {
@@ -82,10 +100,16 @@ export default defineComponent({
       searchUser,
       searchList,
       projectData,
+      alertText,
+      isError,
       findData,
       add,
-      remove
+      remove,
+      startProject
     }
+  },
+  async created () {
+    await this.account.fetchUserList()
   }
 })
 </script>
@@ -96,6 +120,10 @@ export default defineComponent({
   height: 34px;
 }
 
+h3 {
+  margin: 25px;
+  color: white;
+}
 
 .name-input {
   margin-top: 10px;
@@ -121,7 +149,7 @@ export default defineComponent({
 .user-list {
   margin-top: 50px;
   width: 328px;
-  height: 234px;
+  height: 250px;
   background: #333333;
   display: flex;
   flex-direction: column;
@@ -182,12 +210,12 @@ export default defineComponent({
 
 .plus {
   font-size: 16px;
-  margin: 4px;
+  margin: auto;
 }
 
 .cancel {
   font-size: 16px;
-  margin: 4px;
+  margin: auto;
 }
 .user-data {
   font-size: 16px;
@@ -198,7 +226,7 @@ export default defineComponent({
   display: flex;
   align-items: flex-start;
   padding: 0px;
-  width: 80px;
+  width: 60px;
   height: 36px;
   border-radius: 10px;
   margin-top: 6px;
@@ -214,7 +242,7 @@ export default defineComponent({
   display: flex;
   align-items: flex-start;
   padding: 0px;
-  width: 80px;
+  width: 60px;
   height: 36px;
   border-radius: 10px;
   margin-top: 6px;
@@ -227,10 +255,23 @@ export default defineComponent({
   color: red;
 }
 .create-btn {
-  margin-top: 20px;
+  margin: 20px;
   width: 120px;
   height: 30px;
-  background: linear-gradient(90deg, #FF00D6 8.81%, #00E0FF 94.11%);
-  border-radius: 5px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+.create-btn:hover{
+  transform: scale(1.1);
+  color: greenyellow;
 }
 </style>

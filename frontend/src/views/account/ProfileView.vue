@@ -2,12 +2,24 @@
   <div class="profile-view">
     <MainNav/>
     <div class='profile-box'>
+      <AlertView v-if="isError" @close-modal="isError=false">
+        <h3>{{ alertText }}</h3>
+      </AlertView>
       <div class='profile-bg'>
         <img class='bg-image' src="@/assets/profile_bg.jpg" alt="">
       </div>
       <div class='profile-id'>
-        <div class='profile-image'>
-          <span class="material-symbols-outlined" id='account'>account_circle</span>
+        <div class='profile-image' @click="isInput=true">
+          <input v-if="isInput" type="file" accept=".jpg,.png" class="ex_file" @change="fileUpload">
+          <div class="image-btn" v-if="isInput">
+            <button @click="cancel">취소</button>
+            <button @click="profileDelete">삭제</button>
+          </div>
+          <img 
+          v-if="account.profile.profileImagePath && !isInput" 
+          :src="`${ account.profile.profileImagePath }`" 
+          >
+          <img  v-if="account.profile.profileImagePath===null && !isInput" src="@/assets/기본프로필.jpg" alt="">
         </div>
         <div class='profile-detail'>
           <div class='profile-rough'>
@@ -16,7 +28,7 @@
               <span class="material-symbols-outlined" id="edit" v-if="!isEdit" @click="isEdit=true">edit</span>
               </h1>
               <div class="name-edit">
-                <input v-if="isEdit" v-model="name" type="text">
+                <input v-if="isEdit" v-model="name" @input="limitNickname" type="text">
                 <div class="name-btn">
                   <span class="material-symbols-outlined" id="done" v-if="isEdit" @click="onUpdate(name)">done</span>
                   <span class="material-symbols-outlined" id="close" v-if="isEdit" @click="isEdit=false">close</span>
@@ -38,10 +50,11 @@
 
     </div>
     <div class='endproject'>
-      <div class='pjt'>PJT1</div>
-      <div class='pjt'>PJT2</div>
-      <div class='pjt'>PJT3</div>
-      <div class='pjt'>PJT4</div>
+      <EndprojectList 
+      v-for="endProject in account.endProjects"
+      :key="endProject.pid"
+      :endProject="endProject"
+      />
     </div>
     <div class="hidden">
       <p class="signout" @click="signout()">회원탈퇴</p>
@@ -50,63 +63,161 @@
 </template>
 
 <script>
-import { defineComponent } from "vue"
+import { defineComponent,ref } from "vue"
 import { useAccountStore } from "@/stores/account"
-
 import MainNav from '@/views/main/MainNav'
 import ModalView from '@/views/main/ModalView'
 import ChangePassword from '@/views/account/ChangePassword'
+import EndprojectList from '@/views/account/EndProjectList'
+import router from "@/router"
+import AlertView from "@/views/main/AlertView"
 export default defineComponent({
   components: {
     MainNav,
     ModalView,
+    AlertView,
     ChangePassword,
+    EndprojectList
   },
   data() {
     return{
       isModalViewed: false,
-      isEdit: false
+      isEdit: false,
+      isInput: false
     }
   },
   setup() {
+    const alertText = ref('')
+    const isError = ref(false)
+    const profileImage = ''
     const account = useAccountStore()
-    const name = ''
+    const name = ref('')
+    const isNicknameError = ref(false)
+
+
     const onUpdate = (data) => {
-      if (data !== '') {
-        account.changeName(data)
-      }
-      else {
-        alert('변경할 닉네임을 입력하세요')
+      if (data === '') {
+        alertText.value = '변경할 닉네임을 입력하세요'
+        isError.value = true
+      }else {
+        if (isNicknameError.value) {
+          alertText.value = '닉네임을 10글자 이하로 작성해 주세요.'
+          isError.value = true
+        }else{
+          account.changeName(data)
+        }
       }
     }
     const signout = () => {
-      confirm("회원탈퇴 하시겠습니까?")
-      account.signout()
+      if (confirm("회원탈퇴 하시겠습니까?")){
+        account.signout()
+      }
+    }
+    const fileUpload = (e) =>{
+      const fileInput = ref(e.target.files[0])
+      if (fileInput.value !== null) {
+        account.changeImage(fileInput.value)
+      }else {
+        alertText.value = '이미지를 업로드해주세요.'
+        isError.value = true
+      }
+    }
+    const profileDelete = () => {
+      if(confirm('프로필사진을 삭제하시겠습니까?')){
+        account.profileDeleteImage()
+      }
+    }
+    const cancel = () => {
+      router.go({name : 'ProfileView'})
+    }
+    const limitNickname = () => {
+      if(name.value.length <= 10) {
+        isNicknameError.value = false
+      }else{
+        isNicknameError.value = true
+      }
     }
     account.fetchProfile()
-    console.log(account.profile)
     return {
+      profileImage,
       account,
       name,
       onUpdate,
-      signout
+      signout,
+      fileUpload,
+      cancel,
+      profileDelete,
+      limitNickname,
+      isNicknameError,
+      alertText,
+      isError,
     }
   },
 })
 </script>
 
 <style scoped>
+@media (max-width: 996px){
+  .endproject{
+    justify-content: center;
+  }
+}
+@media (max-width: 768px){
+  .profile-id {
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.pw-error {
+  color: red;
+  font-size: 8px;
+  margin: 0%;
+  text-align: start;
+  margin-left:12px;
+}
+
+.image-btn {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px;
+}
+.image-btn button{
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+  width: 50px;
+  height: 30px;
+}
+.image-btn button:hover {
+  transform: scale(1.2);
+}
 .profile-view {
   width:80%; 
   margin:auto;
 }
-#account {
-  font-size:10rem;
-  color: white;
+.profile-image img {
+  width: 142px;
+  height: 142px;
+  border-radius: 50%;
 }
 
 h1 {
   color: white;
+  margin-left: 28px;
 }
 
 h3 {
@@ -130,6 +241,7 @@ h3 {
   display: flex;
   border: solid;
   margin-bottom: 2rem;
+  padding: 24px;
 }
 .profile-detail {
   width: 100%;
@@ -143,13 +255,11 @@ h3 {
 }
 
 .endproject {
-  padding-top: 10rem;
-  padding-bottom: 2rem;
   border: solid;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 input {
@@ -164,12 +274,22 @@ input {
 
 .pwedit-btn {
   width: 148px;
-  height: 40px;
+  height: 50px;
+  background: radial-gradient(95% 60% at 50% 75%, #005FD6 0%, #209BFF 100%);
+  border: 1px solid #54A1FD;
+  box-shadow: 0px 8px 20px -8px #1187FF, inset 0px 1px 8px -4px #FFFFFF;
+  border-radius: 12px;
   color: white;
-  background: #2D68FE;
-  border-radius: 5px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: all .2s ease;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
 }
-
+.pwedit-btn:hover {
+  transform: scale(1.1);
+}
 #edit {
   color: white;
 }
@@ -199,12 +319,11 @@ input {
 .change-password {
   display: flex;
   align-items: center;
-  margin-right: 30px;
 }
 
 .hidden {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 .signout {
   color: black;

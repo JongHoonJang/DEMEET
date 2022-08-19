@@ -14,7 +14,7 @@
         :key="project.pid"
         :project="project"
         />
-      </div>
+    </div>
   </header>
 </template>
 
@@ -38,15 +38,24 @@ export default defineComponent({
   setup() {
     const projects = useAccountStore()
     projects.fetchProjects()
+    projects.fetchUserList()
     return {
       projects,
-
     }
   }
 })
 </script>
 
 <style scoped>
+@media (max-width: 678px){
+  .container{
+		justify-content: center;
+  }
+}
+header {
+  width: 90%;
+  margin-left: 5%;
+}
 #add {
   font-size: 64px;
   color: white;
@@ -69,11 +78,18 @@ export default defineComponent({
   align-items: center;
 }
 
+.create-box:hover {
+  transform: scale(1.1);
+}
+.create-box:hover #add{
+  transform: scale(1.1);
+  color: #54A1FD;
+}
+
 .container {
-  margin-left: 100px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 </style>

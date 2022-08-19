@@ -3,8 +3,11 @@ package com.ssafy.api.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.ssafy.common.customException.NotImageException;
-import com.ssafy.db.entity.ProfileImagePath;
+import com.ssafy.common.customException.ProjectNullException;
+import com.ssafy.db.entity.Conferences;
+import com.ssafy.db.entity.DrawingImgPath;
 import com.ssafy.db.entity.Users;
+import com.ssafy.db.repository.DrawingImagePathRepository;
 import com.ssafy.db.repository.ProfileImagePathRepository;
 import com.ssafy.db.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import java.io.InputStream;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import static org.kurento.jsonrpc.client.JsonRpcClient.log;
+
 @Service("AwsS3Service")
 public class AwsS3ServiceImpl implements AwsS3Service{
     @Autowired
@@ -29,6 +34,9 @@ public class AwsS3ServiceImpl implements AwsS3Service{
 
     @Autowired
     private ProfileImagePathRepository profileImagePathRepository;
+
+    @Autowired
+    private DrawingImagePathRepository drawingImagePathRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -66,15 +74,13 @@ public class AwsS3ServiceImpl implements AwsS3Service{
             throw new NotImageException("method must be profile or drawing");
         }
         String folderName = getFolderName(imgid, flag);
-        ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderName);
-        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
-        ListIterator<S3ObjectSummary> listIterator = listObjectsV2Result.getObjectSummaries().listIterator();
+        ListIterator<S3ObjectSummary> listIterator = getS3Object(folderName);
 
         while (listIterator.hasNext()){
             S3ObjectSummary objectSummary = listIterator.next();
             DeleteObjectRequest request = new DeleteObjectRequest(bucket, objectSummary.getKey());
             amazonS3Client.deleteObject(request);
-            System.out.println("Image Deleted");
+            log.info("Image Deleted");
         }
     }
 
@@ -109,12 +115,35 @@ public class AwsS3ServiceImpl implements AwsS3Service{
     }
 
     @Override
-    public Users saveImagePath(String path, long uid, String flag) throws NotImageException {
+    public Users saveProfileImagePath(String path, long uid, String flag) throws NotImageException {
         if(!flag.equals("profile") && !flag.equals("drawing")){
             throw new NotImageException("method must be profile or drawing");
         }
         Users users = usersRepository.getOne(uid);
         users.getProfileImagePath().setPath(path);
         return usersRepository.save(users);
+    }
+
+    @Override
+    public DrawingImgPath saveDrawingImagePath(String path, Conferences conference, Users user, String drawing) {
+        DrawingImgPath drawingImgPath = new DrawingImgPath();
+        drawingImgPath.setPath(path);
+        drawingImgPath.setConference(conference);
+        drawingImgPath.setUser(user);
+        return drawingImagePathRepository.save(drawingImgPath);
+    }
+
+
+    @Override
+    public ListIterator<S3ObjectSummary> getS3Object(String folderPath) {
+        ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucket).withPrefix(folderPath);
+        ListObjectsV2Result listObjectsV2Result = amazonS3Client.listObjectsV2(listObjectsV2Request);
+        return listObjectsV2Result.getObjectSummaries().listIterator();
+    }
+
+    @Override
+    public void deleteDrawingPath(long dipid) throws NotImageException {
+        DrawingImgPath drawingImgPath = drawingImagePathRepository.findDrawingImgPathByDipid(dipid).orElseThrow(() -> new NotImageException("not found"));
+        drawingImagePathRepository.delete(drawingImgPath);
     }
 }

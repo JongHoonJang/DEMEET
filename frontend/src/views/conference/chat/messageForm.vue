@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div id="inputForm">
     <input
       class="input-text"
       type="text"
       placeholder="채팅을 입력하세요."
       v-model = "messageForm.message"
+      v-on:keyup.enter="submitForm"
     >
     <button
       class="my-btn"
@@ -24,7 +25,7 @@ export default {
       messageForm: {
         message: ""
       }
-    };
+    }
   },
 
   props: {
@@ -37,19 +38,19 @@ export default {
   methods: {
     submitForm(event) {
 
-      const msg = this.messageForm.message.trim();
+      const msg = this.messageForm.message.trim()
 
       if (msg != "") {
 
-        event.preventDefault();
-        // this.$emit("sendMsg", "[" + this.userName + "] : " + msg);
+        event.preventDefault()
+        // this.$emit("sendMsg", "[" + this.userName + "] : " + msg)
         var string = JSON.stringify({
           userName: this.userName,
           msg: msg
-        });
-        this.$emit("sendMsg", string);
+        })
+        this.$emit("sendMsg", string)
       }
-      this.messageForm.message = "";
+      this.messageForm.message = ""
     }
   }
 };
@@ -57,21 +58,29 @@ export default {
 
 <style scoped>
 .my-btn {
-  height: 60px;
+  width:70px;
+  height: 84px;
+  padding:0px;
+  margin: 0px 10px 10px 0px;
+
+  border-radius:10px;
 }
 .input-text {
-    height: 60px;
-
-    flex: 1;
-    display: flex;
-    justify-content: stretch;
-    align-items: stretch;
+  width: 215px;
+  margin: 0px 10px 0px 10px;
+  height: 80px;
+  padding:0;
+  
+  border-radius:10px;
 }
-.inputTextArea {
-
+#inputForm {
+  display: flex;
   position : relative;
-  transform : translateY(-100%);
-  justify-content: space-between;
-
+  height: 100px;
+  background-color:#394867;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  margin-bottom: 16px;
 }
 </style>
+

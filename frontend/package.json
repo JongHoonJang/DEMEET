@@ -10,10 +10,14 @@
   "dependencies": {
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "fabric": "^5.2.1",
     "openvidu-browser": "^2.22.0",
     "pinia": "^2.0.17",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.3"
+    "vue-fabric": "^0.1.42",
+    "vue-router": "^4.0.3",
+    "yorkie": "^2.0.0",
+    "yorkie-js-sdk": "^0.2.16"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

@@ -3,32 +3,39 @@ package com.ssafy.db.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@ToString(of = {"cid", "sessionName", "uniqueSessionName", "confStartTime", "confEndTime", "activation"})
 public class Conferences {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long cid;
 
+    @ManyToOne
+    @JoinColumn(name = "pid")
+    Projects project;
+
     @Column(nullable = false)
     String sessionName;
 
-    @Column(nullable = false)
-    Timestamp confStartTime;
+    String uniqueSessionName;
 
-    Timestamp confEndTime;
+    LocalDateTime confStartTime;
+
+    LocalDateTime confEndTime;
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     boolean activation;
 
-    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="conference", cascade = CascadeType.ALL)
     List<DrawingImgPath> drawingImgPathList = new ArrayList<DrawingImgPath>();
 
 }

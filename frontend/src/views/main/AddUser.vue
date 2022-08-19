@@ -16,7 +16,8 @@
         >
           <div class="user-box" v-if="user.uid !== account.profile.uid">
             <div class="user-data">
-              <img class="user-img" src="@/assets/profile.jpg" alt="">
+              <img class="user-img" v-if="user.profileImagePath===null" src="@/assets/기본프로필.jpg" alt="">
+              <img class="user-img" v-else-if="user.profileImagePath!==null" :src="`${user.profileImagePath}`" alt="">
               <div>
                 <div class="text-type">{{ user.nickname }}</div>
                 <div class="text-type">{{ user.email }}</div>
@@ -27,7 +28,6 @@
             @click="remove(user)"  
             class="cancle-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="cancel">취소</span>
             </button>
             <button
@@ -35,7 +35,6 @@
             @click="add(user)" 
             class="plus-btn"
             >
-              <span class="material-symbols-outlined" id="mail">mail</span>
               <span class="plus">초대</span>
             </button>
           </div>
@@ -68,7 +67,6 @@ export default defineComponent({
       payload.value.uid = addUser.uid
       if (payload.value.uid !== -1){
         account.addUser(payload.value)
-        router.go({name: 'DetailView'})
       }
     }
     const remove = (addUser) => {
@@ -80,7 +78,11 @@ export default defineComponent({
     }
     const findData = (inputData) => {
       if (inputData.length != 0){
-        searchList.value = account.userList.filter(user => user.nickname.includes(inputData))
+        const result = account.userList.filter(user => user.nickname.includes(inputData))
+        result.push(...account.userList.filter(user => user.email.includes(inputData)))
+        const res = new Set(result)
+        const resData = [...res]
+        searchList.value = resData.slice(0,3)
       }
     }
     
@@ -95,6 +97,9 @@ export default defineComponent({
       add,
       remove,
     }
+  },
+  async created() {
+    await this.account.fetchUserList()
   }
 })
 </script>
@@ -103,7 +108,7 @@ export default defineComponent({
 .user-list {
   margin-top: 50px;
   width: 328px;
-  height: 234px;
+  height: 250px;
   background: #333333;
   display: flex;
   flex-direction: column;
@@ -128,5 +133,14 @@ export default defineComponent({
   background: #333333;
   color: white;
   border-radius: 5px;
+}
+.plus {
+  font-size: 16px;
+  margin: auto;
+}
+
+.cancel {
+  font-size: 16px;
+  margin: auto;
 }
 </style>
