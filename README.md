@@ -1,56 +1,130 @@
-# 웹/모바일(웹 기술) 스켈레톤 프로젝트
 
-<!-- 필수 항목 -->
 
-## 카테고리
+# DEMEET - 웹 기술 프로젝트
 
-| Application | Domain | Language | Framework |
-| ---- | ---- | ---- | ---- |
-| :white_check_mark: Desktop Web | :black_square_button: AI | :white_check_mark: JavaScript | :white_check_mark: Vue.js |
-| :white_check_mark: Mobile Web | :black_square_button: Big Data | :black_square_button: TypeScript | :black_square_button: React |
-| :white_check_mark: Responsive Web | :black_square_button: Blockchain | :black_square_button: C/C++ | :black_square_button: Angular |
-| :black_square_button: Android App | :black_square_button: IoT | :black_square_button: C# | :black_square_button: Node.js |
-| :black_square_button: iOS App | :black_square_button: AR/VR/Metaverse | :white_check_mark: Python | :white_check_mark: Flask/Django |
-| :black_square_button: Desktop App | :black_square_button: Game | :white_check_mark: Java | :white_check_mark: Spring/Springboot |
-| | | :black_square_button: Kotlin | |
+------
 
-<!-- 필수 항목 -->
+## **프로젝트 소개**
 
-## 프로젝트 소개
+### 서비스 특징
 
-* 프로젝트명: 그룹 비디오 컨퍼런스 서비스
-* 서비스 특징: 웹/모바일(웹 기술) 프로젝트를 위한 스켈레톤 프로젝트
-* 주요 기능
-  - 회원 관리
-  - 화상 미팅룸
-  - 그룹 채팅
-* 주요 기술
-  - WebRTC
-  - WebSocket
-  - JWT Authentication
-  - REST API
-* 참조 리소스
-  * Vuetify: 디자인 전반 적용
-  * Vue Argon Design System: 디자인 전반 적용
-  * Vue Black Dashboard Pro(유료): 캘린더 컴포넌트 사용
-  * AR Core: 구글에서 제공하는 AR 지원 라이브러리. 이미지 인식 및 오버레이 영상에 활용
-  * Color Thief: 이미지 색상 추출 라이브러리. 커버 사진 색상 추출 및 배경 변경에 활용
-  * Animation.css: CSS 애니메이션 지원 라이브러리. 메인 페이지 진입 애니메이션에 활용
-* 배포 환경
-  - URL: // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정: // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
+프로젝트 기획을 보조하는 화상회의 서비스
 
-<!-- 자유 양식 -->
+### 주요 기능
 
-## 팀 소개
-* 김ㅇㅇ: 팀장, 프론트엔드 개발
-* 이ㅇㅇ: 부팀장, 기획 및 와이어프레임 작성, 프론트엔드 개발
-* 박ㅇㅇ: 백엔드 개발 및 QA 담당
-* 홍ㅇㅇ: 백엔드 개발, Swagger API 문서 관리
-* 전ㅇㅇ: 코드 리뷰 및 인프라 담당, CI/CD, HTTPS, Docker 구성
+- 화상회의 서비스
+- 아이디어 구상을 위한 드로잉 기능 + 동시 편집 기능
+- 회원 관리 (회원가입, 로그인, 비밀번호 변경 ETC.)
+- 프로젝트 관리(산출물 저장, 팀원관리, 화상회의)
 
-<!-- 자유 양식 -->
+### 주요 기술
 
-## 프로젝트 상세 설명
+- WebRTC
+- WebSocket
+- JWT Authentication
+- REST API
+- CRDT 알고리즘
 
-// 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등
+### 개발환경
+
+- FE: Vue 3, JavaScript, HTML5, OpenVidu, fabric.js, yorkie
+- BE: Java 1.8, Spring Boot 2.4.5 , JPA 2.4.8 DB : MySQL 8.0.29, Amazon S3
+- 운영체제 : Windows 10, MacOS 12
+- 서버 : Amazon ec2 Instance, Ubuntu 20.04
+
+### 참조 리소스
+
+- openvidu : 화상미팅의 전반적인 기능에 사용
+- fabric.js : 캔버스 구현에 사용
+- yorkie : 동시 편집기능에 사용
+- AWS : 서버
+- WhoisXMLAPI : 이메일 인증에 사용
+
+### 배포 환경
+
+- URL: https://i7b309.p.ssafy.io/
+- 테스트 계정:이메일 : [demeethelp@gmail.com](mailto:demeethelp@gmail.com) , 비밀번호 : demeet123
+
+### **팀 소개**
+
+- 김대원: 팀장, 백엔드, 동시편집 로직 구현
+- 이정건: 프론트엔드, 배포
+- 임웅균: 백엔드 파트장, 백엔드
+- 장종훈: 프론트 파트장, 프론트엔드, 드로잉
+- 조성규 : 프론트엔드, 화상회의
+- 최명권 : 프론트엔드, 드로잉, 화상회의
+
+#### **ERD**
+
+`https://dbdiagram.io/d/62d6e2280d66c746550997fa`
+
+`https://www.notion.so/wondaeme/ERD-cb0166f9c02e4dbd9f75153c127e60ed`![ERD.PNG](./image/ERD.png)
+
+#### **와이어 프레임**
+
+`https://www.figma.com/file/liftpB4h1hnwkfVaHz72EH/DEMEET-WIREFRAME?node-id=0%3A1`
+
+#### **API**
+
+`https://www.notion.so/wondaeme/API-1e734e67a2f542e7a8adb9dfca82ab58`
+
+### **기능 설명**
+
+#### 회원 관리
+
+- 이메일 인증
+- 회원 관리 (회원가입, 로그인, 비밀번호 변경 ETC.)
+
+#### 프로젝트 관리
+
+- 산출물 저장
+- 누적 미팅 시간
+- 멤버 추가 및 제거(팀장)
+- 프로젝트 시작 시간
+- 회의 시작하기, 회의 종료하기(팀장)
+- 입장하기, 팀 나가기(팀원)
+
+#### 화상 회의
+
+- 음소거 기능(발신만)
+- 화면공유 기능
+- 드로잉 기능(실행시 하얀 캔버스 화면공유)
+- 동시편집기능(배포X)
+
+#### 프로필
+
+- 닉네임변경
+- 비밀번호변경
+- 종료한 프로젝트 정보 자동 보관
+  - 프로젝트 개요
+  - 산출물
+
+### 기능 흐름
+
+#### 로그인 화면
+
+![로그인.PNG](./image/로그인.png)
+
+#### 회원가입
+
+![회원가입.PNG](./image/회원가입.png)
+
+#### 마이페이지
+
+![마이페이지.PNG](./image/마이페이지.png)
+
+#### 메인 페이지
+
+![메인 페이지.PNG](./image/메인 페이지.png)
+
+#### 프로젝트 디테일
+
+![프로젝트 디테일.PNG](./image/프로젝트 디테일.png)
+
+#### 화상 미팅 화면
+
+![화상미팅화면.png](./image/화상미팅화면.png)
+
+#### 캔버스 공유 화면
+
+![캔버스 공유화면.png](./image/캔버스 공유화면.png)
