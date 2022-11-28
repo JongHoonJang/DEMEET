@@ -40,10 +40,6 @@
 - AWS : 서버
 - WhoisXMLAPI : 이메일 인증에 사용
 
-### 배포 환경
-
-- URL: https://i7b309.p.ssafy.io/
-- 테스트 계정:이메일 : [demeethelp@gmail.com](mailto:demeethelp@gmail.com) , 비밀번호 : demeet123
 
 ### **팀 소개**
 
